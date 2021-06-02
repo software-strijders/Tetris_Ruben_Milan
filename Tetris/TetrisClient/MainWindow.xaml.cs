@@ -17,7 +17,7 @@ namespace TetrisClient
         private int _offsetY;
         private Matrix _matrix;
         private Tetronimo _tetronimo;
-        private TimeSpan _tickInterval = new(0, 0, 1);
+        private TimeSpan _tickInterval = new(0, 0, 0, 0, 700);
 
         public MainWindow()
         {
@@ -65,7 +65,7 @@ namespace TetrisClient
             for (var i = 0; i < values.GetLength(0); i++)
             for (var j = 0; j < values.GetLength(1); j++)
             {
-                //  If the value doesn't equal one, it doens't have to get drawn
+                //  If the value doesn't equal one, it does't have to get drawn
                 if (values[i, j] != 1) continue;
 
                 var rectangle = new Rectangle
