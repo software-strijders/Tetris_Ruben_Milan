@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Automation.Peers;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
@@ -17,20 +20,24 @@ namespace TetrisClient
         private int _offsetY;
         private Matrix _matrix;
         private Tetronimo _tetronimo;
-        private TimeSpan _tickInterval = new(0, 0, 1);
+        private TimeSpan _tickInterval = new(0, 0, 0, 0, 700);
+
+        private List<int> _currentYPoints;
 
         public MainWindow()
         {
             InitializeComponent();
             Timer();
+            NewTetromino();
+            Board();
+        }
 
+        private void NewTetromino()
+        {
             _tetronimo = new Tetronimo(0, 4);
             _matrix = new Matrix(_tetronimo.IntArray);
-            _matrix = _matrix.Rotate90();
             _offsetY = 0;
             _offsetX = 3;
-
-            Board();
         }
 
         private void Timer()
@@ -52,22 +59,35 @@ namespace TetrisClient
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
             _offsetY++;
+            DevelopmentInfo();
             Board();
+        }
+
+        private void DevelopmentInfo()
+        {
+            yText.Text = "Y: " + _offsetY;
+            xText.Text = "X: " + _offsetX;
+            string points = "";
+            foreach (var point in _currentYPoints)
+            {
+                points += " " + point;
+            }
+            yList.Text = points;
         }
 
         private void Board()
         {
-            // TODO: Get board representation of landed bricks.
             // Clear the board otherwise for each movement a new tetronimo will be displayed on top of
             // the already existing one.
+            _currentYPoints = new List<int>();
             TetrisGrid.Children.Clear();
             var values = _matrix.Value;
             for (var i = 0; i < values.GetLength(0); i++)
             for (var j = 0; j < values.GetLength(1); j++)
             {
-                //  If the value doesn't equal one, it doens't have to get drawn
+                //  If the value doesn't equal one, it does't have to get drawn
                 if (values[i, j] != 1) continue;
-
+                
                 var rectangle = new Rectangle
                 {
                     Width = 25,                                         // Width of a 'cell' in the Grid
@@ -80,15 +100,26 @@ namespace TetrisClient
                 TetrisGrid.Children.Add(rectangle);                     // Add the rectangle to the grid
                 Grid.SetRow(rectangle, i + _offsetY);
                 Grid.SetColumn(rectangle, j + _offsetX);
+                _currentYPoints.Add(j + _offsetX);
             }
         }
 
         //TODO: improve
         private bool IsMoveAllowed(Key direction)
         {
-            if (direction.Equals(Key.Right))
-                return _offsetX <= 10;
-            return _offsetX >= 1;
+            foreach (var point in _currentYPoints)
+            {
+                switch (direction)
+                {
+                    case Key.Right:
+                        if (point > 8) return false;
+                        break;
+                    case Key.Left:
+                        if (point < 1) return false;
+                        break;
+                }
+            }
+            return true;
         }
         
         /// <summary>
@@ -101,11 +132,11 @@ namespace TetrisClient
             switch (e.Key)
             {
                 case Key.Right:
-                    if (!IsMoveAllowed(Key.Right)) break;
+                    if (!IsMoveAllowed(Key.Right)) return;
                     _offsetX++;
                     break;
                 case Key.Left:
-                    if (!IsMoveAllowed(Key.Left)) break;
+                    if (!IsMoveAllowed(Key.Left)) return;
                     _offsetX--;
                     break;
                 //Rotate clockwise
@@ -125,7 +156,6 @@ namespace TetrisClient
                     _offsetY--;
                     break;
             }
-
             Board();
         }
     }

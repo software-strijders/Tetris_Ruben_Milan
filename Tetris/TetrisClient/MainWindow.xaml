@@ -55,11 +55,14 @@
         <Button x:Name="pauseButton" Content="Pause" HorizontalAlignment="Left" Height="31" Margin="422,293,0,0" VerticalAlignment="Top" Width="100" BorderBrush="{x:Null}" Background="#FFCEDAFF" />
 
         <TextBox x:Name="tetris" HorizontalAlignment="Left" Height="87" Margin="297,329,0,0" Text="tetris" TextWrapping="Wrap" VerticalAlignment="Top" Width="225" BorderBrush="{x:Null}" Background="{x:Null}" FontSize="72" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" IsEnabled="False" FontWeight="Bold" FontStyle="Normal"/>
-        
-        <Grid x:Name="NextTetronimo" HorizontalAlignment="Left" Height="79" Margin="297,33,0,0" VerticalAlignment="Top" Width="225" Background="#FFE2E9FF" >
+
+        <Grid x:Name="NextTetronimo" HorizontalAlignment="Left" Height="79" Margin="297,33,0,0" VerticalAlignment="Top" Width="225" Background="#FFCEDAFF" >
             <Grid.Effect>
                 <DropShadowEffect/>
             </Grid.Effect>
         </Grid>
+        <TextBox x:Name="xText" HorizontalAlignment="Left" Height="30" Margin="581,33,0,0" Text="X:" TextWrapping="Wrap" Width="100" Background="{x:Null}" FontSize="24" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderBrush="{x:Null}" IsEnabled="False"/>
+        <TextBox x:Name="yText" HorizontalAlignment="Left" Height="30" Margin="581,72,0,0" Text="Y:" TextWrapping="Wrap" Width="100" Background="{x:Null}" FontSize="24" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderBrush="{x:Null}" IsEnabled="False"/>
+        <TextBox x:Name="yList" HorizontalAlignment="Left" Height="30" Margin="527,118,0,0" Text="YList:" TextWrapping="Wrap" Width="209" Background="{x:Null}" FontSize="24" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderBrush="{x:Null}" IsEnabled="False"/>
     </Grid>
 </Window>
