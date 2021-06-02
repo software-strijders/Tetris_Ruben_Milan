@@ -42,6 +42,13 @@ namespace TetrisClient
             dpt.Start();
         }
 
+        /// <summary>
+        /// Starts a dispatcherTimer because those are non blocking.
+        /// This timer is used to determine the speed at which tetronimo's
+        /// are falling 
+        /// </summary>
+        /// <param name="sender"></param> 
+        /// <param name="e"></param>
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
             _offsetY++;
@@ -50,40 +57,45 @@ namespace TetrisClient
 
         private void Board()
         {
+            // TODO: Get board representation of landed bricks.
+            // Clear the board otherwise for each movement a new tetronimo will be displayed on top of
+            // the already existing one.
             TetrisGrid.Children.Clear();
-            // Get board representation of landed bricks.
             var values = _matrix.Value;
             for (var i = 0; i < values.GetLength(0); i++)
+            for (var j = 0; j < values.GetLength(1); j++)
             {
-                for (var j = 0; j < values.GetLength(1); j++)
+                //  If the value doesn't equal one, it doens't have to get drawn
+                if (values[i, j] != 1) continue;
+
+                var rectangle = new Rectangle
                 {
-                    // Als de waarde niet gelijk is aan 1,
-                    // dan hoeft die niet getekent te worden:
-                    if (values[i, j] != 1) continue;
+                    Width = 25,                                         // Width of a 'cell' in the Grid
+                    Height = 25,                                        // Height of a 'cell' in the Grid
+                    Stroke = Brushes.Black,                             // Border
+                    StrokeThickness = 0.75,                             // Border thickness
+                    Fill = Tetronimo.DetermineColor(_tetronimo.shape)   // Background color
+                };
 
-                    var rectangle = new Rectangle
-                    {
-                        Width = 25, // Breedte van een 'cell' in de Grid
-                        Height = 25, // Hoogte van een 'cell' in de Grid
-                        Stroke = Brushes.Black, // De rand
-                        StrokeThickness = 0.75, // Dikte van de rand
-                        Fill = Tetronimo.DetermineColor(_tetronimo.shape), // Achtergrondkleur
-                    };
-
-                    TetrisGrid.Children.Add(rectangle); // Voeg de rectangle toe aan de Grid
-                    Grid.SetRow(rectangle, i + _offsetY); // Zet de rij
-                    Grid.SetColumn(rectangle, j + _offsetX); // Zet de kolom
-                }
+                TetrisGrid.Children.Add(rectangle);                     // Add the rectangle to the grid
+                Grid.SetRow(rectangle, i + _offsetY);
+                Grid.SetColumn(rectangle, j + _offsetX);
             }
         }
 
+        //TODO: improve
         private bool IsMoveAllowed(Key direction)
         {
             if (direction.Equals(Key.Right))
                 return _offsetX <= 10;
             return _offsetX >= 1;
         }
-
+        
+        /// <summary>
+        /// C# function that triggers when a key is pressed.
+        /// This is how the user will control the game
+        /// </summary>
+        /// <param name="e">pressed key</param>
         protected override void OnKeyDown(KeyEventArgs e)
         {
             switch (e.Key)
@@ -96,7 +108,7 @@ namespace TetrisClient
                     if (!IsMoveAllowed(Key.Left)) break;
                     _offsetX--;
                     break;
-                //Rotate clockwise    
+                //Rotate clockwise
                 case Key.Up:
                     _matrix = _matrix.Rotate90();
                     break;
@@ -114,7 +126,6 @@ namespace TetrisClient
                     break;
             }
 
-            Console.WriteLine(_offsetX + " " + _offsetY);
             Board();
         }
     }

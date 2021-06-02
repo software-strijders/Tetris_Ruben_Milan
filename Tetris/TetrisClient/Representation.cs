@@ -8,6 +8,13 @@ namespace TetrisClient
         
         public Representation() => Landed = GenerateEmptyBoard();
         
+        /// <summary>
+        /// TODO: create implementation
+        /// 3D array that represents the board.
+        /// The numbers (1-7) indicate from which tetronimo it was.
+        /// This way we can accurately keep control of the colors.
+        /// </summary>
+        /// <returns>board representation given in a 3D array</returns>
         private static int[,] GenerateEmptyBoard()
         {
             return new[,]
