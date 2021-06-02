@@ -56,7 +56,7 @@
 
         <TextBox x:Name="tetris" HorizontalAlignment="Left" Height="87" Margin="297,329,0,0" Text="tetris" TextWrapping="Wrap" VerticalAlignment="Top" Width="225" BorderBrush="{x:Null}" Background="{x:Null}" FontSize="72" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" IsEnabled="False" FontWeight="Bold" FontStyle="Normal"/>
         
-        <Grid x:Name="NextTetronimo" HorizontalAlignment="Left" Height="79" Margin="297,33,0,0" VerticalAlignment="Top" Width="225" Background="#FFE2E9FF" >
+        <Grid x:Name="NextTetronimo" HorizontalAlignment="Left" Height="79" Margin="297,33,0,0" VerticalAlignment="Top" Width="225" Background="#FFCEDAFF" >
             <Grid.Effect>
                 <DropShadowEffect/>
             </Grid.Effect>
