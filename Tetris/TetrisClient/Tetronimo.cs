@@ -65,7 +65,7 @@ namespace TetrisClient
             L => new[,] {{0, 1, 0}, {0, 1, 0}, {0, 1, 1}},
             S => new[,] {{0, 1, 1}, {1, 1, 0}, {0, 0, 0}},
             Z => new[,] {{1, 1, 0}, {0, 1, 1}, {0, 0, 0}},
-            I => new[,] {{0, 0, 0, 0}, {1, 1, 1, 1}, {0, 0, 0, 0}},
+            I => new[,] {{0, 0, 0, 0}, {1, 1, 1, 1}, {0, 0, 0, 0}, {0, 0, 0, 0}},
             _ => throw new ArgumentOutOfRangeException(nameof(shape), shape, null)
         };
 
