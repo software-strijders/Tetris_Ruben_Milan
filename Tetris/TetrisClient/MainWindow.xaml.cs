@@ -122,6 +122,14 @@ namespace TetrisClient
                         if (_offsetX < 0)
                         {
                             _offsetX = 0;
+                            break;
+                        }
+                        
+                        Board();
+                        while (_currentYPoints.Max() > 9)
+                        {
+                            _offsetX--;
+                            Board();
                         }
                         break;
                 }
