@@ -25,35 +25,54 @@ namespace TetrisClient
 
         private List<int> _currentYPoints;
 
+        /// <summary>
+        /// Initializes the component and the timer, then creates the first next Tetromino
+        /// so it can be used in the NewTetromino method.
+        /// After that it renders the new next tetronimo and renders the board with the first tetromino.
+        /// </summary>
         public MainWindow()
         {
-            _nextTetromino = new Tetronimo(0,4);
-            _nextMatrix = new Matrix(_nextTetromino.IntArray);   
+            _nextTetromino = new Tetronimo(0, 4);
+            _nextMatrix = new Matrix(_nextTetromino.IntArray);
             InitializeComponent();
             Timer();
             NewTetromino();
-            RenderNextTetromino();
+            RenderTetromino(_nextMatrix.Value, _nextTetromino, NextGrid);
             Board();
         }
 
+        /// <summary>
+        /// Sets the next tetromino as the current tetromino and than creates a new next tetromino and does
+        /// the same with the matrices.
+        /// Also sets the start position of the current tetromino. 
+        /// </summary>
         private void NewTetromino()
         {
             _tetronimo = _nextTetromino;
             _matrix = _nextMatrix;
-            _nextTetromino = new Tetronimo(0,4);
+            _nextTetromino = new Tetronimo(0, 4);
             _nextMatrix = new Matrix(_nextTetromino.IntArray);
             _offsetY = 0;
             _offsetX = 3;
         }
 
-        public void RenderNextTetromino()
+        
+        /// <summary>
+        /// Constructs the given tetromino by getting the int[,] from the matrix. For each cell that
+        /// is not '1' it creates nothing because that should be empty. For every 1 a block will be drawn.
+        /// Then creates a rectangle of the mapped tetromino and places it in the given grid (trough) param.
+        /// </summary>
+        /// <param name="matrixValue">int[,] from the matrix that belongs to the tetromino parameter</param>
+        /// <param name="tetronimo"></param>
+        /// <param name="grid">TetrisGrid or NextGrid for next tetromino</param>
+        private void RenderTetromino(int[,] matrixValue, Tetronimo tetronimo, Grid grid)
         {
-            var values = _nextMatrix.Value;
-            for (var i = 0; i < values.GetLength(0); i++)
-            for (var j = 0; j < values.GetLength(1); j++)
+            _currentYPoints = new List<int>(); // For debugging purposes
+            for (var i = 0; i < matrixValue.GetLength(0); i++)
+            for (var j = 0; j < matrixValue.GetLength(1); j++)
             {
                 //  If the value doesn't equal one, it does't have to get drawn
-                if (values[i, j] != 1) continue;
+                if (matrixValue[i, j] != 1) continue;
 
                 var rectangle = new Rectangle
                 {
@@ -61,15 +80,28 @@ namespace TetrisClient
                     Height = 25, // Height of a 'cell' in the Grid
                     Stroke = Brushes.Black, // Border
                     StrokeThickness = 0.75, // Border thickness
-                    Fill = Tetronimo.DetermineColor(_nextTetromino.shape) // Background color
+                    Fill = Tetronimo.DetermineColor(tetronimo.shape) // Background color
                 };
 
-                NextGrid.Children.Add(rectangle); // Add the rectangle to the grid
-                Grid.SetRow(rectangle, i);
-                Grid.SetColumn(rectangle, j);
+                grid.Children.Add(rectangle); // Add the rectangle to the grid
+                if (grid.Equals(TetrisGrid))
+                {
+                    Grid.SetRow(rectangle, i + _offsetY);
+                    Grid.SetColumn(rectangle, j + _offsetX);
+                    _currentYPoints.Add(j + _offsetX); // For debugging purposes
+                }
+                else
+                {
+                    Grid.SetRow(rectangle, i);
+                    Grid.SetColumn(rectangle, j);
+                }
             }
         }
 
+        /// <summary>
+        /// Start a DispatcherTimer because those don't interupt the program
+        /// This timer is used for determining the drop speed of tetrominoes.
+        /// </summary>
         private void Timer()
         {
             var dpt = new DispatcherTimer();
@@ -93,15 +125,16 @@ namespace TetrisClient
             Board();
         }
 
+
+        // For debugging purposes
         private void DevelopmentInfo()
         {
             yText.Text = "Y: " + _offsetY;
             xText.Text = "X: " + _offsetX;
             var points = "";
             foreach (var point in _currentYPoints)
-            {
                 points += " " + point;
-            }
+
             yList.Text = points;
         }
 
@@ -109,35 +142,14 @@ namespace TetrisClient
         {
             // Clear the board otherwise for each movement a new tetronimo will be displayed on top of
             // the already existing one.
-            _currentYPoints = new List<int>();
             TetrisGrid.Children.Clear();
-            var values = _matrix.Value;
-            for (var i = 0; i < values.GetLength(0); i++)
-            for (var j = 0; j < values.GetLength(1); j++)
-            {
-                //  If the value doesn't equal one, it does't have to get drawn
-                if (values[i, j] != 1) continue;
-                
-                var rectangle = new Rectangle
-                {
-                    Width = 25,                                         // Width of a 'cell' in the Grid
-                    Height = 25,                                        // Height of a 'cell' in the Grid
-                    Stroke = Brushes.Black,                             // Border
-                    StrokeThickness = 0.75,                             // Border thickness
-                    Fill = Tetronimo.DetermineColor(_tetronimo.shape)   // Background color
-                };
-
-                TetrisGrid.Children.Add(rectangle);                     // Add the rectangle to the grid
-                Grid.SetRow(rectangle, i + _offsetY);
-                Grid.SetColumn(rectangle, j + _offsetX);
-                _currentYPoints.Add(j + _offsetX);
-            }
+            RenderTetromino(_matrix.Value, _tetronimo, TetrisGrid);
         }
 
-        //TODO: improve
+
         private bool IsMoveAllowed(Key direction)
         {
-            foreach (var point in _currentYPoints)
+            foreach (var point in _currentYPoints) // For debugging purposes
             {
                 switch (direction)
                 {
@@ -153,16 +165,18 @@ namespace TetrisClient
                             _offsetX = 0;
                             break;
                         }
-                        
+
                         Board();
                         while (_currentYPoints.Max() > 9)
                         {
                             _offsetX--;
                             Board();
                         }
+
                         break;
                 }
             }
+
             return true;
         }
 
@@ -202,6 +216,7 @@ namespace TetrisClient
                     _offsetY--;
                     break;
             }
+
             Board();
         }
     }
