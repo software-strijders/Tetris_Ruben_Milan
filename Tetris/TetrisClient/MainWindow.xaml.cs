@@ -175,5 +175,10 @@ namespace TetrisClient
             }
             Board();
         }
+
+        public void Quit(object sender, RoutedEventArgs routedEventArgs)
+        {
+            Application.Current.Shutdown();
+        }
     }
 }
