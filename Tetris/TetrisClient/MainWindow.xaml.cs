@@ -18,25 +18,56 @@ namespace TetrisClient
         private int _offsetX;
         private int _offsetY;
         private Matrix _matrix;
+        private Matrix _nextMatrix;
         private Tetronimo _tetronimo;
+        private Tetronimo _nextTetromino;
         private TimeSpan _tickInterval = new(0, 0, 0, 0, 700);
 
         private List<int> _currentYPoints;
 
         public MainWindow()
         {
+            _nextTetromino = new Tetronimo(0,4);
+            _nextMatrix = new Matrix(_nextTetromino.IntArray);   
             InitializeComponent();
             Timer();
             NewTetromino();
+            RenderNextTetromino();
             Board();
         }
 
         private void NewTetromino()
         {
-            _tetronimo = new Tetronimo(0, 4);
-            _matrix = new Matrix(_tetronimo.IntArray);
+            _tetronimo = _nextTetromino;
+            _matrix = _nextMatrix;
+            _nextTetromino = new Tetronimo(0,4);
+            _nextMatrix = new Matrix(_nextTetromino.IntArray);
             _offsetY = 0;
             _offsetX = 3;
+        }
+
+        public void RenderNextTetromino()
+        {
+            var values = _nextMatrix.Value;
+            for (var i = 0; i < values.GetLength(0); i++)
+            for (var j = 0; j < values.GetLength(1); j++)
+            {
+                //  If the value doesn't equal one, it does't have to get drawn
+                if (values[i, j] != 1) continue;
+
+                var rectangle = new Rectangle
+                {
+                    Width = 25, // Width of a 'cell' in the Grid
+                    Height = 25, // Height of a 'cell' in the Grid
+                    Stroke = Brushes.Black, // Border
+                    StrokeThickness = 0.75, // Border thickness
+                    Fill = Tetronimo.DetermineColor(_nextTetromino.shape) // Background color
+                };
+
+                NextGrid.Children.Add(rectangle); // Add the rectangle to the grid
+                Grid.SetRow(rectangle, i);
+                Grid.SetColumn(rectangle, j);
+            }
         }
 
         private void Timer()
@@ -66,7 +97,7 @@ namespace TetrisClient
         {
             yText.Text = "Y: " + _offsetY;
             xText.Text = "X: " + _offsetX;
-            string points = "";
+            var points = "";
             foreach (var point in _currentYPoints)
             {
                 points += " " + point;
