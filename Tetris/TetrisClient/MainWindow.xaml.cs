@@ -56,7 +56,7 @@ namespace TetrisClient
             _offsetX = 3;
         }
 
-        
+
         /// <summary>
         /// Constructs the given tetromino by getting the int[,] from the matrix. For each cell that
         /// is not '1' it creates nothing because that should be empty. For every 1 a block will be drawn.
@@ -138,15 +138,22 @@ namespace TetrisClient
             yList.Text = points;
         }
 
+        /// <summary>
+        /// Clears the board otherwise for each movement a new tetronimo will be displayed on top of
+        /// the already existing one. Then Renders the tetromino.
+        /// </summary>
         private void Board()
         {
-            // Clear the board otherwise for each movement a new tetronimo will be displayed on top of
-            // the already existing one.
+            
             TetrisGrid.Children.Clear();
             RenderTetromino(_matrix.Value, _tetronimo, TetrisGrid);
         }
-
-
+        
+        /// <summary>
+        /// Checks if the tetromino can move in the given direction.
+        /// </summary>
+        /// <param name="direction">Key.Right or Key.Left to specify the direction</param>
+        /// <returns></returns>
         private bool IsMoveAllowed(Key direction)
         {
             foreach (var point in _currentYPoints) // For debugging purposes
@@ -159,21 +166,6 @@ namespace TetrisClient
                     case Key.Left:
                         if (point < 1) return false;
                         break;
-                    default:
-                        if (_offsetX < 0)
-                        {
-                            _offsetX = 0;
-                            break;
-                        }
-
-                        Board();
-                        while (_currentYPoints.Max() > 9)
-                        {
-                            _offsetX--;
-                            Board();
-                        }
-
-                        break;
                 }
             }
 
@@ -181,8 +173,27 @@ namespace TetrisClient
         }
 
         /// <summary>
+        /// Checks if a rotation would cross the border and if so, corrects the position accordingly.
+        /// </summary>
+        private void CorrectRotation()
+        {
+            if (_offsetX < 0)
+            {
+                _offsetX = 0;
+                return;
+            }
+
+            Board();
+            while (_currentYPoints.Max() > 9)
+            {
+                _offsetX--;
+                Board();
+            }
+        }
+
+        /// <summary>
         /// C# function that triggers when a key is pressed.
-        /// This is how the user will control the game
+        /// This is how the user controls the game
         /// </summary>
         /// <param name="e">pressed key</param>
         protected override void OnKeyDown(KeyEventArgs e)
@@ -200,12 +211,12 @@ namespace TetrisClient
                 //Rotate clockwise
                 case Key.Up:
                     _matrix = _matrix.Rotate90();
-                    IsMoveAllowed(Key.Up);
+                    CorrectRotation();
                     break;
                 //Rotate counter clockwise
                 case Key.Down:
                     _matrix = _matrix.Rotate90CounterClockwise();
-                    IsMoveAllowed(Key.Down);
+                    CorrectRotation();
                     break;
                 //ToDo: instantly move down, we need to implement collision detection first before we can do this
                 case Key.Space:
