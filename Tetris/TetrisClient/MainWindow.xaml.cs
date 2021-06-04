@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Automation.Peers;
 using System.Windows.Controls;
@@ -117,11 +118,25 @@ namespace TetrisClient
                     case Key.Left:
                         if (point < 1) return false;
                         break;
+                    default:
+                        if (_offsetX < 0)
+                        {
+                            _offsetX = 0;
+                            break;
+                        }
+                        
+                        Board();
+                        while (_currentYPoints.Max() > 9)
+                        {
+                            _offsetX--;
+                            Board();
+                        }
+                        break;
                 }
             }
             return true;
         }
-        
+
         /// <summary>
         /// C# function that triggers when a key is pressed.
         /// This is how the user will control the game
@@ -142,10 +157,12 @@ namespace TetrisClient
                 //Rotate clockwise
                 case Key.Up:
                     _matrix = _matrix.Rotate90();
+                    IsMoveAllowed(Key.Up);
                     break;
                 //Rotate counter clockwise
                 case Key.Down:
                     _matrix = _matrix.Rotate90CounterClockwise();
+                    IsMoveAllowed(Key.Down);
                     break;
                 //ToDo: instantly move down, we need to implement collision detection first before we can do this
                 case Key.Space:
