@@ -40,7 +40,10 @@ namespace TetrisClient
 
         public void PlaceTetrominoInBoard(Tetronimo tetronimo)
         {
-            
+            for (var i = 0; i < tetronimo.Matrix.Value.Length; i++)
+            {
+                       
+            }
         }
     }
 }
