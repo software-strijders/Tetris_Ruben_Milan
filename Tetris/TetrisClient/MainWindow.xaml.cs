@@ -13,15 +13,17 @@ namespace TetrisClient
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
         private int _offsetX;
         private int _offsetY;
         private Matrix _matrix;
         private Matrix _nextMatrix;
         private Tetronimo _tetronimo;
+        private DispatcherTimer _dpt;
         private Tetronimo _nextTetromino;
         private TimeSpan _tickInterval = new(0, 0, 0, 0, 700);
+        private bool _paused; // Default value is false
 
         private List<int> _currentYPoints;
 
@@ -104,11 +106,11 @@ namespace TetrisClient
         /// </summary>
         private void Timer()
         {
-            var dpt = new DispatcherTimer();
-            dpt.Tick += new EventHandler(dispatcherTimer_Tick);
-            dpt.Interval = _tickInterval;
+            _dpt = new DispatcherTimer();
+            _dpt.Tick += dispatcherTimer_Tick;
+            _dpt.Interval = _tickInterval;
 
-            dpt.Start();
+            _dpt.Start();
         }
 
         /// <summary>
@@ -144,11 +146,10 @@ namespace TetrisClient
         /// </summary>
         private void Board()
         {
-            
             TetrisGrid.Children.Clear();
             RenderTetromino(_matrix.Value, _tetronimo, TetrisGrid);
         }
-        
+
         /// <summary>
         /// Checks if the tetromino can move in the given direction.
         /// </summary>
@@ -198,6 +199,9 @@ namespace TetrisClient
         /// <param name="e">pressed key</param>
         protected override void OnKeyDown(KeyEventArgs e)
         {
+            if (_paused)
+                return;
+
             switch (e.Key)
             {
                 case Key.Right:
@@ -231,9 +235,17 @@ namespace TetrisClient
             Board();
         }
 
-        public void Quit(object sender, RoutedEventArgs routedEventArgs)
+        private void Quit(object sender, RoutedEventArgs routedEventArgs) => Application.Current.Shutdown();
+
+        private void Pause(object sender, RoutedEventArgs routedEventArgs)
         {
-            Application.Current.Shutdown();
+            _paused = !_paused;
+
+            var button = (Button) sender;
+            button.Content = ReferenceEquals(button.Content, "Pause") ? "Resume" : "Pause";
+
+            if (_paused) _dpt.Stop();
+            else _dpt.Start();
         }
     }
 }
