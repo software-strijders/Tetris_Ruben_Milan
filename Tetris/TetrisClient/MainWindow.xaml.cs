@@ -15,16 +15,14 @@ namespace TetrisClient
     /// </summary>
     public partial class MainWindow
     {
-        private int _offsetX;
-        private int _offsetY;
-        private Matrix _matrix;
-        private Matrix _nextMatrix;
+        private Representation _representation;
         private Tetronimo _tetronimo;
-        private DispatcherTimer _dpt;
         private Tetronimo _nextTetromino;
+        private DispatcherTimer _dpt;
         private TimeSpan _tickInterval = new(0, 0, 0, 0, 700);
         private bool _paused; // Default value is false
-
+        
+        //this needs to go
         private List<int> _currentYPoints;
 
         /// <summary>
@@ -34,12 +32,12 @@ namespace TetrisClient
         /// </summary>
         public MainWindow()
         {
-            _nextTetromino = new Tetronimo(0, 4);
-            _nextMatrix = new Matrix(_nextTetromino.IntArray);
+            _nextTetromino = new Tetronimo(4, 0);
+            _representation = new Representation();
             InitializeComponent();
             Timer();
             NewTetromino();
-            RenderTetromino(_nextMatrix.Value, _nextTetromino, NextGrid);
+            RenderTetromino(_nextTetromino, NextGrid);
             Board();
         }
 
@@ -51,11 +49,9 @@ namespace TetrisClient
         private void NewTetromino()
         {
             _tetronimo = _nextTetromino;
-            _matrix = _nextMatrix;
             _nextTetromino = new Tetronimo(0, 4);
-            _nextMatrix = new Matrix(_nextTetromino.IntArray);
-            _offsetY = 0;
-            _offsetX = 3;
+            _tetronimo.OffsetY = 0;
+            _tetronimo.OffsetX = 3;
         }
 
 
@@ -67,14 +63,14 @@ namespace TetrisClient
         /// <param name="matrixValue">int[,] from the matrix that belongs to the tetromino parameter</param>
         /// <param name="tetronimo"></param>
         /// <param name="grid">TetrisGrid or NextGrid for next tetromino</param>
-        private void RenderTetromino(int[,] matrixValue, Tetronimo tetronimo, Grid grid)
+        private void RenderTetromino(Tetronimo tetronimo, Grid grid)
         {
             _currentYPoints = new List<int>(); // For debugging purposes
-            for (var i = 0; i < matrixValue.GetLength(0); i++)
-            for (var j = 0; j < matrixValue.GetLength(1); j++)
+            for (var i = 0; i < tetronimo.Matrix.Value.GetLength(0); i++)
+            for (var j = 0; j < tetronimo.Matrix.Value.GetLength(1); j++)
             {
                 //  If the value doesn't equal one, it does't have to get drawn
-                if (matrixValue[i, j] != 1) continue;
+                if (tetronimo.Matrix.Value[i, j] != 1) continue;
 
                 var rectangle = new Rectangle
                 {
@@ -88,9 +84,9 @@ namespace TetrisClient
                 grid.Children.Add(rectangle); // Add the rectangle to the grid
                 if (grid.Equals(TetrisGrid))
                 {
-                    Grid.SetRow(rectangle, i + _offsetY);
-                    Grid.SetColumn(rectangle, j + _offsetX);
-                    _currentYPoints.Add(j + _offsetX); // For debugging purposes
+                    Grid.SetRow(rectangle, i + tetronimo.OffsetY);
+                    Grid.SetColumn(rectangle, j + tetronimo.OffsetX);
+                    _currentYPoints.Add(j + tetronimo.OffsetX); // For debugging purposes
                 }
                 else
                 {
@@ -122,7 +118,7 @@ namespace TetrisClient
         /// <param name="e"></param>
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
-            _offsetY++;
+            _tetronimo.OffsetY++;
             DevelopmentInfo();
             Board();
         }
@@ -131,12 +127,9 @@ namespace TetrisClient
         // For debugging purposes
         private void DevelopmentInfo()
         {
-            yText.Text = "Y: " + _offsetY;
-            xText.Text = "X: " + _offsetX;
-            var points = "";
-            foreach (var point in _currentYPoints)
-                points += " " + point;
-
+            yText.Text = "Y: " + _tetronimo.OffsetY;
+            xText.Text = "X: " + _tetronimo.OffsetX;
+            var points = _currentYPoints.Aggregate("", (current, point) => current + (" " + point));
             yList.Text = points;
         }
 
@@ -147,7 +140,7 @@ namespace TetrisClient
         private void Board()
         {
             TetrisGrid.Children.Clear();
-            RenderTetromino(_matrix.Value, _tetronimo, TetrisGrid);
+            RenderTetromino(_tetronimo, TetrisGrid);
         }
 
         /// <summary>
@@ -169,7 +162,6 @@ namespace TetrisClient
                         break;
                 }
             }
-
             return true;
         }
 
@@ -178,16 +170,16 @@ namespace TetrisClient
         /// </summary>
         private void CorrectRotation()
         {
-            if (_offsetX < 0)
+            if (_tetronimo.OffsetX < 0)
             {
-                _offsetX = 0;
+                _tetronimo.OffsetX = 0;
                 return;
             }
 
             Board();
             while (_currentYPoints.Max() > 9)
             {
-                _offsetX--;
+                _tetronimo.OffsetX--;
                 Board();
             }
         }
@@ -206,29 +198,29 @@ namespace TetrisClient
             {
                 case Key.Right:
                     if (!IsMoveAllowed(Key.Right)) return;
-                    _offsetX++;
+                    _tetronimo.OffsetX++;
                     break;
                 case Key.Left:
                     if (!IsMoveAllowed(Key.Left)) return;
-                    _offsetX--;
+                    _tetronimo.OffsetX--;
                     break;
                 //Rotate clockwise
                 case Key.Up:
-                    _matrix = _matrix.Rotate90();
+                    _tetronimo.Matrix = _tetronimo.Matrix.Rotate90();
                     CorrectRotation();
                     break;
                 //Rotate counter clockwise
                 case Key.Down:
-                    _matrix = _matrix.Rotate90CounterClockwise();
+                    _tetronimo.Matrix = _tetronimo.Matrix.Rotate90CounterClockwise();
                     CorrectRotation();
                     break;
                 //ToDo: instantly move down, we need to implement collision detection first before we can do this
                 case Key.Space:
-                    _offsetY++;
+                    _tetronimo.OffsetY++;
                     break;
-                //Easter egg, unknown to the human race
+                //Easter egg, unknown to the human race, used in development
                 case Key.E:
-                    _offsetY--;
+                    _tetronimo.OffsetY--;
                     break;
             }
 

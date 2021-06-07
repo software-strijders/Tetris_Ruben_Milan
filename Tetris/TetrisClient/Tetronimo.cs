@@ -21,9 +21,10 @@ namespace TetrisClient
     public class Tetronimo
     {
         public TetronimoShape shape { get; private set; }
-        public int[,] IntArray { get; set; }
-        private int offsetX { get; set; }
-        private int offsetY { get; set; }
+        
+        public Matrix Matrix { get; set; }
+        public int OffsetX;
+        public int OffsetY;
 
         /// <summary>
         /// Default start position is at the left top (0,0).
@@ -36,9 +37,9 @@ namespace TetrisClient
         {
             var generatedShape = GenerateShape();
             shape = generatedShape;
-            IntArray = CreateShape(generatedShape);
-            this.offsetX = offsetX;
-            this.offsetY = offsetY;
+            Matrix = CreateShape(generatedShape);
+            this.OffsetX = offsetX;
+            this.OffsetY = offsetY;
         }
 
         /// <summary>
@@ -57,15 +58,15 @@ namespace TetrisClient
         /// <param name="shape">TetronimoShape enum</param>
         /// <returns>3D array that represents a tetronimo of the passed enum</returns>
         /// <exception cref="ArgumentOutOfRangeException">when an invalid entry is passed</exception>
-        private static int[,] CreateShape(TetronimoShape shape) => shape switch
+        private static Matrix CreateShape(TetronimoShape shape) => shape switch
         {
-            O => new[,] {{1, 1}, {1, 1}},
-            T => new[,] {{1, 1, 1}, {0, 1, 0}, {0, 0, 0}},
-            J => new[,] {{0, 1, 0}, {0, 1, 0}, {1, 1, 0}},
-            L => new[,] {{0, 1, 0}, {0, 1, 0}, {0, 1, 1}},
-            S => new[,] {{0, 1, 1}, {1, 1, 0}, {0, 0, 0}},
-            Z => new[,] {{1, 1, 0}, {0, 1, 1}, {0, 0, 0}},
-            I => new[,] {{0, 0, 0, 0}, {1, 1, 1, 1}, {0, 0, 0, 0}, {0, 0, 0, 0}},
+            O => new Matrix( new [,]{{1, 1}, {1, 1}}),
+            T => new Matrix( new [,]{{1, 1, 1}, {0, 1, 0}, {0, 0, 0}}),
+            J => new Matrix( new [,]{{0, 1, 0}, {0, 1, 0}, {1, 1, 0}}),
+            L => new Matrix( new [,]{{0, 1, 0}, {0, 1, 0}, {0, 1, 1}}),
+            S => new Matrix( new [,]{{0, 1, 1}, {1, 1, 0}, {0, 0, 0}}),
+            Z => new Matrix( new [,]{{1, 1, 0}, {0, 1, 1}, {0, 0, 0}}),
+            I => new Matrix( new [,]{{0, 0, 0, 0}, {1, 1, 1, 1}, {0, 0, 0, 0}, {0, 0, 0, 0}}),
             _ => throw new ArgumentOutOfRangeException(nameof(shape), shape, null)
         };
 

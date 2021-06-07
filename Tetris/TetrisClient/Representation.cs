@@ -37,5 +37,10 @@ namespace TetrisClient
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
             };
         }
+
+        public void PlaceTetrominoInBoard(Tetronimo tetronimo)
+        {
+            
+        }
     }
 }
