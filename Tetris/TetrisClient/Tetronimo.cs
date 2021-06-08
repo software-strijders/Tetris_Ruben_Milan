@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Media;
 using static TetrisClient.TetronimoShape;
 
@@ -40,6 +41,19 @@ namespace TetrisClient
             Matrix = CreateShape(generatedShape);
             this.OffsetX = offsetX;
             this.OffsetY = offsetY;
+        }
+        
+        //gets all y,x positions
+        public List<(int, int)> CalculatePositions() 
+        {
+            var coordinates = new List<(int, int)>();
+            for (var y = 0; y < Matrix.Value.GetLength(0); y++)
+            for (var x = 0; x < Matrix.Value.GetLength(1); x++)
+            {
+                if(Matrix.Value[y,x] == 0) continue; //block does not need to be rendered when it is 0 because its empty
+                coordinates.Add((y + OffsetY, x + OffsetX));
+            }
+            return coordinates;
         }
 
         /// <summary>
