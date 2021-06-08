@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,7 +15,6 @@ namespace TetrisClient
     public partial class MainWindow
     {
         private Representation _representation;
-        
         private Tetronimo _tetronimo;
         private Tetronimo _nextTetromino;
         private DispatcherTimer _dpt;
@@ -93,8 +91,8 @@ namespace TetrisClient
 
         private void DropTetromino()
         {
-            // Named argument ------------------------------>|__________|
-            if (_representation.IsInRangeOfBoard(_tetronimo, givenYOffset: 1) /* || collides with other Tetromino? */)
+            if (_representation.IsInRangeOfBoard(_tetronimo, givenYOffset: 1)  //if in range of the board
+                && !_representation.CheckCollision(_tetronimo, givenYOffset: 1)) //if not collides with other tetromino's
                 _tetronimo.OffsetY++;
             else
             {
@@ -156,10 +154,12 @@ namespace TetrisClient
 
             switch (e.Key)
             {
-                case Key.Right when _representation.IsInRangeOfBoard(_tetronimo, 1):
+                case Key.Right when _representation.IsInRangeOfBoard(_tetronimo, 1)
+                                    && !_representation.CheckCollision(_tetronimo, givenYOffset: 0, givenXOffset: 1):
                     _tetronimo.OffsetX++;
                     break;
-                case Key.Left when _representation.IsInRangeOfBoard(_tetronimo, -1): 
+                case Key.Left when _representation.IsInRangeOfBoard(_tetronimo, -1)
+                                    && !_representation.CheckCollision(_tetronimo, givenYOffset: 0, givenXOffset: -1):
                     _tetronimo.OffsetX--;
                     break;
                 //Rotate clockwise
@@ -172,8 +172,9 @@ namespace TetrisClient
                     _tetronimo.Matrix = _tetronimo.Matrix.Rotate90CounterClockwise();
                     CorrectRotation();
                     break;
-                //ToDo: instantly move down, we need to implement collision detection first before we can do this
-                case Key.Space when _representation.IsInRangeOfBoard(_tetronimo, 0, 1):
+                //move down
+                case Key.Space when _representation.IsInRangeOfBoard(_tetronimo, 0, 1)
+                                    && !_representation.CheckCollision(_tetronimo, givenYOffset: 1):
                     _tetronimo.OffsetY++;
                     break;
                 //Only used in development
@@ -189,14 +190,14 @@ namespace TetrisClient
         {
             if (_representation.IsInRangeOfBoard(_tetronimo)) return; //return when check is not necessary 
             
-            //left side
+            //left side of the board
             if (_tetronimo.OffsetX < 0)
             {
                 _tetronimo.OffsetX = 0;
                 return;
             }
 
-            //right side
+            //right side of the board
             var xCoordinates = _tetronimo.CalculatePositions().Select(coordinate => coordinate.Item2).ToList();
             _tetronimo.OffsetX -= xCoordinates.Max() - _representation.Board.GetLength(1)+1 ;
         }

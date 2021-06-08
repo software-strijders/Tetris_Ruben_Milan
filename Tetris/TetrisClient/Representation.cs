@@ -52,10 +52,31 @@ namespace TetrisClient
                 var yWithOffset = y + tetronimo.OffsetY + givenYOffset;
                 var xWithOffset = x + tetronimo.OffsetX + givenXOffset;
                 
-                if (yWithOffset > Board.GetLength(0) - 1) return false;
-                if (xWithOffset > Board.GetLength(1) - 1 || xWithOffset < 0) return false;
+                if (yWithOffset > Board.GetLength(0) - 1) return false; //false if current block in loop is outside the board vertically
+                if (xWithOffset > Board.GetLength(1) - 1 || xWithOffset < 0) return false; //^same but horizontally
             }
             return true;
+        }
+
+        //checks if any blocks of the given tetromino is the same as any of the occupied blocks in the board 
+        //thinks one step ahead with the givenOffsets
+        public bool CheckCollision(Tetronimo tetronimo, int givenXOffset = 0, int givenYOffset = 0)
+        {
+            var collided = false;
+            for (var y = 0; y < Board.GetLength(0); y++) //dimension 0 = y
+            for (var x = 0; x < Board.GetLength(1); x++) //dimension 1 = x
+            {
+                if (Board[y, x] != 0) //if block is not empty
+                    tetronimo.CalculatePositions().ForEach(coordinate =>
+                    {
+                        var (tetrominoY, tetrominoX) = coordinate;
+                        if (tetrominoY == y - givenYOffset && tetrominoX == x - givenXOffset)
+                        {
+                            collided = true; //TODO should simply be return true but that does not work for unknown reasons
+                        }
+                    });
+            }
+            return collided;
         }
 
         public void PutTetrominoInBoard(Tetronimo tetronimo)
