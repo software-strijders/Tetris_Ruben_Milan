@@ -33,13 +33,14 @@ namespace TetrisClient
             _score = new Score();
             _nextTetromino = new Tetromino(4, 0);
             
+
             InitializeComponent();
             Timer();
             
             NewTetromino();
             RenderGrid();
         }
-        
+
         /// <summary>
         /// Clears the board otherwise for each movement a new tetromino will be displayed on top of
         /// the already existing one. Then Renders the tetromino.
