@@ -84,6 +84,7 @@ namespace TetrisClient
         /// <param name="e"></param>
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
+            _representation.HandleRows(); // TODO: put in the right location.
             DropTetromino();
             Board();
             DevelopmentInfo(); //TODO remove before release
