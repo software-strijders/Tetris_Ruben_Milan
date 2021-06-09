@@ -191,6 +191,7 @@ namespace TetrisClient
                 case Key.Space when _representation.IsInRangeOfBoard(_tetromino, 0, 1)
                                     && !_representation.CheckCollision(_tetromino, givenYOffset: 1):
                     _tetromino.OffsetY++;
+                    OnKeyDown(e);
                     break;
                 //Only used in development
                 case Key.E:
