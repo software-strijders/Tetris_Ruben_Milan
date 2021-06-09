@@ -65,8 +65,7 @@ namespace TetrisClient
         private static TetrominoShape GenerateShape()
         {
             var values = Enum.GetValues(typeof(TetrominoShape));
-            //return (TetrominoShape) values.GetValue(new Random().Next(values.Length));
-            return (TetrominoShape) values.GetValue(0);
+            return (TetrominoShape) values.GetValue(new Random().Next(values.Length));
         }
 
         /// <summary>

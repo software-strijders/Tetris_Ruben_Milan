@@ -8,7 +8,7 @@
 
         public Score()
         {
-            this.Level = 1;
+            this.Level = 0;
             this.Points = 0;
             this.Rows = 0;
         }
@@ -31,6 +31,8 @@
 
         public void HandleLevel()
         {
+            if (this.Rows == 0) return;
+            
             if (this.Rows % 10 == 0)
             {
                 this.Level++;
