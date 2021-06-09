@@ -39,7 +39,7 @@ namespace TetrisClient
             NewTetromino();
             RenderGrid();
         }
-
+        
         /// <summary>
         /// Clears the board otherwise for each movement a new tetromino will be displayed on top of
         /// the already existing one. Then Renders the tetromino.
@@ -70,7 +70,7 @@ namespace TetrisClient
             RenderTetromino(_nextTetromino, NextGrid);
             return false;
         }
-        
+
         /// <summary>
         /// Start a DispatcherTimer because those don't interupt the program
         /// This timer is used for determining the drop speed of tetrominoes.
@@ -82,7 +82,7 @@ namespace TetrisClient
             _dpt.Interval = new TimeSpan(0, 0, 0, 0, 700);
             _dpt.Start();
         }
-        
+
         /// <summary>
         /// Starts a dispatcherTimer because those are non blocking.
         /// This timer is used to determine the speed at which tetromino's
@@ -108,8 +108,9 @@ namespace TetrisClient
         /// </summary>
         private bool DropTetromino()
         {
-            if (_representation.IsInRangeOfBoard(_tetromino, givenYOffset: 1)  //if in range of the board
-                && !_representation.CheckCollision(_tetromino, givenYOffset: 1)) //if not collides with other tetromino's
+            if (_representation.IsInRangeOfBoard(_tetromino, givenYOffset: 1) //if in range of the board
+                && !_representation.CheckCollision(_tetromino,
+                    givenYOffset: 1)) //if not collides with other tetromino's
                 _tetromino.OffsetY++;
             else
             {
@@ -138,12 +139,12 @@ namespace TetrisClient
             for (var x = 0; x < _representation.Board.GetLength(1); x++)
             {
                 var block = _representation.Board[y, x];
-                if(block == 0) continue; //block does not need to be rendered when it is 0 because its empty
-                
+                if (block == 0) continue; //block does not need to be rendered when it is 0 because its empty
+
                 var rectangle = CreateRectangle(
-                    ConvertNumberToBrush(_representation.Board[y,x])); // TODO Fix colors corresponding to tetromino
+                    ConvertNumberToBrush(_representation.Board[y, x])); // TODO Fix colors corresponding to tetromino
                 TetrisGrid.Children.Add(rectangle);
-                
+
                 Grid.SetRow(rectangle, y);
                 Grid.SetColumn(rectangle, x);
             }
@@ -159,7 +160,8 @@ namespace TetrisClient
         /// <param name="grid">TetrisGrid or NextGrid for next tetromino</param>
         private void RenderTetromino(Tetromino tetromino, Grid grid)
         {
-            tetromino.CalculatePositions().ForEach(coordinate => {
+            tetromino.CalculatePositions().ForEach(coordinate =>
+            {
                 var (y, x) = coordinate;
                 var rectangle = CreateRectangle(Tetromino.DetermineColor(tetromino.Shape));
                 grid.Children.Add(rectangle);
@@ -198,7 +200,7 @@ namespace TetrisClient
                     break;
                 //move left
                 case Key.Left when _representation.IsInRangeOfBoard(_tetromino, -1)
-                                    && !_representation.CheckCollision(_tetromino, givenYOffset: 0, givenXOffset: -1):
+                                   && !_representation.CheckCollision(_tetromino, givenYOffset: 0, givenXOffset: -1):
                     _tetromino.OffsetX--;
                     break;
                 //Rotate clockwise
@@ -224,13 +226,14 @@ namespace TetrisClient
                 default:
                     return;
             }
+
             RenderGrid();
         }
 
         private void CorrectRotation()
         {
             if (_representation.IsInRangeOfBoard(_tetromino)) return; //return when check is not necessary 
-            
+
             //left side of the board
             if (_tetromino.OffsetX < 0)
             {
@@ -240,7 +243,7 @@ namespace TetrisClient
 
             //right side of the board
             var xCoordinates = _tetromino.CalculatePositions().Select(coordinate => coordinate.Item2).ToList();
-            _tetromino.OffsetX -= xCoordinates.Max() - _representation.Board.GetLength(1)+1 ;
+            _tetromino.OffsetX -= xCoordinates.Max() - _representation.Board.GetLength(1) + 1;
         }
 
         private void Quit(object sender, RoutedEventArgs routedEventArgs) => Application.Current.Shutdown();
@@ -253,13 +256,13 @@ namespace TetrisClient
         }
 
         private static Rectangle CreateRectangle(Brush color) => new()
-            {
-                Width = 30, // Width of a 'cell' in the Grid
-                Height = 30, // Height of a 'cell' in the Grid
-                Stroke = Brushes.Black, // Border
-                StrokeThickness = 0.75, // Border thickness
-                Fill = color // Background color
-            };
+        {
+            Width = 30, // Width of a 'cell' in the Grid
+            Height = 30, // Height of a 'cell' in the Grid
+            Stroke = Brushes.Black, // Border
+            StrokeThickness = 0.75, // Border thickness
+            Fill = color // Background color
+        };
 
         private static Brush ConvertNumberToBrush(int num)
         {
