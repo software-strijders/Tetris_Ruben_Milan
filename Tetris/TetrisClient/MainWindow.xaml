@@ -1,7 +1,7 @@
 ﻿<Window
-    Height="450"
+    Height="559"
     Title="Tetris"
-    Width="800"
+    Width="614"
     mc:Ignorable="d"
     x:Class="TetrisClient.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -9,107 +9,99 @@
     xmlns:local="clr-namespace:TetrisClient"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Background="#FFE2E9FF">
-    <Grid>
-        <Grid Background="Black" x:Name="TetrisGrid" Margin="2,0,0,1" VerticalAlignment="Bottom"
-              HorizontalAlignment="Left" Width="250" Height="400" ShowGridLines="True">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="25" />
-                <RowDefinition Height="25" />
-                <RowDefinition Height="25" />
-                <RowDefinition Height="25" />
-                <RowDefinition Height="25" />
-                <RowDefinition Height="25" />
-                <RowDefinition Height="25" />
-                <RowDefinition Height="25" />
-                <RowDefinition Height="25" />
-                <RowDefinition Height="25" />
-                <RowDefinition Height="25" />
-                <RowDefinition Height="25" />
-                <RowDefinition Height="25" />
-                <RowDefinition Height="25" />
-                <RowDefinition Height="25" />
-                <RowDefinition Height="25" />
+    <Grid Background="Black" Margin="0,0,0,-6">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="19*"/>
+            <ColumnDefinition Width="781*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Background="#FF121212" x:Name="TetrisGrid" Margin="10,0,0,0" VerticalAlignment="Center"
+              HorizontalAlignment="Left" Width="300" Height="480" Grid.ColumnSpan="2">
+            <Grid.RowDefinitions >
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="25" />
-                <ColumnDefinition Width="25" />
-                <ColumnDefinition Width="25" />
-                <ColumnDefinition Width="25" />
-                <ColumnDefinition Width="25" />
-                <ColumnDefinition Width="25" />
-                <ColumnDefinition Width="25" />
-                <ColumnDefinition Width="25" />
-                <ColumnDefinition Width="25" />
-                <ColumnDefinition Width="25" />
+                <ColumnDefinition Width="30" />
+                <ColumnDefinition Width="30" />
+                <ColumnDefinition Width="30" />
+                <ColumnDefinition Width="30" />
+                <ColumnDefinition Width="30" />
+                <ColumnDefinition Width="30" />
+                <ColumnDefinition Width="30" />
+                <ColumnDefinition Width="30" />
+                <ColumnDefinition Width="30" />
+                <ColumnDefinition Width="30" />
             </Grid.ColumnDefinitions>
         </Grid>
 
-        <TextBox x:Name="level" HorizontalAlignment="Left" Height="30" Margin="297,133,0,0" Text="level"
+        <TextBox x:Name="level" HorizontalAlignment="Left" Height="30" Margin="335,169,0,0" Text="level"
                  TextWrapping="Wrap" Width="100" Background="{x:Null}" FontSize="24" VerticalAlignment="Top"
                  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderBrush="{x:Null}"
-                 IsEnabled="False" />
-        <TextBox x:Name="lines" HorizontalAlignment="Left" Height="30" Margin="297,183,0,0" Text="lines"
+                 IsEnabled="False" Foreground="#FF03DAC6" Grid.Column="1" />
+        <TextBox x:Name="lines" HorizontalAlignment="Left" Height="30" Margin="335,219,0,0" Text="lines"
                  TextWrapping="Wrap" VerticalAlignment="Top" Width="100" Background="{x:Null}" FontSize="24"
                  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderBrush="{x:Null}"
-                 IsEnabled="False" />
-        <TextBox x:Name="score" HorizontalAlignment="Left" Height="30" Margin="297,233,0,0" Text="score"
+                 IsEnabled="False" Foreground="#FF03DAC6" Grid.Column="1" />
+        <TextBox x:Name="score" HorizontalAlignment="Left" Height="30" Margin="335,269,0,0" Text="score"
                  TextWrapping="Wrap" VerticalAlignment="Top" Width="100" Background="{x:Null}" FontSize="24"
                  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderBrush="{x:Null}"
-                 IsEnabled="False" />
+                 IsEnabled="False" Foreground="#FF03DAC6" Grid.Column="1" />
 
-        <TextBox x:Name="levelTextBox" HorizontalAlignment="Left" Height="30" Margin="422,133,0,0" Text="1"
+        <TextBox x:Name="levelTextBox" HorizontalAlignment="Left" Height="30" Margin="457,169,0,0" Text="1"
                  TextWrapping="Wrap" Width="100" Background="{x:Null}" FontSize="24" VerticalAlignment="Top"
                  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderBrush="{x:Null}"
-                 IsEnabled="False" />
-        <TextBox x:Name="linesTextBox" HorizontalAlignment="Left" Height="30" Margin="422,183,0,0" Text="0"
+                 IsEnabled="False" Foreground="#FF03DAC6" Grid.Column="1" />
+        <TextBox x:Name="linesTextBox" HorizontalAlignment="Left" Height="30" Margin="457,219,0,0" Text="0"
                  TextWrapping="Wrap" VerticalAlignment="Top" Width="100" Background="{x:Null}" FontSize="24"
                  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderBrush="{x:Null}"
-                 IsEnabled="False" />
-        <TextBox x:Name="scoreTextBox" HorizontalAlignment="Left" Height="30" Margin="422,233,0,0" Text="0"
+                 IsEnabled="False" Foreground="#FF03DAC6" Grid.Column="1" />
+        <TextBox x:Name="scoreTextBox" HorizontalAlignment="Left" Height="30" Margin="457,269,0,0" Text="0"
                  TextWrapping="Wrap" VerticalAlignment="Top" Width="100" Background="{x:Null}" FontSize="24"
                  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderBrush="{x:Null}"
-                 IsEnabled="False" />
+                 IsEnabled="False" Foreground="#FF03DAC6" Grid.Column="1" />
 
-        <Button x:Name="quitButton" Content="Quit" HorizontalAlignment="Left" Height="31" Margin="297,293,0,0"
-                VerticalAlignment="Top" Width="100" BorderBrush="{x:Null}" Background="#FFCEDAFF" Click="Quit" />
-        <Button x:Name="pauseButton" Content="Pause" HorizontalAlignment="Left" Height="31" Margin="422,293,0,0"
-                VerticalAlignment="Top" Width="100" BorderBrush="{x:Null}" Background="#FFCEDAFF" Click="Pause" />
+        <Button x:Name="quitButton" Content="Quit" HorizontalAlignment="Left" Height="30" Margin="330,332,0,0"
+                VerticalAlignment="Top" Width="100" BorderBrush="{x:Null}" Background="#FF03DAC6" Click="Quit" Grid.Column="1" />
+        <Button x:Name="pauseButton" Content="Pause" HorizontalAlignment="Left" Height="30" Margin="455,332,0,0"
+                VerticalAlignment="Top" Width="100" BorderBrush="{x:Null}" Background="#FF03DAC6" Click="Pause" Grid.Column="1" RenderTransformOrigin="0.794,1.96" />
 
-        <TextBox x:Name="tetris" HorizontalAlignment="Left" Height="87" Margin="297,329,0,0" Text="tetris"
-                 TextWrapping="Wrap" VerticalAlignment="Top" Width="225" BorderBrush="{x:Null}" Background="{x:Null}"
+        <TextBox x:Name="tetris" HorizontalAlignment="Left" Height="87" Margin="316,411,0,0" Text="tetris"
+                 TextWrapping="Wrap" VerticalAlignment="Top" Width="239" BorderBrush="{x:Null}" Background="Black"
                  FontSize="72" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" IsEnabled="False"
-                 FontWeight="Bold" FontStyle="Normal" />
+                 FontWeight="Bold" FontStyle="Normal" Foreground="#FF00FFE7" Grid.Column="1" />
 
-        <Grid x:Name="NextGrid" HorizontalAlignment="Left" Height="100" Margin="297,33,0,0" VerticalAlignment="Top"
-              Width="100" Background="#FFCEDAFF">
+        <Grid x:Name="NextGrid" HorizontalAlignment="Left" Height="120" Margin="385,18,0,0" VerticalAlignment="Top"
+              Width="120" Background="#FF121212" Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="25" />
-                <RowDefinition Height="25" />
-                <RowDefinition Height="25" />
-                <RowDefinition Height="25" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="25" />
-                <ColumnDefinition Width="25" />
-                <ColumnDefinition Width="25" />
-                <ColumnDefinition Width="25" />
+                <ColumnDefinition Width="30" />
+                <ColumnDefinition Width="30" />
+                <ColumnDefinition Width="30" />
+                <ColumnDefinition Width="30" />
             </Grid.ColumnDefinitions>
 
             <Grid.Effect>
                 <DropShadowEffect />
             </Grid.Effect>
         </Grid>
-        <TextBox x:Name="xText" HorizontalAlignment="Left" Height="30" Margin="581,33,0,0" Text="X:"
-                 TextWrapping="Wrap" Width="100" Background="{x:Null}" FontSize="24" VerticalAlignment="Top"
-                 HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderBrush="{x:Null}"
-                 IsEnabled="False" />
-        <TextBox x:Name="yText" HorizontalAlignment="Left" Height="30" Margin="581,72,0,0" Text="Y:"
-                 TextWrapping="Wrap" Width="100" Background="{x:Null}" FontSize="24" VerticalAlignment="Top"
-                 HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderBrush="{x:Null}"
-                 IsEnabled="False" />
-        <TextBox x:Name="yList" HorizontalAlignment="Left" Height="30" Margin="527,118,0,0" Text="YList:"
-                 TextWrapping="Wrap" Width="209" Background="{x:Null}" FontSize="24" VerticalAlignment="Top"
-                 HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderBrush="{x:Null}"
-                 IsEnabled="False" />
     </Grid>
 </Window>
