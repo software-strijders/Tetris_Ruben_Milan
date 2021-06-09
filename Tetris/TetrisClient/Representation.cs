@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
-using System.Windows.Documents;
 using static System.Linq.Enumerable;
 
 namespace TetrisClient
@@ -97,41 +95,25 @@ namespace TetrisClient
 
                 //put the value at the correct spot
                 Board[y + tetromino.OffsetY, x + tetromino.OffsetX]
-                    = ConvertTetrominoShapeToNumber(tetromino.shape);
+                    = ConvertTetrominoShapeToNumber(tetromino.Shape);
             }
-        }
-
-        private int ConvertTetrominoShapeToNumber(TetrominoShape tetrominoShape)
-        {
-            return tetrominoShape switch
-            {
-                TetrominoShape.O => 1,
-                TetrominoShape.T => 2,
-                TetrominoShape.J => 3,
-                TetrominoShape.L => 4,
-                TetrominoShape.S => 5,
-                TetrominoShape.Z => 6,
-                TetrominoShape.I => 7,
-                _ => throw new ArgumentOutOfRangeException(nameof(tetrominoShape), tetrominoShape, null)
-            };
         }
 
         /// <summary>
         /// General method that's called after each tick.
         /// Evaluates if rows are full and handles it.
         /// </summary>
-        public void HandleRows()
+        public void HandleRowDeletion()
         {
             var fullRows = FullRows();
             DeleteFullRows(fullRows);
-            // DropFloaters(fullRows);
         }
 
         /// <summary>
         /// Checks if there are any rows that are full (x axis)
         /// </summary>
         /// <returns>row numbers that are full</returns>
-        public List<int> FullRows()
+        private List<int> FullRows()
         {
             var fullRows = new List<int>();
             for (var yAxis = 0; yAxis < Board.GetLength(0); yAxis++)
@@ -144,7 +126,7 @@ namespace TetrisClient
         /// Deletes the rows that are full.
         /// </summary>
         /// <param name="fullRows"></param>
-        public void DeleteFullRows(List<int> fullRows)
+        private void DeleteFullRows(List<int> fullRows)
         {
             for (var y = 0; y < Board.GetLength(0); y++)
             {
@@ -152,7 +134,7 @@ namespace TetrisClient
                 for (var x = 0; x < Board.GetLength(1); x++)
                     Board[y, x] = 0;
 
-                DropFloaters(y);
+                DropFloatingTetrominos(y);
                 fullRows.Remove(y);
             }
         }
@@ -161,9 +143,33 @@ namespace TetrisClient
         /// Looks at the rows above the deleted row and copies them at the row below.
         /// </summary>
         /// <param name="deletedRow"></param>
-        public void DropFloaters(int deletedRow)
+        private void DropFloatingTetrominos(int deletedRow)
         {
-            
+            for (var y = deletedRow; y > 0; y--) //dimension 0 = y
+            for (var x = 0; x < Board.GetLength(1); x++) //dimension 1 = x
+                Board[y, x] = Board[y - 1, x];
+        }
+        
+        /// <summary>
+        /// Converts the shape of the tetromino to its corresponding number
+        /// this number will later be used in the UI to match it's corresponding color(Brush)
+        /// </summary>
+        /// <param name="tetrominoShape"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        private static int ConvertTetrominoShapeToNumber(TetrominoShape tetrominoShape)
+        {
+            return tetrominoShape switch
+            {
+                TetrominoShape.O => 1,
+                TetrominoShape.T => 2,
+                TetrominoShape.J => 3,
+                TetrominoShape.L => 4,
+                TetrominoShape.S => 5,
+                TetrominoShape.Z => 6,
+                TetrominoShape.I => 7,
+                _ => throw new ArgumentOutOfRangeException(nameof(tetrominoShape), tetrominoShape, null)
+            };
         }
     }
 }
