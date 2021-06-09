@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Media;
-using static TetrisClient.TetronimoShape;
+using static TetrisClient.TetrominoShape;
 
 namespace TetrisClient
 {
     /// <summary>
     /// Enum that represents the different kinds of tetronimo's.
     /// </summary>
-    public enum TetronimoShape
+    public enum TetrominoShape
     {
         O,
         T,
@@ -16,12 +16,12 @@ namespace TetrisClient
         L,
         S,
         Z,
-        I
+        I,
     }
 
-    public class Tetronimo
+    public class Tetromino
     {
-        public TetronimoShape shape { get; private set; }
+        public TetrominoShape shape { get; private set; }
         
         public Matrix Matrix { get; set; }
         public int OffsetX;
@@ -32,9 +32,9 @@ namespace TetrisClient
         /// Constructor overloading is used if alternate spawnpoints
         /// are being chosen.
         /// </summary>
-        public Tetronimo() => new Tetronimo(0, 0);
+        public Tetromino() => new Tetromino(0, 0);
 
-        public Tetronimo(int offsetX, int offsetY)
+        public Tetromino(int offsetX, int offsetY)
         {
             var generatedShape = GenerateShape();
             shape = generatedShape;
@@ -59,20 +59,20 @@ namespace TetrisClient
         /// <summary>
         /// Picks a random tetronimo.
         /// </summary>
-        /// <returns>TetronimoShape enum</returns>
-        private static TetronimoShape GenerateShape()
+        /// <returns>TetrominoShape enum</returns>
+        private static TetrominoShape GenerateShape()
         {
-            var values = Enum.GetValues(typeof(TetronimoShape));
-            return (TetronimoShape) values.GetValue(new Random().Next(values.Length));
+            var values = Enum.GetValues(typeof(TetrominoShape));
+            return (TetrominoShape) values.GetValue(new Random().Next(values.Length));
         }
 
         /// <summary>
         /// Gives back the 3D array that corresponds with the given tetronimo shape enum.
         /// </summary>
-        /// <param name="shape">TetronimoShape enum</param>
+        /// <param name="shape">TetrominoShape enum</param>
         /// <returns>3D array that represents a tetronimo of the passed enum</returns>
         /// <exception cref="ArgumentOutOfRangeException">when an invalid entry is passed</exception>
-        private static Matrix CreateShape(TetronimoShape shape) => shape switch
+        private static Matrix CreateShape(TetrominoShape shape) => shape switch
         {
             O => new Matrix( new [,]{{1, 1}, {1, 1}}),
             T => new Matrix( new [,]{{1, 1, 1}, {0, 1, 0}, {0, 0, 0}}),
@@ -85,21 +85,21 @@ namespace TetrisClient
         };
 
         /// <summary>
-        /// Tetronimo's have specific colors.
+        /// Tetromino's have specific colors.
         /// Here those colors are bound to the corresponding enum shape. 
         /// </summary>
-        /// <param name="shape">TetronimoShape enum</param>
+        /// <param name="shape">TetrominoShape enum</param>
         /// <returns>color that corresponds with the given tetronimo shope</returns>
         /// <exception cref="ArgumentOutOfRangeException">when an invalid entry is passed</exception>
-        public static Brush DetermineColor(TetronimoShape shape) => shape switch
+        public static Brush DetermineColor(TetrominoShape shape) => shape switch
         {
             O => Brushes.Yellow,
-            T => Brushes.Purple,
-            J => Brushes.Blue,
-            L => Brushes.Orange,
-            S => Brushes.Green,
+            T => Brushes.BlueViolet,
+            J => Brushes.Aqua,
+            L => Brushes.DarkOrange,
+            S => Brushes.LimeGreen,
             Z => Brushes.Red,
-            I => Brushes.Aqua,
+            I => Brushes.Blue,
             _ => throw new ArgumentOutOfRangeException(nameof(shape), shape, null)
         };
     }

@@ -12,7 +12,7 @@ namespace TetrisClient
         /// <summary>
         /// TODO: create implementation
         /// 3D array that represents the board.
-        /// The numbers (1-7) indicate from which tetronimo it was.
+        /// The numbers (1-7) indicate from which tetromino it was.
         /// This way we can accurately keep control of the colors.
         /// </summary>
         /// <returns>board representation given in a multidimensional array</returns>
@@ -40,17 +40,17 @@ namespace TetrisClient
         }
 
         //GivenOffsets are used to think one step ahead, to calculate if the next move if possible.
-        public bool IsInRangeOfBoard(Tetronimo tetronimo, int givenXOffset = 0, int givenYOffset = 0)
+        public bool IsInRangeOfBoard(Tetromino tetromino, int givenXOffset = 0, int givenYOffset = 0)
         {
             //check if any of the tetromino's blocks is out of bounds
-            for (var y = 0; y < tetronimo.Matrix.Value.GetLength(0); y++) //dimension 0 = y
-            for (var x = 0; x < tetronimo.Matrix.Value.GetLength(1); x++) //dimension 1 = x
+            for (var y = 0; y < tetromino.Matrix.Value.GetLength(0); y++) //dimension 0 = y
+            for (var x = 0; x < tetromino.Matrix.Value.GetLength(1); x++) //dimension 1 = x
             {
                 //do nothing when cell in the tetromino matrix is 0(not a block)
-                if(tetronimo.Matrix.Value[y,x] == 0) continue;
+                if(tetromino.Matrix.Value[y,x] == 0) continue;
                 
-                var yWithOffset = y + tetronimo.OffsetY + givenYOffset;
-                var xWithOffset = x + tetronimo.OffsetX + givenXOffset;
+                var yWithOffset = y + tetromino.OffsetY + givenYOffset;
+                var xWithOffset = x + tetromino.OffsetX + givenXOffset;
                 
                 if (yWithOffset > Board.GetLength(0) - 1) return false; //false if current block in loop is outside the board vertically
                 if (xWithOffset > Board.GetLength(1) - 1 || xWithOffset < 0) return false; //^same but horizontally
@@ -60,14 +60,14 @@ namespace TetrisClient
 
         //checks if any blocks of the given tetromino is the same as any of the occupied blocks in the board 
         //thinks one step ahead with the givenOffsets
-        public bool CheckCollision(Tetronimo tetronimo, int givenXOffset = 0, int givenYOffset = 0)
+        public bool CheckCollision(Tetromino tetromino, int givenXOffset = 0, int givenYOffset = 0)
         {
             var collided = false;
             for (var y = 0; y < Board.GetLength(0); y++) //dimension 0 = y
             for (var x = 0; x < Board.GetLength(1); x++) //dimension 1 = x
             {
                 if (Board[y, x] != 0) //if block is not empty
-                    tetronimo.CalculatePositions().ForEach(coordinate =>
+                    tetromino.CalculatePositions().ForEach(coordinate =>
                     {
                         var (tetrominoY, tetrominoX) = coordinate;
                         if (tetrominoY == y - givenYOffset && tetrominoX == x - givenXOffset)
@@ -79,19 +79,34 @@ namespace TetrisClient
             return collided;
         }
 
-        public void PutTetrominoInBoard(Tetronimo tetronimo)
+        public void PutTetrominoInBoard(Tetromino tetromino)
         {
             //render the tetromino
             //loop trough all blocks in the tetromino
-            for (var y = 0; y < tetronimo.Matrix.Value.GetLength(0); y++) //dimension 0 = y
-            for (var x = 0; x < tetronimo.Matrix.Value.GetLength(1); x++) //dimension 1 = x
+            for (var y = 0; y < tetromino.Matrix.Value.GetLength(0); y++) //dimension 0 = y
+            for (var x = 0; x < tetromino.Matrix.Value.GetLength(1); x++) //dimension 1 = x
             {
                 //do nothing when cell in the tetromino matrix is 0(not a block)
-                if(tetronimo.Matrix.Value[y,x] == 0) continue;
+                if(tetromino.Matrix.Value[y,x] == 0) continue;
 
                 //put the value at the correct spot
-                Board[y + tetronimo.OffsetY, x + tetronimo.OffsetX] = 1; //TODO should be tetromino's corresponding number
+                Board[y + tetromino.OffsetY, x + tetromino.OffsetX] 
+                    = ConvertTetrominoShapeToNumber(tetromino.shape); 
             } 
+        }
+
+        private int ConvertTetrominoShapeToNumber(TetrominoShape tetrominoShape)
+        {
+            return tetrominoShape switch
+            {
+                TetrominoShape.O => 1,
+                TetrominoShape.T => 2,
+                TetrominoShape.J => 3,
+                TetrominoShape.L => 4,
+                TetrominoShape.S => 5,
+                TetrominoShape.Z => 6,
+                TetrominoShape.I => 7,
+            };
         }
     }
 }
