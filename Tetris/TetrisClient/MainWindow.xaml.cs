@@ -36,18 +36,18 @@ namespace TetrisClient
             _nextTetromino = new Tetromino(3, 0);
             NewTetromino();
 
-            Board();
+            RenderGrid();
         }
         
         /// <summary>
         /// Clears the board otherwise for each movement a new tetromino will be displayed on top of
         /// the already existing one. Then Renders the tetromino.
         /// </summary>
-        private void Board()
+        private void RenderGrid()
         {
             TetrisGrid.Children.Clear();
             RenderTetromino(_tetromino, TetrisGrid);
-            RenderBoard();
+            RenderLandedTetrominos();
         }
 
         /// <summary>
@@ -85,10 +85,17 @@ namespace TetrisClient
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
             DropTetromino();
-            Board();
+            RenderGrid();
             DevelopmentInfo(); //TODO remove before release
         }
 
+        /// <summary>
+        /// Drops the tetromino every ... milliseconds
+        /// Checks if the tetromino can drop without colliding with other tetrominos or the board bounds
+        /// if it will collide with bounds or other tetromino's the tetromino will be put in the representation board
+        /// and the representation checks if there are any full rows, if so they will be deleted
+        /// lastly a new tetromino will be added and the board will be rendered again 
+        /// </summary>
         private void DropTetromino()
         {
             if (_representation.IsInRangeOfBoard(_tetromino, givenYOffset: 1)  //if in range of the board
@@ -97,12 +104,16 @@ namespace TetrisClient
             else
             {
                 _representation.PutTetrominoInBoard(_tetromino);
+                _representation.HandleRowDeletion();
                 NewTetromino();
-                Board();
+                RenderGrid();
             }
         }
 
-        private void RenderBoard()
+        /// <summary>
+        /// Renders all tetrominos that are in the representation
+        /// </summary>
+        private void RenderLandedTetrominos()
         {
             for (var y = 0; y < _representation.Board.GetLength(0); y++)
             for (var x = 0; x < _representation.Board.GetLength(1); x++)
@@ -131,7 +142,7 @@ namespace TetrisClient
         {
             tetromino.CalculatePositions().ForEach(coordinate => {
                 var (y, x) = coordinate;
-                var rectangle = CreateRectangle(Tetromino.DetermineColor(tetromino.shape));
+                var rectangle = CreateRectangle(Tetromino.DetermineColor(tetromino.Shape));
                 grid.Children.Add(rectangle);
 
                 Grid.SetRow(rectangle, y);
@@ -188,7 +199,7 @@ namespace TetrisClient
                 default:
                     return;
             }
-            Board();
+            RenderGrid();
         }
 
         private void CorrectRotation()

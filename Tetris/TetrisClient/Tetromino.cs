@@ -21,8 +21,7 @@ namespace TetrisClient
 
     public class Tetromino
     {
-        public TetrominoShape shape { get; private set; }
-        
+        public TetrominoShape Shape { get; private set; }
         public Matrix Matrix { get; set; }
         public int OffsetX;
         public int OffsetY;
@@ -37,13 +36,16 @@ namespace TetrisClient
         public Tetromino(int offsetX, int offsetY)
         {
             var generatedShape = GenerateShape();
-            shape = generatedShape;
+            Shape = generatedShape;
             Matrix = CreateShape(generatedShape);
             this.OffsetX = offsetX;
             this.OffsetY = offsetY;
         }
         
-        //gets all y,x positions
+        /// <summary>
+        /// Calculates all x and y positions from the tetromino in the board(also uses the offsets)
+        /// </summary>
+        /// <returns>All coordinates</returns>
         public List<(int, int)> CalculatePositions() 
         {
             var coordinates = new List<(int, int)>();
