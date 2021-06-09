@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using static System.Linq.Enumerable;
 
 namespace TetrisClient
@@ -154,7 +153,7 @@ namespace TetrisClient
             for (var x = 0; x < Board.GetLength(1); x++) //dimension 1 = x
                 Board[y, x] = Board[y - 1, x];
         }
-        
+
         /// <summary>
         /// Converts the shape of the tetromino to its corresponding number
         /// this number will later be used in the UI to match it's corresponding color(Brush)
