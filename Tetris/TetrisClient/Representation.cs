@@ -103,10 +103,10 @@ namespace TetrisClient
         /// General method that's called after each tick.
         /// Evaluates if rows are full and handles it.
         /// </summary>
-        public void HandleRowDeletion()
+        public int HandleRowDeletion()
         {
             var fullRows = FullRows();
-            DeleteFullRows(fullRows);
+            return DeleteFullRows(fullRows);
         }
 
         /// <summary>
@@ -126,8 +126,9 @@ namespace TetrisClient
         /// Deletes the rows that are full.
         /// </summary>
         /// <param name="fullRows"></param>
-        private void DeleteFullRows(List<int> fullRows)
+        private int DeleteFullRows(List<int> fullRows)
         {
+            var rowsDeleted = 0;
             for (var y = 0; y < Board.GetLength(0); y++)
             {
                 if (!fullRows.Contains(y)) continue;
@@ -135,8 +136,12 @@ namespace TetrisClient
                     Board[y, x] = 0;
 
                 DropFloatingTetrominos(y);
+                rowsDeleted++;
                 fullRows.Remove(y);
             }
+
+            Console.WriteLine(rowsDeleted);
+            return rowsDeleted;
         }
 
         /// <summary>

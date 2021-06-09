@@ -17,6 +17,8 @@ namespace TetrisClient
         private Representation _representation;
         private Tetromino _tetromino;
         private Tetromino _nextTetromino;
+        private Score _score;
+        
         private DispatcherTimer _dpt;
         private TimeSpan _tickInterval = new(0, 0, 0, 0, 700);
         private bool _paused; // Default value is false
@@ -29,6 +31,7 @@ namespace TetrisClient
         public MainWindow()
         {
             _representation = new Representation();
+            _score = new Score();
             
             InitializeComponent();
             Timer();
@@ -45,6 +48,10 @@ namespace TetrisClient
         /// </summary>
         private void RenderGrid()
         {
+            levelTextBox.Text = _score.Level.ToString();
+            scoreTextBox.Text = _score.Points.ToString();
+            linesTextBox.Text = _score.Rows.ToString();
+            
             TetrisGrid.Children.Clear();
             RenderTetromino(_tetromino, TetrisGrid);
             RenderLandedTetrominos();
@@ -94,6 +101,7 @@ namespace TetrisClient
         /// Checks if the tetromino can drop without colliding with other tetrominos or the board bounds
         /// if it will collide with bounds or other tetromino's the tetromino will be put in the representation board
         /// and the representation checks if there are any full rows, if so they will be deleted
+        /// The score and the level is also calculated.
         /// lastly a new tetromino will be added and the board will be rendered again 
         /// </summary>
         private void DropTetromino()
@@ -103,8 +111,11 @@ namespace TetrisClient
                 _tetromino.OffsetY++;
             else
             {
-                _representation.PutTetrominoInBoard(_tetromino);
                 _representation.HandleRowDeletion();
+                //_score.HandleScore(rowsDeleted);
+                //_score.HandleLevel();
+                
+                _representation.PutTetrominoInBoard(_tetromino);
                 NewTetromino();
                 RenderGrid();
             }
@@ -259,18 +270,18 @@ namespace TetrisClient
         // For debugging purposes
         private void DevelopmentInfo()
         {
-            var i = 1;
-            foreach (var cell in _representation.Board)
-            {
-                
-                if (i % 10 == 0)
-                {
-                    Console.WriteLine(cell);
-                }
-                else Console.Write(cell);
-
-                i++;
-            }
+            //var i = 1;
+            //foreach (var cell in _representation.Board)
+            //{
+            //    
+            //    if (i % 10 == 0)
+            //    {
+            //        Console.WriteLine(cell);
+            //    }
+            //    else Console.Write(cell);
+//
+            //    i++;
+            //}
         }
     }
 }
