@@ -205,13 +205,11 @@ namespace TetrisClient
                     break;
                 //Rotate clockwise
                 case Key.Up:
-                    _tetromino.Matrix = _tetromino.Matrix.Rotate90();
-                    CorrectRotation();
+                    HandleRotation(Key.Up);
                     break;
                 //Rotate counter clockwise
                 case Key.Down:
-                    _tetromino.Matrix = _tetromino.Matrix.Rotate90CounterClockwise();
-                    CorrectRotation();
+                    HandleRotation(Key.Down);
                     break;
                 //fully move down (hard drop)
                 case Key.Space when _representation.IsInRangeOfBoard(_tetromino, 0, 1)
@@ -233,6 +231,26 @@ namespace TetrisClient
             }
 
             RenderGrid();
+        }
+
+        private void HandleRotation(Key key)
+        {
+            _tetromino.Matrix = key switch
+            {
+                Key.Up => _tetromino.Matrix.Rotate90(),
+                Key.Down => _tetromino.Matrix.Rotate90CounterClockwise(),
+                _ => _tetromino.Matrix
+            };
+
+            CorrectRotation();
+            RenderGrid();
+
+            var coordinates = _tetromino.CalculatePositions();
+            foreach (var (y, x) in coordinates)
+                if (_representation.Board[y, x] > 0)
+                    _tetromino.Matrix = key == Key.Up
+                        ? _tetromino.Matrix = _tetromino.Matrix.Rotate90CounterClockwise()
+                        : _tetromino.Matrix = _tetromino.Matrix.Rotate90();
         }
 
         private void CorrectRotation()
@@ -291,13 +309,13 @@ namespace TetrisClient
             foreach (var cell in _representation.Board)
             {
                 if (i % 10 == 0)
-                {
                     Console.WriteLine(cell);
-                }
                 else Console.Write(cell);
 
                 i++;
             }
+
+            Console.WriteLine();
         }
     }
 }

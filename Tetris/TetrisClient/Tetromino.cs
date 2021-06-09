@@ -38,23 +38,25 @@ namespace TetrisClient
             var generatedShape = GenerateShape();
             Shape = generatedShape;
             Matrix = CreateShape(generatedShape);
-            this.OffsetX = offsetX;
-            this.OffsetY = offsetY;
+            OffsetX = offsetX;
+            OffsetY = offsetY;
         }
-        
+
         /// <summary>
         /// Calculates all x and y positions from the tetromino in the board(also uses the offsets)
         /// </summary>
         /// <returns>All coordinates</returns>
-        public List<(int, int)> CalculatePositions() 
+        public List<(int, int)> CalculatePositions()
         {
             var coordinates = new List<(int, int)>();
             for (var y = 0; y < Matrix.Value.GetLength(0); y++)
             for (var x = 0; x < Matrix.Value.GetLength(1); x++)
             {
-                if(Matrix.Value[y,x] == 0) continue; //block does not need to be rendered when it is 0 because its empty
+                if (Matrix.Value[y, x] == 0)
+                    continue; //block does not need to be rendered when it is 0 because its empty
                 coordinates.Add((y + OffsetY, x + OffsetX));
             }
+
             return coordinates;
         }
 
@@ -76,13 +78,13 @@ namespace TetrisClient
         /// <exception cref="ArgumentOutOfRangeException">when an invalid entry is passed</exception>
         private static Matrix CreateShape(TetrominoShape shape) => shape switch
         {
-            O => new Matrix( new [,]{{1, 1}, {1, 1}}),
-            T => new Matrix( new [,]{{1, 1, 1}, {0, 1, 0}, {0, 0, 0}}),
-            J => new Matrix( new [,]{{0, 1, 0}, {0, 1, 0}, {1, 1, 0}}),
-            L => new Matrix( new [,]{{0, 1, 0}, {0, 1, 0}, {0, 1, 1}}),
-            S => new Matrix( new [,]{{0, 1, 1}, {1, 1, 0}, {0, 0, 0}}),
-            Z => new Matrix( new [,]{{1, 1, 0}, {0, 1, 1}, {0, 0, 0}}),
-            I => new Matrix( new [,]{{0, 0, 0, 0}, {1, 1, 1, 1}, {0, 0, 0, 0}, {0, 0, 0, 0}}),
+            O => new Matrix(new[,] {{1, 1}, {1, 1}}),
+            T => new Matrix(new[,] {{1, 1, 1}, {0, 1, 0}, {0, 0, 0}}),
+            J => new Matrix(new[,] {{0, 1, 0}, {0, 1, 0}, {1, 1, 0}}),
+            L => new Matrix(new[,] {{0, 1, 0}, {0, 1, 0}, {0, 1, 1}}),
+            S => new Matrix(new[,] {{0, 1, 1}, {1, 1, 0}, {0, 0, 0}}),
+            Z => new Matrix(new[,] {{1, 1, 0}, {0, 1, 1}, {0, 0, 0}}),
+            I => new Matrix(new[,] {{0, 0, 0, 0}, {1, 1, 1, 1}, {0, 0, 0, 0}, {0, 0, 0, 0}}),
             _ => throw new ArgumentOutOfRangeException(nameof(shape), shape, null)
         };
 
