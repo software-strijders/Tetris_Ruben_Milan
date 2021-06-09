@@ -180,7 +180,6 @@ namespace TetrisClient
         /// <summary>
         /// Checks if a rotation would cross the border and if so, corrects the position accordingly.
         /// </summary>
-
         /// <summary>
         /// C# function that triggers when a key is pressed.
         /// This is how the user controls the game
@@ -188,8 +187,7 @@ namespace TetrisClient
         /// <param name="e">pressed key</param>
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            if (_paused)
-                return;
+            if (!_dpt.IsEnabled) return;
 
             switch (e.Key)
             {
@@ -249,13 +247,9 @@ namespace TetrisClient
 
         private void Pause(object sender, RoutedEventArgs routedEventArgs)
         {
-            _paused = !_paused;
-
             var button = (Button) sender;
-            button.Content = ReferenceEquals(button.Content, "Pause") ? "Resume" : "Pause";
-
-            if (_paused) _dpt.Stop();
-            else _dpt.Start();
+            button.Content = (string) button.Content == "Pause" ? "Resume" : "Pause";
+            _dpt.IsEnabled = !_dpt.IsEnabled;
         }
 
         private static Rectangle CreateRectangle(Brush color) => new()
@@ -288,7 +282,6 @@ namespace TetrisClient
             var i = 1;
             foreach (var cell in _representation.Board)
             {
-                
                 if (i % 10 == 0)
                 {
                     Console.WriteLine(cell);
