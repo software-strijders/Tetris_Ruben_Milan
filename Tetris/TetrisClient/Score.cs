@@ -29,14 +29,13 @@
             this.Rows += rows;
         }
 
-        public void HandleLevel()
+        public bool HandleLevel()
         {
-            if (this.Rows == 0) return;
-            
-            if (this.Rows % 10 == 0)
-            {
-                this.Level++;
-            }
+            if (this.Rows == 0) return false;
+            if (this.Rows % 10 != 0) return false;
+            this.Level++;
+            return true;
+
         }
     }
 }
