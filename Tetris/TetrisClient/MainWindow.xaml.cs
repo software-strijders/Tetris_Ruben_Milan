@@ -118,12 +118,12 @@ namespace TetrisClient
                 if (deletedRows != 0)
                 {
                     _score.HandleScore(deletedRows);
-                    levelTextBox.Text = _score.Level.ToString();
-                    scoreTextBox.Text = _score.Points.ToString();
-                    linesTextBox.Text = _score.Rows.ToString();
                     if (_score.HandleLevel())
                         _dpt.Interval = new TimeSpan(0, 0, 0, 0, Convert.ToInt32(_dpt.Interval.Milliseconds * 0.9));
                 }
+                levelTextBox.Text = _score.Level.ToString();
+                scoreTextBox.Text = _score.Points.ToString();
+                linesTextBox.Text = _score.Rows.ToString();
                 return NewTetromino();
             }
             return false;
@@ -213,11 +213,16 @@ namespace TetrisClient
                     _tetromino.Matrix = _tetromino.Matrix.Rotate90CounterClockwise();
                     CorrectRotation();
                     break;
-                //move down
+                //fully move down (hard drop)
                 case Key.Space when _representation.IsInRangeOfBoard(_tetromino, 0, 1)
                                     && !_representation.CheckCollision(_tetromino, givenYOffset: 1):
                     _tetromino.OffsetY++;
                     OnKeyDown(e);
+                    break;
+                //move down by one (soft drop)
+                case Key.LeftShift when _representation.IsInRangeOfBoard(_tetromino, 0, 1)
+                                    && !_representation.CheckCollision(_tetromino, givenYOffset: 1):
+                    _tetromino.OffsetY++;
                     break;
                 //Only used in development
                 case Key.E:
