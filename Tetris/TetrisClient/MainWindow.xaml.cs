@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -30,7 +31,7 @@ namespace TetrisClient
         {
             _representation = new Representation();
             _score = new Score();
-            _nextTetromino = new Tetromino(3, 0);
+            _nextTetromino = new Tetromino(4, 0);
             
             InitializeComponent();
             Timer();
@@ -38,17 +39,13 @@ namespace TetrisClient
             NewTetromino();
             RenderGrid();
         }
-        
+
         /// <summary>
         /// Clears the board otherwise for each movement a new tetromino will be displayed on top of
         /// the already existing one. Then Renders the tetromino.
         /// </summary>
         private void RenderGrid()
         {
-            levelTextBox.Text = _score.Level.ToString();
-            scoreTextBox.Text = _score.Points.ToString();
-            linesTextBox.Text = _score.Rows.ToString();
-            
             TetrisGrid.Children.Clear();
             RenderTetromino(_tetromino, TetrisGrid);
             RenderLandedTetrominos();
@@ -59,12 +56,19 @@ namespace TetrisClient
         /// the same with the matrices.
         /// Also sets the start position of the current tetromino. 
         /// </summary>
-        private void NewTetromino()
+        /// <returns>True if the game is lost(new tetromino cant be put in an empty spot at the top, else false</returns>
+        private bool NewTetromino()
         {
             NextGrid.Children.Clear();
             _tetromino = _nextTetromino;
+            if (_representation.CheckCollision(_tetromino))
+            {
+                GameOver();
+                return true;
+            };
             _nextTetromino = new Tetromino(4, 0);
             RenderTetromino(_nextTetromino, NextGrid);
+            return false;
         }
         
         /// <summary>
@@ -88,7 +92,7 @@ namespace TetrisClient
         /// <param name="e"></param>
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
-            DropTetromino();
+            if (DropTetromino()) return;
             RenderGrid();
             DevelopmentInfo(); //TODO remove before release
         }
@@ -102,7 +106,7 @@ namespace TetrisClient
         /// if the level is updated so will the gamespeed(the interval is reduced by 10% per level)
         /// lastly a new tetromino will be added and the board will be rendered again 
         /// </summary>
-        private void DropTetromino()
+        private bool DropTetromino()
         {
             if (_representation.IsInRangeOfBoard(_tetromino, givenYOffset: 1)  //if in range of the board
                 && !_representation.CheckCollision(_tetromino, givenYOffset: 1)) //if not collides with other tetromino's
@@ -114,13 +118,15 @@ namespace TetrisClient
                 if (deletedRows != 0)
                 {
                     _score.HandleScore(deletedRows);
+                    levelTextBox.Text = _score.Level.ToString();
+                    scoreTextBox.Text = _score.Points.ToString();
+                    linesTextBox.Text = _score.Rows.ToString();
                     if (_score.HandleLevel())
                         _dpt.Interval = new TimeSpan(0, 0, 0, 0, Convert.ToInt32(_dpt.Interval.Milliseconds * 0.9));
                 }
-
-                NewTetromino();
-                RenderGrid();
+                return NewTetromino();
             }
+            return false;
         }
 
         /// <summary>
@@ -161,6 +167,13 @@ namespace TetrisClient
                 Grid.SetRow(rectangle, y);
                 Grid.SetColumn(rectangle, grid == TetrisGrid ? x : x - 4);
             });
+        }
+
+        private void GameOver()
+        {
+            _dpt.Stop();
+            _paused = true;
+            GameOverText.Text = "Game over";
         }
 
 
@@ -244,7 +257,7 @@ namespace TetrisClient
             if (_paused) _dpt.Stop();
             else _dpt.Start();
         }
-        
+
         private static Rectangle CreateRectangle(Brush color) => new()
             {
                 Width = 30, // Width of a 'cell' in the Grid
