@@ -103,5 +103,10 @@
                 <DropShadowEffect />
             </Grid.Effect>
         </Grid>
+        <TextBox x:Name="GameOverText" Height="117" Margin="10,212,300,0"
+            TextWrapping="Wrap" VerticalAlignment="Top" BorderBrush="{x:Null}"
+            FontSize="48" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False"
+            FontWeight="Bold" FontStyle="Normal" Foreground="#FF00FFE7" Grid.ColumnSpan="2" Background="{x:Null}" />
     </Grid>
 </Window>
+    
