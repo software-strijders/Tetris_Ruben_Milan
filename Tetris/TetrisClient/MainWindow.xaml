@@ -61,7 +61,7 @@
                  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderBrush="{x:Null}"
                  IsEnabled="False" Foreground="#FF03DAC6" Grid.Column="1" />
 
-        <TextBox x:Name="levelTextBox" HorizontalAlignment="Left" Height="30" Margin="457,169,0,0" Text="1"
+        <TextBox x:Name="levelTextBox" HorizontalAlignment="Left" Height="30" Margin="457,169,0,0" Text="0"
                  TextWrapping="Wrap" Width="100" Background="{x:Null}" FontSize="24" VerticalAlignment="Top"
                  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderBrush="{x:Null}"
                  IsEnabled="False" Foreground="#FF03DAC6" Grid.Column="1" />
