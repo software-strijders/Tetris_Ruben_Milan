@@ -17,8 +17,8 @@ namespace TetrisClient
         private Representation _representation;
         private Tetromino _tetromino;
         private Tetromino _nextTetromino;
+        private Score _score;
         private DispatcherTimer _dpt;
-        private TimeSpan _tickInterval = new(0, 0, 0, 0, 700);
         private bool _paused; // Default value is false
 
         /// <summary>
@@ -29,13 +29,13 @@ namespace TetrisClient
         public MainWindow()
         {
             _representation = new Representation();
+            _score = new Score();
+            _nextTetromino = new Tetromino(3, 0);
             
             InitializeComponent();
             Timer();
             
-            _nextTetromino = new Tetromino(3, 0);
             NewTetromino();
-
             RenderGrid();
         }
         
@@ -45,6 +45,10 @@ namespace TetrisClient
         /// </summary>
         private void RenderGrid()
         {
+            levelTextBox.Text = _score.Level.ToString();
+            scoreTextBox.Text = _score.Points.ToString();
+            linesTextBox.Text = _score.Rows.ToString();
+            
             TetrisGrid.Children.Clear();
             RenderTetromino(_tetromino, TetrisGrid);
             RenderLandedTetrominos();
@@ -71,7 +75,7 @@ namespace TetrisClient
         {
             _dpt = new DispatcherTimer();
             _dpt.Tick += dispatcherTimer_Tick;
-            _dpt.Interval = _tickInterval;
+            _dpt.Interval = new TimeSpan(0, 0, 0, 0, 700);
             _dpt.Start();
         }
         
@@ -94,6 +98,8 @@ namespace TetrisClient
         /// Checks if the tetromino can drop without colliding with other tetrominos or the board bounds
         /// if it will collide with bounds or other tetromino's the tetromino will be put in the representation board
         /// and the representation checks if there are any full rows, if so they will be deleted
+        /// if there are deleted rows score and level will be calculated again
+        /// if the level is updated so will the gamespeed(the interval is reduced by 10% per level)
         /// lastly a new tetromino will be added and the board will be rendered again 
         /// </summary>
         private void DropTetromino()
@@ -104,7 +110,14 @@ namespace TetrisClient
             else
             {
                 _representation.PutTetrominoInBoard(_tetromino);
-                _representation.HandleRowDeletion();
+                var deletedRows = _representation.HandleRowDeletion();
+                if (deletedRows != 0)
+                {
+                    _score.HandleScore(deletedRows);
+                    if (_score.HandleLevel())
+                        _dpt.Interval = new TimeSpan(0, 0, 0, 0, Convert.ToInt32(_dpt.Interval.Milliseconds * 0.9));
+                }
+
                 NewTetromino();
                 RenderGrid();
             }
