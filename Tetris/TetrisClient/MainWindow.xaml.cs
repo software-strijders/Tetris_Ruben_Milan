@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -20,7 +19,6 @@ namespace TetrisClient
         private Tetromino _nextTetromino;
         private Score _score;
         private DispatcherTimer _dpt;
-        private bool _paused; // Default value is false
 
         /// <summary>
         /// Initializes the component and the timer, then creates the first next Tetromino
@@ -32,11 +30,10 @@ namespace TetrisClient
             _representation = new Representation();
             _score = new Score();
             _nextTetromino = new Tetromino(4, 0);
-            
 
             InitializeComponent();
             Timer();
-            
+
             NewTetromino();
             RenderGrid();
         }
@@ -66,7 +63,8 @@ namespace TetrisClient
             {
                 GameOver();
                 return true;
-            };
+            }
+            
             _nextTetromino = new Tetromino(4, 0);
             RenderTetromino(_nextTetromino, NextGrid);
             return false;
@@ -128,6 +126,7 @@ namespace TetrisClient
                 linesTextBox.Text = _score.Rows.ToString();
                 return NewTetromino();
             }
+
             return false;
         }
 
@@ -175,7 +174,6 @@ namespace TetrisClient
         private void GameOver()
         {
             _dpt.Stop();
-            _paused = true;
             GameOverText.Text = "Game over";
         }
 
