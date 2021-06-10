@@ -102,7 +102,7 @@ namespace TetrisClient
         /// if it will collide with bounds or other tetromino's the tetromino will be put in the representation board
         /// and the representation checks if there are any full rows, if so they will be deleted
         /// if there are deleted rows score and level will be calculated again
-        /// if the level is updated so will the gamespeed(the interval is reduced by 10% per level)
+        /// if the level is updated so will the game speed (the interval is reduced by 10% per level)
         /// lastly a new tetromino will be added and the board will be rendered again 
         /// </summary>
         private bool DropTetromino()
@@ -117,9 +117,8 @@ namespace TetrisClient
                 var deletedRows = _representation.HandleRowDeletion();
                 if (deletedRows == 0) return NewTetromino();
                 _score.HandleScore(deletedRows);
-                levelTextBox.Text = _score.Level.ToString();
-                scoreTextBox.Text = _score.Points.ToString();
-                linesTextBox.Text = _score.Rows.ToString();
+                UpdateTextBoxes();
+                
                 if (_score.HandleLevel())
                     _dpt.Interval = new TimeSpan(0, 0, 0, 0, Convert.ToInt32(_dpt.Interval.Milliseconds * 0.9));
 
@@ -127,6 +126,16 @@ namespace TetrisClient
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Updates the level-, score-, and linesTextBox with the updated values.
+        /// </summary>
+        private void UpdateTextBoxes()
+        {
+            levelTextBox.Text = _score.Level.ToString();
+            scoreTextBox.Text = _score.Points.ToString();
+            linesTextBox.Text = _score.Rows.ToString();
         }
 
         /// <summary>
@@ -154,10 +163,9 @@ namespace TetrisClient
         /// is not '1' it creates nothing because that should be empty. For every 1 a block will be drawn.
         /// Then creates a rectangle of the mapped tetromino and places it in the given grid (trough) param.
         /// </summary>
-        /// <param name="matrixValue">int[,] from the matrix that belongs to the tetromino parameter</param>
         /// <param name="tetromino"></param>
         /// <param name="grid">TetrisGrid or NextGrid for next tetromino</param>
-        private void RenderTetromino(Tetromino tetromino, Grid grid)
+        private void RenderTetromino(Tetromino tetromino, Panel grid)
         {
             tetromino.CalculatePositions().ForEach(coordinate =>
             {
@@ -231,6 +239,11 @@ namespace TetrisClient
             RenderGrid();
         }
 
+        /// <summary>
+        /// Rotates the tetromino and corrects the border offsets.
+        /// Then checks if that's a valid move when it isn't, it reverts the move.
+        /// </summary>
+        /// <param name="key">Key pressed</param>
         private void HandleRotation(Key key)
         {
             _tetromino.Matrix = key switch
@@ -239,7 +252,7 @@ namespace TetrisClient
                 Key.Down => _tetromino.Matrix.Rotate90CounterClockwise(),
                 _ => _tetromino.Matrix
             };
-            
+
             CorrectRotation();
 
             if (_representation.CheckTurnCollision(_tetromino, key))
@@ -254,6 +267,9 @@ namespace TetrisClient
             RenderGrid();
         }
 
+        /// <summary>
+        /// Corrects the border offsets of the tetromino so that turning against a border is possible.
+        /// </summary>
         private void CorrectRotation()
         {
             if (_representation.IsInRangeOfBoard(_tetromino)) return; //return when check is not necessary 
@@ -279,15 +295,26 @@ namespace TetrisClient
             _dpt.IsEnabled = !_dpt.IsEnabled;
         }
 
+        /// <summary>
+        /// Creates a rectangle and gives it the given <paramref name="color"/>
+        /// </summary>
+        /// <param name="color">Brush that corresponds with the current tetromino</param>
+        /// <returns>Rectangle with the given <paramref name="color"/></returns>
         private static Rectangle CreateRectangle(Brush color) => new()
         {
-            Width = 30, // Width of a 'cell' in the Grid
-            Height = 30, // Height of a 'cell' in the Grid
+            Width = 30,             // Width of a 'cell' in the Grid
+            Height = 30,            // Height of a 'cell' in the Grid
             Stroke = Brushes.Black, // Border
             StrokeThickness = 0.75, // Border thickness
-            Fill = color // Background color
+            Fill = color            // Background color
         };
 
+        /// <summary>
+        /// Based on the <paramref name="num"/> given, determines what color should be returned.
+        /// </summary>
+        /// <param name="num">number of the TetrominoShape</param>
+        /// <returns>Brush color that corresponds with the given number</returns>
+        /// <exception cref="ArgumentOutOfRangeException">If an invalid number has been passed</exception>
         private static Brush ConvertNumberToBrush(int num)
         {
             return num switch

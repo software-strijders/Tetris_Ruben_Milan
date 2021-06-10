@@ -6,7 +6,7 @@ using static TetrisClient.TetrominoShape;
 namespace TetrisClient
 {
     /// <summary>
-    /// Enum that represents the different kinds of tetronimo's.
+    /// Enum that represents the different kinds of Tetromino's.
     /// </summary>
     public enum TetrominoShape
     {
@@ -19,6 +19,9 @@ namespace TetrisClient
         I,
     }
 
+    /// <summary>
+    /// A Tetromino is a "block" in the tetris game.
+    /// </summary>
     public class Tetromino
     {
         public TetrominoShape Shape { get; private set; }
@@ -51,7 +54,7 @@ namespace TetrisClient
         /// <summary>
         /// Constructor used in the representation so that a tetromino is cloneable.
         /// </summary>
-        /// <param name="shape">TetronimoShape enum</param>
+        /// <param name="shape">TetrominoShape enum</param>
         /// <param name="offsetX">from the left side of the grid</param>
         /// <param name="offsetY">from the bottom of the grid</param>
         public Tetromino(TetrominoShape shape, int offsetX, int offsetY)
@@ -81,7 +84,7 @@ namespace TetrisClient
         }
 
         /// <summary>
-        /// Picks a random tetronimo.
+        /// Picks a random Tetromino.
         /// </summary>
         /// <returns>TetrominoShape enum</returns>
         private static TetrominoShape GenerateShape()
@@ -91,10 +94,10 @@ namespace TetrisClient
         }
 
         /// <summary>
-        /// Gives back the 3D array that corresponds with the given tetronimo shape enum.
+        /// Gives back the 3D array that corresponds with the given Tetromino shape enum.
         /// </summary>
         /// <param name="shape">TetrominoShape enum</param>
-        /// <returns>3D array that represents a tetronimo of the passed enum</returns>
+        /// <returns>3D array that represents a Tetromino of the passed enum</returns>
         /// <exception cref="ArgumentOutOfRangeException">when an invalid entry is passed</exception>
         private static Matrix CreateShape(TetrominoShape shape) => shape switch
         {
@@ -113,7 +116,7 @@ namespace TetrisClient
         /// Here those colors are bound to the corresponding enum shape. 
         /// </summary>
         /// <param name="shape">TetrominoShape enum</param>
-        /// <returns>color that corresponds with the given tetronimo shope</returns>
+        /// <returns>color that corresponds with the given Tetromino shope</returns>
         /// <exception cref="ArgumentOutOfRangeException">when an invalid entry is passed</exception>
         public static Brush DetermineColor(TetrominoShape shape) => shape switch
         {
