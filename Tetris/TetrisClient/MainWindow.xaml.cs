@@ -115,15 +115,14 @@ namespace TetrisClient
             {
                 _representation.PutTetrominoInBoard(_tetromino);
                 var deletedRows = _representation.HandleRowDeletion();
-                if (deletedRows != 0)
-                {
-                    _score.HandleScore(deletedRows);
-                    if (_score.HandleLevel())
-                        _dpt.Interval = new TimeSpan(0, 0, 0, 0, Convert.ToInt32(_dpt.Interval.Milliseconds * 0.9));
-                }
+                if (deletedRows == 0) return NewTetromino();
+                _score.HandleScore(deletedRows);
                 levelTextBox.Text = _score.Level.ToString();
                 scoreTextBox.Text = _score.Points.ToString();
                 linesTextBox.Text = _score.Rows.ToString();
+                if (_score.HandleLevel())
+                    _dpt.Interval = new TimeSpan(0, 0, 0, 0, Convert.ToInt32(_dpt.Interval.Milliseconds * 0.9));
+
                 return NewTetromino();
             }
 
