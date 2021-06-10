@@ -14,7 +14,7 @@
         }
 
         /// <summary>
-        /// Calculates the score that needs to be added whe <<int rows>> rows are deleted
+        /// Calculates the score that needs to be added when <paramref name="rows"/> are deleted
         /// </summary>
         /// <param name="rows"></param>
         public void HandleScore(int rows)
