@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Input;
 using static System.Linq.Enumerable;
 
 namespace TetrisClient
@@ -73,12 +74,29 @@ namespace TetrisClient
                     {
                         var (tetrominoY, tetrominoX) = coordinate;
                         if (tetrominoY == y - givenYOffset && tetrominoX == x - givenXOffset)
-                        {
-                            collided = true; //TODO should simply be return true but that does not work for unknown reasons
-                        }
+                            collided = true;
                     });
             }
 
+            return collided;
+        }
+
+        public bool CheckTurnCollision(Tetromino tetromino, Key key)
+        {
+            var collided = false;
+            var testTetro = new Tetromino(tetromino.Shape, tetromino.OffsetX, tetromino.OffsetY);
+            testTetro.Matrix = key switch
+            {
+                Key.Up => testTetro.Matrix.Rotate90(),
+                Key.Down => testTetro.Matrix.Rotate90CounterClockwise(),
+                _ => testTetro.Matrix
+            };
+
+            foreach (var (x, y) in tetromino.CalculatePositions())
+                if (Board[x, y] != 0)
+                    collided = true;
+
+            Console.WriteLine(collided);
             return collided;
         }
 
@@ -102,11 +120,8 @@ namespace TetrisClient
         /// General method that's called after each tick.
         /// Evaluates if rows are full and handles it.
         /// </summary>
-        public int HandleRowDeletion()
-        {
-            var fullRows = FullRows();
-            return DeleteFullRows(fullRows);
-        }
+        public int HandleRowDeletion() => DeleteFullRows(FullRows());
+
 
         /// <summary>
         /// Checks if there are any rows that are full (x axis)
@@ -125,7 +140,7 @@ namespace TetrisClient
         /// Deletes the rows that are full.
         /// </summary>
         /// <param name="fullRows"></param>
-        private int DeleteFullRows(List<int> fullRows)
+        private int DeleteFullRows(ICollection<int> fullRows)
         {
             var rowsDeleted = 0;
             for (var y = 0; y < Board.GetLength(0); y++)
@@ -139,7 +154,6 @@ namespace TetrisClient
                 fullRows.Remove(y);
             }
 
-            Console.WriteLine(rowsDeleted);
             return rowsDeleted;
         }
 

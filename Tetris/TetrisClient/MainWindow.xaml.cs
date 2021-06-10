@@ -64,7 +64,7 @@ namespace TetrisClient
                 GameOver();
                 return true;
             }
-            
+
             _nextTetromino = new Tetromino(4, 0);
             RenderTetromino(_nextTetromino, NextGrid);
             return false;
@@ -141,7 +141,7 @@ namespace TetrisClient
                 if (block == 0) continue; //block does not need to be rendered when it is 0 because its empty
 
                 var rectangle = CreateRectangle(
-                    ConvertNumberToBrush(_representation.Board[y, x])); // TODO Fix colors corresponding to tetromino
+                    ConvertNumberToBrush(_representation.Board[y, x]));
                 TetrisGrid.Children.Add(rectangle);
 
                 Grid.SetRow(rectangle, y);
@@ -217,7 +217,7 @@ namespace TetrisClient
                     break;
                 //move down by one (soft drop)
                 case Key.LeftShift when _representation.IsInRangeOfBoard(_tetromino, 0, 1)
-                                    && !_representation.CheckCollision(_tetromino, givenYOffset: 1):
+                                        && !_representation.CheckCollision(_tetromino, givenYOffset: 1):
                     _tetromino.OffsetY++;
                     break;
                 //Only used in development
@@ -239,16 +239,19 @@ namespace TetrisClient
                 Key.Down => _tetromino.Matrix.Rotate90CounterClockwise(),
                 _ => _tetromino.Matrix
             };
+            
+            CorrectRotation();
+
+            if (_representation.CheckTurnCollision(_tetromino, key))
+                _tetromino.Matrix = key switch
+                {
+                    Key.Up => _tetromino.Matrix.Rotate90CounterClockwise(),
+                    Key.Down => _tetromino.Matrix.Rotate90(),
+                    _ => _tetromino.Matrix
+                };
 
             CorrectRotation();
             RenderGrid();
-
-            var coordinates = _tetromino.CalculatePositions();
-            foreach (var (y, x) in coordinates)
-                if (_representation.Board[y, x] > 0)
-                    _tetromino.Matrix = key == Key.Up
-                        ? _tetromino.Matrix = _tetromino.Matrix.Rotate90CounterClockwise()
-                        : _tetromino.Matrix = _tetromino.Matrix.Rotate90();
         }
 
         private void CorrectRotation()
