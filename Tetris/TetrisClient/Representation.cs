@@ -12,7 +12,7 @@ namespace TetrisClient
         public Representation() => Board = GenerateEmptyBoard();
 
         /// <summary>
-        /// 3D array that represents the board.
+        /// multidimensional array that represents the board.
         /// The numbers (1-7) indicate from which tetromino it was.
         /// This way we can accurately keep control of the colors.
         /// </summary>

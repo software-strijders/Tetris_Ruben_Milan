@@ -13,6 +13,10 @@
             this.Rows = 0;
         }
 
+        /// <summary>
+        /// Calculates the score that needs to be added whe <<int rows>> rows are deleted
+        /// </summary>
+        /// <param name="rows"></param>
         public void HandleScore(int rows)
         {
             if (rows == 0) return;
@@ -29,6 +33,10 @@
             this.Rows += rows;
         }
 
+        /// <summary>
+        /// Calculates if a level needs to be added (level will be upped by one every 10 deleted rows)
+        /// </summary>
+        /// <returns>true if the level is upped else false</returns>
         public bool HandleLevel()
         {
             if (this.Rows == 0) return false;
