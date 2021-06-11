@@ -150,7 +150,7 @@ namespace TetrisClient
                 if (block == 0) continue; //block does not need to be rendered when it is 0 because its empty
 
                 var rectangle = CreateRectangle(
-                    ConvertNumberToBrush(_representation.Board[y, x]));
+                    ConvertNumberToBrush(_representation.Board[y, x])); // TODO Fix colors corresponding to tetromino
                 TetrisGrid.Children.Add(rectangle);
 
                 Grid.SetRow(rectangle, y);
@@ -181,7 +181,7 @@ namespace TetrisClient
         private void GameOver()
         {
             _dpt.Stop();
-            GameOverText.Text = "Game over";
+            GameOverText.Text = "Game over \nPress enter \nto restart";
         }
 
 
@@ -196,7 +196,23 @@ namespace TetrisClient
         protected override void OnKeyDown(KeyEventArgs e)
         {
             if (!_dpt.IsEnabled) return;
+            // Non in-game actions related keyboard controls
+            switch (e.Key)
+            {
+                case Key.Enter:
+                    Restart();
+                    break;
+                case Key.P:
+                    Pause(null, null);
+                    break;
+                case Key.Escape:
+                    Quit(null, null);
+                    break;
+            }
+            
+            if (!_dpt.IsEnabled) return;
 
+            // In-game actions
             switch (e.Key)
             {
                 //move right
@@ -235,6 +251,23 @@ namespace TetrisClient
                 default:
                     return;
             }
+
+            RenderGrid();
+        }
+
+        private void Restart()
+        {
+            _representation = new Representation();
+            _score = new Score();
+            _nextTetromino = new Tetromino(4, 0);
+
+            InitializeComponent();
+            Timer();
+            levelTextBox.Text = _score.Level.ToString();
+            scoreTextBox.Text = _score.Points.ToString();
+            linesTextBox.Text = _score.Rows.ToString();
+            GameOverText.Clear();
+            NewTetromino();
 
             RenderGrid();
         }
@@ -290,8 +323,7 @@ namespace TetrisClient
 
         private void Pause(object sender, RoutedEventArgs routedEventArgs)
         {
-            var button = (Button) sender;
-            button.Content = (string) button.Content == "Pause" ? "Resume" : "Pause";
+            pauseButton.Content = (string) pauseButton.Content == "Pause" ? "Resume" : "Pause";
             _dpt.IsEnabled = !_dpt.IsEnabled;
         }
 
