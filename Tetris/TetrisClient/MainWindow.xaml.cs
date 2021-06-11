@@ -118,7 +118,7 @@ namespace TetrisClient
                 if (deletedRows == 0) return NewTetromino();
                 _score.HandleScore(deletedRows);
                 UpdateTextBoxes();
-                
+
                 if (_score.HandleLevel())
                     _dpt.Interval = new TimeSpan(0, 0, 0, 0, Convert.ToInt32(_dpt.Interval.Milliseconds * 0.9));
 
@@ -150,7 +150,7 @@ namespace TetrisClient
                 if (block == 0) continue; //block does not need to be rendered when it is 0 because its empty
 
                 var rectangle = CreateRectangle(
-                    ConvertNumberToBrush(_representation.Board[y, x]));
+                    ConvertNumberToBrush(_representation.Board[y, x])); // TODO Fix colors corresponding to tetromino
                 TetrisGrid.Children.Add(rectangle);
 
                 Grid.SetRow(rectangle, y);
@@ -181,7 +181,7 @@ namespace TetrisClient
         private void GameOver()
         {
             _dpt.Stop();
-            GameOverText.Text = "Game over";
+            GameOverText.Text = "Game over \nPress enter \nto restart";
         }
 
 
@@ -195,8 +195,23 @@ namespace TetrisClient
         /// <param name="e">pressed key</param>
         protected override void OnKeyDown(KeyEventArgs e)
         {
+            // Non in-game actions related keyboard controls
+            switch (e.Key)
+            {
+                case Key.Enter:
+                    Restart();
+                    break;
+                case Key.P:
+                    Pause(null, null);
+                    break;
+                case Key.Escape:
+                    Quit(null, null);
+                    break;
+            }
+
             if (!_dpt.IsEnabled) return;
 
+            // In-game actions
             switch (e.Key)
             {
                 //move right
@@ -235,6 +250,21 @@ namespace TetrisClient
                 default:
                     return;
             }
+
+            RenderGrid();
+        }
+
+        private void Restart()
+        {
+            _representation = new Representation();
+            _score = new Score();
+            _nextTetromino = new Tetromino(4, 0);
+
+            InitializeComponent();
+            Timer();
+            UpdateTextBoxes();
+            GameOverText.Clear();
+            NewTetromino();
 
             RenderGrid();
         }
@@ -290,8 +320,7 @@ namespace TetrisClient
 
         private void Pause(object sender, RoutedEventArgs routedEventArgs)
         {
-            var button = (Button) sender;
-            button.Content = (string) button.Content == "Pause" ? "Resume" : "Pause";
+            pauseButton.Content = (string) pauseButton.Content == "Pause" ? "Resume" : "Pause";
             _dpt.IsEnabled = !_dpt.IsEnabled;
         }
 
@@ -302,11 +331,11 @@ namespace TetrisClient
         /// <returns>Rectangle with the given <paramref name="color"/></returns>
         private static Rectangle CreateRectangle(Brush color) => new()
         {
-            Width = 30,             // Width of a 'cell' in the Grid
-            Height = 30,            // Height of a 'cell' in the Grid
+            Width = 30, // Width of a 'cell' in the Grid
+            Height = 30, // Height of a 'cell' in the Grid
             Stroke = Brushes.Black, // Border
             StrokeThickness = 0.75, // Border thickness
-            Fill = color            // Background color
+            Fill = color // Background color
         };
 
         /// <summary>
