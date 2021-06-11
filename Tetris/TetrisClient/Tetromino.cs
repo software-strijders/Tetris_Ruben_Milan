@@ -50,6 +50,21 @@ namespace TetrisClient
             OffsetX = offsetX;
             OffsetY = offsetY;
         }
+        
+        /// <summary>
+        /// This constructor is only used to clone tetromino's
+        /// </summary>
+        /// <param name="offsetX">from the left side of the grid</param>
+        /// <param name="offsetY">from the bottom of the grid</param>
+        /// <param name="matrix">matrix of a tetromino</param>
+        /// <param name="shape">shape of a tetromino</param>
+        public Tetromino(int offsetX, int offsetY, Matrix matrix, TetrominoShape shape)
+        {
+            Shape = shape;
+            Matrix = matrix;
+            this.OffsetX = offsetX;
+            this.OffsetY = offsetY;
+        }
 
         /// <summary>
         /// Constructor used in the representation so that a tetromino is cloneable.
