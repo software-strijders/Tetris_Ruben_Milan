@@ -189,9 +189,8 @@ namespace TetrisClient
                 _tetromino.Shape);
             while (_representation.IsInRangeOfBoard(ghostTetromino, 0, 1)
                    && !_representation.CheckCollision(ghostTetromino, givenYOffset: 1))
-            {
                 ghostTetromino.OffsetY++;
-            }
+            
             ghostTetromino.CalculatePositions().ForEach(coordinate => {
                 var (y, x) = coordinate;
                 var rectangle = CreateRectangle(Tetromino.DetermineColor(_tetromino.Shape), 0.10);
