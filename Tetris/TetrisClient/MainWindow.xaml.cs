@@ -131,9 +131,9 @@ namespace TetrisClient
         /// </summary>
         private void UpdateTextBoxes()
         {
-            levelTextBox.Text = _score.Level.ToString();
-            scoreTextBox.Text = _score.Points.ToString();
-            linesTextBox.Text = _score.Rows.ToString();
+            levelTextBlock.Text = _score.Level.ToString();
+            scoreTextBlock.Text = _score.Points.ToString();
+            linesTextBlock.Text = _score.Rows.ToString();
         }
 
         /// <summary>
@@ -193,7 +193,7 @@ namespace TetrisClient
             
             ghostTetromino.CalculatePositions().ForEach(coordinate => {
                 var (y, x) = coordinate;
-                var rectangle = CreateRectangle(Tetromino.DetermineColor(_tetromino.Shape), 0.10);
+                var rectangle = CreateRectangle(Tetromino.DetermineColor(_tetromino.Shape), 0.20);
                 TetrisGrid.Children.Add(rectangle);
 
                 Grid.SetRow(rectangle, y);
@@ -204,7 +204,7 @@ namespace TetrisClient
         private void GameOver()
         {
             _dpt.Stop();
-            GameOverText.Text = "Game over \nPress enter \nto restart";
+            gameOverText.Visibility = Visibility.Visible;
         }
 
 
@@ -273,7 +273,6 @@ namespace TetrisClient
                 default:
                     return;
             }
-
             RenderGrid();
         }
 
@@ -286,38 +285,33 @@ namespace TetrisClient
             InitializeComponent();
             Timer();
             UpdateTextBoxes();
-            GameOverText.Clear();
+            gameOverText.Visibility = Visibility.Hidden;
             NewTetromino();
 
             RenderGrid();
         }
 
         /// <summary>
-        /// Rotates the tetromino and corrects the border offsets.
-        /// Then checks if that's a valid move when it isn't, it reverts the move.
+        /// Tries to rotate a tetromino with given offsets, if one of them succeeds
+        /// the tetromino will turn.
         /// </summary>
         /// <param name="key">Key pressed</param>
         private void HandleRotation(Key key)
         {
-            _tetromino.Matrix = key switch
+            var offsetsToTest = new[] {0,1,-1,2,-2};
+            foreach (var offset in offsetsToTest)
             {
-                Key.Up => _tetromino.Matrix.Rotate90(),
-                Key.Down => _tetromino.Matrix.Rotate90CounterClockwise(),
-                _ => _tetromino.Matrix
-            };
-
-            CorrectRotation();
-
-            if (_representation.CheckTurnCollision(_tetromino, key))
+                if (_representation.CheckTurnCollision(_tetromino, key, offset)) continue;
+                _tetromino.OffsetX += offset;
                 _tetromino.Matrix = key switch
                 {
-                    Key.Up => _tetromino.Matrix.Rotate90CounterClockwise(),
-                    Key.Down => _tetromino.Matrix.Rotate90(),
+                    Key.Up => _tetromino.Matrix.Rotate90(),
+                    Key.Down => _tetromino.Matrix.Rotate90CounterClockwise(),
                     _ => _tetromino.Matrix
                 };
-
+                break;
+            }
             CorrectRotation();
-            RenderGrid();
         }
 
         /// <summary>
