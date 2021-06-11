@@ -117,11 +117,9 @@ namespace TetrisClient
                 var deletedRows = _representation.HandleRowDeletion();
                 if (deletedRows == 0) return NewTetromino();
                 _score.HandleScore(deletedRows);
-                UpdateTextBoxes();
-                
                 if (_score.HandleLevel())
                     _dpt.Interval = new TimeSpan(0, 0, 0, 0, Convert.ToInt32(_dpt.Interval.Milliseconds * 0.9));
-
+                UpdateTextBoxes();
                 return NewTetromino();
             }
 
@@ -175,6 +173,32 @@ namespace TetrisClient
 
                 Grid.SetRow(rectangle, y);
                 Grid.SetColumn(rectangle, grid == TetrisGrid ? x : x - 4);
+            });
+            RenderGhostTetromino();
+        }
+        
+        /// <summary>
+        /// Renders a ghost tetromino, tetromino is copied from _tetromino
+        /// and then rendered on the bottom of the playfield with a lower opacity
+        /// </summary>
+        private void RenderGhostTetromino()
+        {
+            var ghostTetromino = new Tetromino(_tetromino.OffsetX,
+                _tetromino.OffsetY,
+                _tetromino.Matrix,
+                _tetromino.Shape);
+            while (_representation.IsInRangeOfBoard(ghostTetromino, 0, 1)
+                   && !_representation.CheckCollision(ghostTetromino, givenYOffset: 1))
+            {
+                ghostTetromino.OffsetY++;
+            }
+            ghostTetromino.CalculatePositions().ForEach(coordinate => {
+                var (y, x) = coordinate;
+                var rectangle = CreateRectangle(Tetromino.DetermineColor(_tetromino.Shape), 0.10);
+                TetrisGrid.Children.Add(rectangle);
+
+                Grid.SetRow(rectangle, y);
+                Grid.SetColumn(rectangle, x);
             });
         }
 
@@ -299,14 +323,16 @@ namespace TetrisClient
         /// Creates a rectangle and gives it the given <paramref name="color"/>
         /// </summary>
         /// <param name="color">Brush that corresponds with the current tetromino</param>
+        /// <param name="opacity"></param>
         /// <returns>Rectangle with the given <paramref name="color"/></returns>
-        private static Rectangle CreateRectangle(Brush color) => new()
+        private static Rectangle CreateRectangle(Brush color, double opacity = 1) => new()
         {
             Width = 30,             // Width of a 'cell' in the Grid
             Height = 30,            // Height of a 'cell' in the Grid
             Stroke = Brushes.Black, // Border
             StrokeThickness = 0.75, // Border thickness
-            Fill = color            // Background color
+            Fill = color,           // Background color
+            Opacity = opacity       // Opacity
         };
 
         /// <summary>
