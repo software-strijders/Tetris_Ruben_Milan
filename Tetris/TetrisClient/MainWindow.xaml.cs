@@ -283,11 +283,12 @@ namespace TetrisClient
             _nextTetromino = new Tetromino(4, 0);
 
             InitializeComponent();
+            _dpt.Stop();
             Timer();
             UpdateTextBoxes();
             gameOverText.Visibility = Visibility.Hidden;
             NewTetromino();
-
+            
             RenderGrid();
         }
 
