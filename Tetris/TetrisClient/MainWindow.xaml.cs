@@ -118,7 +118,7 @@ namespace TetrisClient
                 if (deletedRows == 0) return NewTetromino();
                 _score.HandleScore(deletedRows);
                 UpdateTextBoxes();
-                
+
                 if (_score.HandleLevel())
                     _dpt.Interval = new TimeSpan(0, 0, 0, 0, Convert.ToInt32(_dpt.Interval.Milliseconds * 0.9));
 
@@ -195,7 +195,6 @@ namespace TetrisClient
         /// <param name="e">pressed key</param>
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            if (!_dpt.IsEnabled) return;
             // Non in-game actions related keyboard controls
             switch (e.Key)
             {
@@ -209,7 +208,7 @@ namespace TetrisClient
                     Quit(null, null);
                     break;
             }
-            
+
             if (!_dpt.IsEnabled) return;
 
             // In-game actions
@@ -263,9 +262,7 @@ namespace TetrisClient
 
             InitializeComponent();
             Timer();
-            levelTextBox.Text = _score.Level.ToString();
-            scoreTextBox.Text = _score.Points.ToString();
-            linesTextBox.Text = _score.Rows.ToString();
+            UpdateTextBoxes();
             GameOverText.Clear();
             NewTetromino();
 
@@ -334,11 +331,11 @@ namespace TetrisClient
         /// <returns>Rectangle with the given <paramref name="color"/></returns>
         private static Rectangle CreateRectangle(Brush color) => new()
         {
-            Width = 30,             // Width of a 'cell' in the Grid
-            Height = 30,            // Height of a 'cell' in the Grid
+            Width = 30, // Width of a 'cell' in the Grid
+            Height = 30, // Height of a 'cell' in the Grid
             Stroke = Brushes.Black, // Border
             StrokeThickness = 0.75, // Border thickness
-            Fill = color            // Background color
+            Fill = color // Background color
         };
 
         /// <summary>
