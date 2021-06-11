@@ -67,7 +67,6 @@ namespace TetrisClient
                     return false; // false if current block in loop is outside the board vertically
                 if (xWithOffset > Board.GetLength(1) - 1 || xWithOffset < 0) return false; //^same but horizontally
             }
-
             return true;
         }
 
@@ -93,7 +92,6 @@ namespace TetrisClient
                             collided = true;
                     });
             }
-
             return collided;
         }
 
@@ -103,24 +101,21 @@ namespace TetrisClient
         /// </summary>
         /// <param name="tetromino">Tetromino object</param>
         /// <param name="key">Key pressed</param>
-        /// <returns>If a collision has occured with the recreated Tetromino</returns>
-        public bool CheckTurnCollision(Tetromino tetromino, Key key)
+        /// <param name="givenXOffset">Given offset</param>
+        /// <returns>true if a collision has occured with the recreated Tetromino</returns>
+        public bool CheckTurnCollision(Tetromino tetromino, Key key, int givenXOffset = 0)
         {
-            var collided = false;
-            var testTetro = new Tetromino(tetromino.Shape, tetromino.OffsetX, tetromino.OffsetY);
-            testTetro.Matrix = key switch
+            if (key != Key.Up && key != Key.Down) return false;
+            
+            var testTetromino = new Tetromino(tetromino.OffsetX, tetromino.OffsetY,tetromino.Matrix,tetromino.Shape);
+            testTetromino.OffsetX += givenXOffset;
+            testTetromino.Matrix = key switch
             {
-                Key.Up => testTetro.Matrix.Rotate90(),
-                Key.Down => testTetro.Matrix.Rotate90CounterClockwise(),
-                _ => testTetro.Matrix
+                Key.Up => testTetromino.Matrix.Rotate90(),
+                Key.Down => testTetromino.Matrix.Rotate90CounterClockwise(),
             };
 
-            foreach (var (x, y) in tetromino.CalculatePositions())
-                if (Board[x, y] != 0)
-                    collided = true;
-
-            Console.WriteLine(collided);
-            return collided;
+            return !IsInRangeOfBoard(testTetromino) || CheckCollision(testTetromino);
         }
 
         /// <summary>

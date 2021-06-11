@@ -9,13 +9,19 @@
     xmlns:local="clr-namespace:TetrisClient"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Background="#FFE2E9FF">
-    <Grid Background="Black" Margin="0,0,0,-6">
+    <Grid Margin="0,0,0,-6">
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FF000605" Offset="0"/>
+                <GradientStop Color="#FF004039" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="19*"/>
             <ColumnDefinition Width="781*"/>
         </Grid.ColumnDefinitions>
-        <Grid Background="#FF121212" x:Name="TetrisGrid" Margin="10,0,0,0" VerticalAlignment="Center"
-              HorizontalAlignment="Left" Width="300" Height="480" Grid.ColumnSpan="2">
+        <Grid x:Name="TetrisGrid" Margin="12,0,0,0" VerticalAlignment="Center"
+              HorizontalAlignment="Left" Width="300" Height="480" Grid.Column="1" Background="Black" >
             <Grid.RowDefinitions >
                 <RowDefinition Height="30" />
                 <RowDefinition Height="30" />
@@ -48,44 +54,21 @@
             </Grid.ColumnDefinitions>
         </Grid>
 
-        <TextBox x:Name="level" HorizontalAlignment="Left" Height="30" Margin="335,169,0,0" Text="level"
-                 TextWrapping="Wrap" Width="100" Background="{x:Null}" FontSize="24" VerticalAlignment="Top"
-                 HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderBrush="{x:Null}"
-                 IsEnabled="False" Foreground="#FF03DAC6" Grid.Column="1" />
-        <TextBox x:Name="lines" HorizontalAlignment="Left" Height="30" Margin="335,219,0,0" Text="lines"
-                 TextWrapping="Wrap" VerticalAlignment="Top" Width="100" Background="{x:Null}" FontSize="24"
-                 HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderBrush="{x:Null}"
-                 IsEnabled="False" Foreground="#FF03DAC6" Grid.Column="1" />
-        <TextBox x:Name="score" HorizontalAlignment="Left" Height="30" Margin="335,269,0,0" Text="score"
-                 TextWrapping="Wrap" VerticalAlignment="Top" Width="100" Background="{x:Null}" FontSize="24"
-                 HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderBrush="{x:Null}"
-                 IsEnabled="False" Foreground="#FF03DAC6" Grid.Column="1" />
+        <Button x:Name="quitButton" Content="Quit" HorizontalAlignment="Left" Height="30" Margin="351,364,0,0"
+                VerticalAlignment="Top" Width="100" BorderBrush="{x:Null}" Background="#FF03DAC6" Click="Quit" Grid.Column="1" >
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
+        <Button x:Name="pauseButton" Content="Pause" HorizontalAlignment="Left" Height="30" Margin="476,364,0,0"
+                VerticalAlignment="Top" Width="100" BorderBrush="{x:Null}" Background="#FF03DAC6" Click="Pause" Grid.Column="1" RenderTransformOrigin="0.794,1.96" >
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
 
-        <TextBox x:Name="levelTextBox" HorizontalAlignment="Left" Height="30" Margin="457,169,0,0" Text="0"
-                 TextWrapping="Wrap" Width="100" Background="{x:Null}" FontSize="24" VerticalAlignment="Top"
-                 HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderBrush="{x:Null}"
-                 IsEnabled="False" Foreground="#FF03DAC6" Grid.Column="1" />
-        <TextBox x:Name="linesTextBox" HorizontalAlignment="Left" Height="30" Margin="457,219,0,0" Text="0"
-                 TextWrapping="Wrap" VerticalAlignment="Top" Width="100" Background="{x:Null}" FontSize="24"
-                 HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderBrush="{x:Null}"
-                 IsEnabled="False" Foreground="#FF03DAC6" Grid.Column="1" />
-        <TextBox x:Name="scoreTextBox" HorizontalAlignment="Left" Height="30" Margin="457,269,0,0" Text="0"
-                 TextWrapping="Wrap" VerticalAlignment="Top" Width="100" Background="{x:Null}" FontSize="24"
-                 HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderBrush="{x:Null}"
-                 IsEnabled="False" Foreground="#FF03DAC6" Grid.Column="1" />
-
-        <Button x:Name="quitButton" Content="Quit" HorizontalAlignment="Left" Height="30" Margin="330,332,0,0"
-                VerticalAlignment="Top" Width="100" BorderBrush="{x:Null}" Background="#FF03DAC6" Click="Quit" Grid.Column="1" Focusable="False"/>
-        <Button x:Name="pauseButton" Content="Pause" HorizontalAlignment="Left" Height="30" Margin="455,332,0,0"
-                VerticalAlignment="Top" Width="100" BorderBrush="{x:Null}" Background="#FF03DAC6" Click="Pause" Grid.Column="1" RenderTransformOrigin="0.794,1.96" Focusable="False"/>
-
-        <TextBox x:Name="tetris" HorizontalAlignment="Left" Height="87" Margin="316,411,0,0" Text="tetris"
-                 TextWrapping="Wrap" VerticalAlignment="Top" Width="239" BorderBrush="{x:Null}" Background="Black"
-                 FontSize="72" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" IsEnabled="False"
-                 FontWeight="Bold" FontStyle="Normal" Foreground="#FF00FFE7" Grid.Column="1" />
-
-        <Grid x:Name="NextGrid" HorizontalAlignment="Left" Height="120" Margin="385,18,0,0" VerticalAlignment="Top"
-              Width="120" Background="#FF121212" Grid.Column="1">
+        <Grid x:Name="NextGrid" HorizontalAlignment="Left" Height="120" Margin="406,35,0,0" VerticalAlignment="Top"
+              Width="120" Grid.Column="1" Background="Black">
             <Grid.RowDefinitions>
                 <RowDefinition Height="30" />
                 <RowDefinition Height="30" />
@@ -98,15 +81,36 @@
                 <ColumnDefinition Width="30" />
                 <ColumnDefinition Width="30" />
             </Grid.ColumnDefinitions>
-
-            <Grid.Effect>
-                <DropShadowEffect />
-            </Grid.Effect>
         </Grid>
-        <TextBox x:Name="GameOverText" Height="117" Margin="10,212,300,0"
-            TextWrapping="Wrap" VerticalAlignment="Top" BorderBrush="{x:Null}"
-            FontSize="48" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False"
-            FontWeight="Bold" FontStyle="Normal" Foreground="#FF00FFE7" Grid.ColumnSpan="2" Background="{x:Null}" />
+        <TextBlock x:Name="TetrisText" Grid.Column="1" HorizontalAlignment="Left" Margin="369,428,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FF00FFE7" FontSize="72" FontWeight="Bold" Width="193" Height="84">
+            <TextBlock.Effect>
+                <DropShadowEffect/>
+            </TextBlock.Effect><Run Language="en-gb" Text="Tetris"/></TextBlock>
+        <TextBlock x:Name="score" Grid.Column="1" HorizontalAlignment="Left" Margin="377,305,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FF00FFE7" FontSize="24">
+            <TextBlock.Effect>
+                <DropShadowEffect/>
+            </TextBlock.Effect><Run Language="en-gb" Text="Score"/></TextBlock>
+        <TextBlock x:Name="lines" Grid.Column="1" HorizontalAlignment="Left" Margin="377,254,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FF00FFE7" FontSize="24" Height="35">
+            <TextBlock.Effect>
+                <DropShadowEffect/>
+            </TextBlock.Effect><Run Text="L"/><Run Text="ines"/><LineBreak/><Run/></TextBlock>
+        <TextBlock x:Name="level" Grid.Column="1" HorizontalAlignment="Left" Margin="377,201,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FF00FFE7" FontSize="24" Height="35">
+            <TextBlock.Effect>
+                <DropShadowEffect/>
+            </TextBlock.Effect><Run Language="en-gb" Text="L"/><Run Text="evel"/><LineBreak/><Run/></TextBlock>
+        <TextBlock x:Name="levelTextBlock" Grid.Column="1" HorizontalAlignment="Left" Margin="526,198,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FF00FFE7" FontSize="24" Height="35">
+            <TextBlock.Effect>
+                <DropShadowEffect/>
+            </TextBlock.Effect><Run Language="en-gb" Text="0"/></TextBlock>
+        <TextBlock x:Name="linesTextBlock" Grid.Column="1" HorizontalAlignment="Left" Margin="526,251,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FF00FFE7" FontSize="24" Height="35">
+            <TextBlock.Effect>
+                <DropShadowEffect/>
+            </TextBlock.Effect><Run Language="en-gb" Text="0"/></TextBlock>
+        <TextBlock x:Name="scoreTextBlock" Grid.Column="1" HorizontalAlignment="Left" Margin="526,302,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FF00FFE7" FontSize="24" Height="35">
+            <TextBlock.Effect>
+                <DropShadowEffect/>
+            </TextBlock.Effect><Run Language="en-gb" Text="0"/></TextBlock>
+        <TextBlock x:Name="gameOverText" HorizontalAlignment="Left" Margin="14,0,0,0" TextWrapping="Wrap" VerticalAlignment="Center" Height="257" Width="298" Foreground="#FF00FFE7" FontSize="48" Grid.Column="1" TextAlignment="Center" FontWeight="Bold" Visibility="Hidden"><Run Text="GAME OVER"/><LineBreak/><Run Text="PRES"/><Run Text="S ENTER"/><LineBreak/><Run Text="TO RESTART"/></TextBlock>
     </Grid>
 </Window>
     
