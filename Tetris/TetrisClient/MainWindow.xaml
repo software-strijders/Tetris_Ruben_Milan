@@ -55,13 +55,13 @@
         </Grid>
 
         <Button x:Name="quitButton" Content="Quit" HorizontalAlignment="Left" Height="30" Margin="351,364,0,0"
-                VerticalAlignment="Top" Width="100" BorderBrush="{x:Null}" Background="#FF03DAC6" Click="Quit" Grid.Column="1" >
+                VerticalAlignment="Top" Width="100" BorderBrush="{x:Null}" Background="#FF03DAC6" Click="Quit" Grid.Column="1" Focusable="False">
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
         <Button x:Name="pauseButton" Content="Pause" HorizontalAlignment="Left" Height="30" Margin="476,364,0,0"
-                VerticalAlignment="Top" Width="100" BorderBrush="{x:Null}" Background="#FF03DAC6" Click="Pause" Grid.Column="1" RenderTransformOrigin="0.794,1.96" >
+                VerticalAlignment="Top" Width="100" BorderBrush="{x:Null}" Background="#FF03DAC6" Click="Pause" Grid.Column="1" RenderTransformOrigin="0.794,1.96" Focusable="False">
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>
