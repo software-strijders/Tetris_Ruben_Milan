@@ -28,8 +28,8 @@ namespace TetrisClient
         }
 
         /// <summary>
-        /// Start a DispatcherTimer because those don't interupt the program
-        /// This timer is used for determining the drop speed of tetrominoes.
+        /// Start a DispatcherTimer because those don't interrupt the program
+        /// This timer is used for determining the drop speed of tetrominos.
         /// </summary>
         private void Timer()
         {

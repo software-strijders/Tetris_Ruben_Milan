@@ -24,13 +24,13 @@ namespace TetrisClient
         }
 
         /// <summary>
-        /// Start a DispatcherTimer because those don't interupt the program
+        /// Start a DispatcherTimer because those don't interrupt the program
         /// This timer is only used for rendering, it matches the speed of the engine timer
         /// </summary>
         private void Timer()
         {
             _renderTimer = new DispatcherTimer();
-            _renderTimer.Tick += dispatcherTimer_Tick; //TODO change in UpdateGame();
+            _renderTimer.Tick += dispatcherTimer_Tick;
             _renderTimer.Interval = _engine.GameTimer.Interval;
             _renderTimer.Start();
         }
@@ -43,8 +43,7 @@ namespace TetrisClient
         /// <param name="sender"></param> 
         /// <param name="e"></param>
         private void dispatcherTimer_Tick(object sender, EventArgs e) => UpdateGame();
-
-
+        
         /// <summary>
         /// Renders all landed tetrominos, the falling tetromino and the next tetromino
         /// </summary>
@@ -183,7 +182,7 @@ namespace TetrisClient
         /// <summary>
         /// Stops the timer
         /// Restarts the game engine
-        /// Hides the gameover text
+        /// Hides the game over text
         /// Starts the timer again
         /// Updates all game info
         /// </summary>

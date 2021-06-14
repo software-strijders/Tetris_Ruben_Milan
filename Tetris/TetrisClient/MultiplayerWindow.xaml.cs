@@ -15,18 +15,18 @@ namespace TetrisClient
         {
             InitializeComponent();
 
-            // De url waar de meegeleverde TetrisHub op draait:
-            string url = "http://127.0.0.1:5000/TetrisHub";
+            // Url that TetrisHub will run on.
+            const string url = "http://127.0.0.1:5000/TetrisHub";
 
-            // De Builder waarmee de connectie aangemaakt wordt:
+            // The Builder that helps us create the connection.
             _connection = new HubConnectionBuilder()
                 .WithUrl(url)
                 .WithAutomaticReconnect()
                 .Build();
 
-            // De eerste paramater moet gelijk zijn met de methodenaam in TetrisHub.cs
-            // Wat er tussen de <..> staat bepaald wat de type van de paramater `seed` is.
-            // Op deze manier loopt het onderstaande gelijk met de methode in TetrisHub.cs.
+            // The first parameter has to be the same as the one in TetrisHub.cs
+            // The type specified between <..> determines what the type of the parameter `seed` is.
+            // This way the code below corresponds with the method in TetrisHub.cs
             _connection.On<int>("ReadyUp", seed =>
             {
                 // Seed van de andere client:
@@ -34,27 +34,27 @@ namespace TetrisClient
                 MessageBox.Show(seed.ToString());
             });
 
-            // Let op: het starten van de connectie moet *nadat* alle event listeners zijn gezet!
-            // Als de methode waarin dit voorkomt al `async` (asynchroon) is, dan kan `Task.Run` weggehaald worden.
-            // In het startersproject staat dit in de constructor, daarom is dit echter wel nodig:
+     
+            // It is mandatory that the connection is started *after* all event listeners are set.
+            // If the method this occurs in happens to be `async`, Task.Run can be removed.
+            // It is necessary because of the constructor.
             Task.Run(async () => await _connection.StartAsync());
         }
 
-        // Events kunnen `async` zijn in WPF:
+        /// <summary>
+        /// Generates a seed and gives it to P1Random, then fires the ReadyUp event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void StartGame_OnClick(object sender, RoutedEventArgs e)
         {
-            // Als de connectie nog niet is geïnitialiseerd, dan kan er nog niks verstuurd worden:
-            if (_connection.State != HubConnectionState.Connected)
-            {
-                return;
-            }
-
-            int seed = Guid.NewGuid().GetHashCode();
-
+            // If the connection isn't initialized, nothing can be sent to it.
+            if (_connection.State != HubConnectionState.Connected) return;
+           
+            var seed = Guid.NewGuid().GetHashCode();
             P1Random = new Random(seed);
 
-            // Het aanroepen van de TetrisHub.cs methode `ReadyUp`.
-            // Hier geven we de int mee die de methode `ReadyUp` verwacht.
+            // Calls `ReadyUp` from the TetrisHub.cs and gives the int it expects
             await _connection.InvokeAsync("ReadyUp", seed);
         }
     }

@@ -82,7 +82,7 @@ namespace TetrisClient
         public Matrix Rotate90CounterClockwise() => Rotate((value, size, i, j) => value[j, size - 1 - i]);
 
         /// <summary>
-        /// A private member method that recieves a rotation method <see cref="RotationMethod"/>
+        /// A private member method that receives a rotation method <see cref="RotationMethod"/>
         /// </summary>
         /// <param name="rotationMethod">How the matrix should be rotated</param>
         /// <returns>A new Matrix.</returns>

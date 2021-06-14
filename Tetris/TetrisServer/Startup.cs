@@ -10,17 +10,24 @@ namespace TetrisServer
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration) => Configuration = configuration;
-
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public void ConfigureServices(IServiceCollection services) =>
+        
+        /// <summary>
+        /// This method is used to add services to the containter and is called by the runtime.
+        /// For more info on how to configure, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        /// </summary>
+        /// <param name="services"></param>
+        public static void ConfigureServices(IServiceCollection services) =>
             services.AddSignalR(config => { config.EnableDetailedErrors = true; });
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        /// <summary>
+        /// This method is used to configure the HTTP request pipeline, runtine.
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="env"></param>
+        public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
 
