@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 
 namespace TetrisClient
 {
-    public partial class Startup : Window
+    public partial class Startup
     {
         public Startup()
         {
@@ -15,20 +14,15 @@ namespace TetrisClient
         private void HandleButtonClick(object sender, RoutedEventArgs routedEventArgs)
         {
             var button = (Button) sender;
-            Window window = null;
-            switch (button.Content)
+            Window window = button.Content switch
             {
-                case "Single player":
-                    window = new MainWindow();
-                    break;
-                case "Multiplayer":
-                    window = new MultiplayerWindow();
-                    break;
-            }
+                "Single player" => new MainWindow(),
+                "Multiplayer" => new MultiplayerWindow(),
+                _ => throw new Exception("Invalid option")
+            };
 
             Hide();
-            Debug.Assert(window != null, nameof(window) + " != null");
-            window.Closed += (s, args) => Close();
+            window.Closed += (_, _) => Close();
             window.Show();
         }
     }

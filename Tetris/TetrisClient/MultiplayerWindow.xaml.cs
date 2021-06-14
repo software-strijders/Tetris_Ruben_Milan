@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 
 namespace TetrisClient
 {
-    public partial class MultiplayerWindow : Window
+    public partial class MultiplayerWindow
     {
         private HubConnection _connection;
         private Random P1Random;
