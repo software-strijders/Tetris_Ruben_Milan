@@ -7,7 +7,7 @@ namespace TetrisClient
 {
     public class Representation
     {
-        public int[,] Board;
+        public readonly int[,] Board;
 
         /// <summary>
         /// Constructor, when called generates an empty board.

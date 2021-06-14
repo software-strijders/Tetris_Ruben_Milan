@@ -54,14 +54,14 @@
             </Grid.ColumnDefinitions>
         </Grid>
 
-        <Button x:Name="quitButton" Content="Quit" HorizontalAlignment="Left" Height="30" Margin="351,364,0,0"
+        <Button x:Name="QuitButton" Content="Quit" HorizontalAlignment="Left" Height="30" Margin="351,364,0,0"
                 VerticalAlignment="Top" Width="100" BorderBrush="{x:Null}" Background="#FF03DAC6" Click="Quit" Grid.Column="1" Focusable="False">
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
-        <Button x:Name="pauseButton" Content="Pause" HorizontalAlignment="Left" Height="30" Margin="476,364,0,0"
-                VerticalAlignment="Top" Width="100" BorderBrush="{x:Null}" Background="#FF03DAC6" Click="Pause" Grid.Column="1" RenderTransformOrigin="0.794,1.96" Focusable="False">
+        <Button x:Name="PauseButton" Content="Pause" HorizontalAlignment="Left" Height="30" Margin="476,364,0,0"
+                VerticalAlignment="Top" Width="100" BorderBrush="{x:Null}" Background="#FF03DAC6" Click="TogglePause" Grid.Column="1" RenderTransformOrigin="0.794,1.96" Focusable="False">
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>
@@ -86,31 +86,31 @@
             <TextBlock.Effect>
                 <DropShadowEffect/>
             </TextBlock.Effect><Run Language="en-gb" Text="Tetris"/></TextBlock>
-        <TextBlock x:Name="score" Grid.Column="1" HorizontalAlignment="Left" Margin="377,305,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FF00FFE7" FontSize="24">
+        <TextBlock x:Name="Score" Grid.Column="1" HorizontalAlignment="Left" Margin="377,305,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FF00FFE7" FontSize="24">
             <TextBlock.Effect>
                 <DropShadowEffect/>
             </TextBlock.Effect><Run Language="en-gb" Text="Score"/></TextBlock>
-        <TextBlock x:Name="lines" Grid.Column="1" HorizontalAlignment="Left" Margin="377,254,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FF00FFE7" FontSize="24" Height="35">
+        <TextBlock x:Name="Lines" Grid.Column="1" HorizontalAlignment="Left" Margin="377,254,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FF00FFE7" FontSize="24" Height="35">
             <TextBlock.Effect>
                 <DropShadowEffect/>
             </TextBlock.Effect><Run Text="L"/><Run Text="ines"/><LineBreak/><Run/></TextBlock>
-        <TextBlock x:Name="level" Grid.Column="1" HorizontalAlignment="Left" Margin="377,201,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FF00FFE7" FontSize="24" Height="35">
+        <TextBlock x:Name="Level" Grid.Column="1" HorizontalAlignment="Left" Margin="377,201,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FF00FFE7" FontSize="24" Height="35">
             <TextBlock.Effect>
                 <DropShadowEffect/>
             </TextBlock.Effect><Run Language="en-gb" Text="L"/><Run Text="evel"/><LineBreak/><Run/></TextBlock>
-        <TextBlock x:Name="levelTextBlock" Grid.Column="1" HorizontalAlignment="Left" Margin="526,198,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FF00FFE7" FontSize="24" Height="35">
+        <TextBlock x:Name="LevelTextBlock" Grid.Column="1" HorizontalAlignment="Left" Margin="526,198,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FF00FFE7" FontSize="24" Height="35">
             <TextBlock.Effect>
                 <DropShadowEffect/>
             </TextBlock.Effect><Run Language="en-gb" Text="0"/></TextBlock>
-        <TextBlock x:Name="linesTextBlock" Grid.Column="1" HorizontalAlignment="Left" Margin="526,251,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FF00FFE7" FontSize="24" Height="35">
+        <TextBlock x:Name="LinesTextBlock" Grid.Column="1" HorizontalAlignment="Left" Margin="526,251,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FF00FFE7" FontSize="24" Height="35">
             <TextBlock.Effect>
                 <DropShadowEffect/>
             </TextBlock.Effect><Run Language="en-gb" Text="0"/></TextBlock>
-        <TextBlock x:Name="scoreTextBlock" Grid.Column="1" HorizontalAlignment="Left" Margin="526,302,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FF00FFE7" FontSize="24" Height="35">
+        <TextBlock x:Name="ScoreTextBlock" Grid.Column="1" HorizontalAlignment="Left" Margin="526,302,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FF00FFE7" FontSize="24" Height="35">
             <TextBlock.Effect>
                 <DropShadowEffect/>
             </TextBlock.Effect><Run Language="en-gb" Text="0"/></TextBlock>
-        <TextBlock x:Name="gameOverText" HorizontalAlignment="Left" Margin="14,0,0,0" TextWrapping="Wrap" VerticalAlignment="Center" Height="257" Width="298" Foreground="#FF00FFE7" FontSize="48" Grid.Column="1" TextAlignment="Center" FontWeight="Bold" Visibility="Hidden"><Run Text="GAME OVER"/><LineBreak/><Run Text="PRES"/><Run Text="S ENTER"/><LineBreak/><Run Text="TO RESTART"/></TextBlock>
+        <TextBlock x:Name="GameOverText" HorizontalAlignment="Left" Margin="14,0,0,0" TextWrapping="Wrap" VerticalAlignment="Center" Height="257" Width="298" Foreground="#FF00FFE7" FontSize="48" Grid.Column="1" TextAlignment="Center" FontWeight="Bold" Visibility="Hidden"><Run Text="GAME OVER"/><LineBreak/><Run Text="PRES"/><Run Text="S ENTER"/><LineBreak/><Run Text="TO RESTART"/></TextBlock>
     </Grid>
 </Window>
     

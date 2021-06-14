@@ -67,20 +67,6 @@ namespace TetrisClient
         }
 
         /// <summary>
-        /// Constructor used in the representation so that a tetromino is cloneable.
-        /// </summary>
-        /// <param name="shape">TetrominoShape enum</param>
-        /// <param name="offsetX">from the left side of the grid</param>
-        /// <param name="offsetY">from the bottom of the grid</param>
-        public Tetromino(TetrominoShape shape, int offsetX, int offsetY)
-        {
-            Shape = shape;
-            OffsetX = offsetX;
-            OffsetY = offsetY;
-            Matrix = CreateShape(shape);
-        }
-
-        /// <summary>
         /// Calculates all x and y positions from the tetromino in the board(also uses the offsets)
         /// </summary>
         /// <returns>All coordinates</returns>
@@ -105,7 +91,7 @@ namespace TetrisClient
         private static TetrominoShape GenerateShape()
         {
             var values = Enum.GetValues(typeof(TetrominoShape));
-            return (TetrominoShape) values.GetValue(new Random().Next(values.Length));
+            return (TetrominoShape) values.GetValue(0);
         }
 
         /// <summary>
