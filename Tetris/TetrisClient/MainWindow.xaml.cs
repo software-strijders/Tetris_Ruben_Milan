@@ -30,7 +30,7 @@ namespace TetrisClient
         private void Timer()
         {
             _renderTimer = new DispatcherTimer();
-            _renderTimer.Tick += dispatcherTimer_Tick;
+            _renderTimer.Tick += dispatcherTimer_Tick; //TODO change in UpdateGame();
             _renderTimer.Interval = _engine.GameTimer.Interval;
             _renderTimer.Start();
         }
@@ -42,10 +42,7 @@ namespace TetrisClient
         /// </summary>
         /// <param name="sender"></param> 
         /// <param name="e"></param>
-        private void dispatcherTimer_Tick(object sender, EventArgs e)
-        {
-            UpdateGame();
-        }
+        private void dispatcherTimer_Tick(object sender, EventArgs e) => UpdateGame();
 
 
         /// <summary>

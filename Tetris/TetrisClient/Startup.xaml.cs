@@ -14,7 +14,7 @@ namespace TetrisClient
         private void HandleButtonClick(object sender, RoutedEventArgs routedEventArgs)
         {
             var button = (Button) sender;
-            Window window = button.Content switch
+            Window window = (string) button.Content switch
             {
                 "Single player" => new MainWindow(),
                 "Multiplayer" => new MultiplayerWindow(),

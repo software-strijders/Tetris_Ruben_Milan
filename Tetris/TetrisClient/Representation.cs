@@ -113,6 +113,7 @@ namespace TetrisClient
             {
                 "UP" => testTetromino.Matrix.Rotate90(),
                 "DOWN" => testTetromino.Matrix.Rotate90CounterClockwise(),
+                _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
             };
 
             return !IsInRangeOfBoard(testTetromino) || CheckCollision(testTetromino);

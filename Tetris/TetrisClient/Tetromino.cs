@@ -43,14 +43,15 @@ namespace TetrisClient
         /// </summary>
         /// <param name="offsetX">from the left side of the grid</param>
         /// <param name="offsetY">from the bottom of the grid</param>
+        /// <param name="seed">random seed</param>
         public Tetromino(int offsetX, int offsetY, int? seed = null)
         {
+            _random = seed == null ? new Random() : new Random((int) seed);
             var generatedShape = GenerateShape();
             Shape = generatedShape;
             Matrix = CreateShape(generatedShape);
             OffsetX = offsetX;
             OffsetY = offsetY;
-            _random = seed == null ? new Random() : new Random((int) seed);
         }
 
         /// <summary>
@@ -60,12 +61,14 @@ namespace TetrisClient
         /// <param name="offsetY">from the bottom of the grid</param>
         /// <param name="matrix">matrix of a tetromino</param>
         /// <param name="shape">shape of a tetromino</param>
-        public Tetromino(int offsetX, int offsetY, Matrix matrix, TetrominoShape shape)
+        /// <param name="seed">random seed</param>
+        public Tetromino(int offsetX, int offsetY, Matrix matrix, TetrominoShape shape,  int? seed = null)
         {
             Shape = shape;
             Matrix = matrix;
             OffsetX = offsetX;
             OffsetY = offsetY;
+            _random = seed == null ? new Random() : new Random((int) seed);
         }
 
         /// <summary>
