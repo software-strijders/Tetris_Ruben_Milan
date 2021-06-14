@@ -119,7 +119,8 @@
                 HorizontalAlignment="Left"
                 Margin="0,2,0,0"
                 VerticalAlignment="Top"
-                Width="240" />
+                Width="240"
+                x:Name="ReadyButton" />
         </Grid>
 
 
@@ -128,7 +129,7 @@
             Grid.Column="3"
             Height="101"
             HorizontalAlignment="Left"
-            Margin="20,60,0,0"
+            Margin="98,53,0,0"
             VerticalAlignment="Top"
             Width="101"
             x:Name="NextGridP1">
@@ -300,53 +301,6 @@
 
 
         </Grid>
-        <Grid
-            Background="Black"
-            Grid.Column="3"
-            Height="101"
-            HorizontalAlignment="Left"
-            Margin="140,60,0,0"
-            VerticalAlignment="Top"
-            Width="101"
-            x:Name="NextGridP2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30" />
-                <RowDefinition Height="30" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="30" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="30" />
-                <ColumnDefinition Width="30" />
-                <ColumnDefinition Width="30" />
-                <ColumnDefinition Width="30" />
-            </Grid.ColumnDefinitions>
-        </Grid>
-        <TextBlock
-            FontSize="24"
-            Foreground="#FF00FFE7"
-            Grid.Column="3"
-            Height="32"
-            HorizontalAlignment="Left"
-            Margin="55,23,0,0"
-            TextWrapping="Wrap"
-            VerticalAlignment="Top"
-            Width="33">
-            <Run Language="nl-nl" Text="P1" />
-        </TextBlock>
-
-        <TextBlock
-            FontSize="24"
-            Foreground="#FF00FFE7"
-            Grid.Column="3"
-            Height="29"
-            HorizontalAlignment="Left"
-            Margin="177,23,0,0"
-            TextWrapping="Wrap"
-            VerticalAlignment="Top"
-            Width="33">
-            <Run Language="nl-nl" Text="P2" />
-        </TextBlock>
         <TextBlock
             FontSize="24"
             Foreground="#FF00FFE7"

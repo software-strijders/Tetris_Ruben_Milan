@@ -28,6 +28,7 @@ namespace TetrisClient
         public Matrix Matrix { get; set; }
         public int OffsetX;
         public int OffsetY;
+        private static Random _random;
 
         /// <summary>
         /// Default start position is at the left top (0,0).
@@ -42,13 +43,14 @@ namespace TetrisClient
         /// </summary>
         /// <param name="offsetX">from the left side of the grid</param>
         /// <param name="offsetY">from the bottom of the grid</param>
-        public Tetromino(int offsetX, int offsetY)
+        public Tetromino(int offsetX, int offsetY, int? seed = null)
         {
             var generatedShape = GenerateShape();
             Shape = generatedShape;
             Matrix = CreateShape(generatedShape);
             OffsetX = offsetX;
             OffsetY = offsetY;
+            _random = seed == null ? new Random() : new Random((int) seed);
         }
 
         /// <summary>
@@ -62,8 +64,8 @@ namespace TetrisClient
         {
             Shape = shape;
             Matrix = matrix;
-            this.OffsetX = offsetX;
-            this.OffsetY = offsetY;
+            OffsetX = offsetX;
+            OffsetY = offsetY;
         }
 
         /// <summary>
@@ -91,7 +93,7 @@ namespace TetrisClient
         private static TetrominoShape GenerateShape()
         {
             var values = Enum.GetValues(typeof(TetrominoShape));
-            return (TetrominoShape) values.GetValue(new Random().Next(values.Length));
+            return (TetrominoShape) values.GetValue(_random.Next(values.Length));
         }
 
         /// <summary>
