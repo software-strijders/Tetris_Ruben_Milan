@@ -105,7 +105,7 @@ namespace TetrisClient
         /// <returns>true if a collision has occured with the recreated Tetromino</returns>
         public bool CheckTurnCollision(Tetromino tetromino, string type, int givenXOffset = 0)
         {
-            if (type != "UP" && type != "DOWN") return false; 
+            if (type is not "UP" and not "DOWN" ) return false; 
             
             var testTetromino = new Tetromino(tetromino.OffsetX, tetromino.OffsetY,tetromino.Matrix,tetromino.Shape);
             testTetromino.OffsetX += givenXOffset;

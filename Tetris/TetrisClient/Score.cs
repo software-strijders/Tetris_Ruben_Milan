@@ -3,9 +3,12 @@
     public class Score
     {
         public int Level;
+
         public int Points;
+
         //number of deleted rows
         public int Rows;
+
         /// <summary>
         /// used for level calculation
         /// if it reaches 10 or higher the level is upped
@@ -14,9 +17,9 @@
 
         public Score()
         {
-            this.Level = 0;
-            this.Points = 0;
-            this.Rows = 0;
+            Level = 0;
+            Points = 0;
+            Rows = 0;
         }
 
         /// <summary>
@@ -35,9 +38,9 @@
                 _ => 1200
             };
 
-            this.Points += this.Level * multiplier + multiplier;
-            this.Rows += rows;
-            this._rowsForLeveling += rows;
+            Points += Level * multiplier + multiplier;
+            Rows += rows;
+            _rowsForLeveling += rows;
         }
 
         /// <summary>

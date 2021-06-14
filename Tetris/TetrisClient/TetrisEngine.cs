@@ -26,7 +26,7 @@ namespace TetrisClient
             Timer();
             NewTetromino();
         }
-        
+
         /// <summary>
         /// Start a DispatcherTimer because those don't interupt the program
         /// This timer is used for determining the drop speed of tetrominoes.
@@ -48,12 +48,13 @@ namespace TetrisClient
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
             if (DropTetromino()) return;
-            if (HandleScore()) GameTimer.Interval = new TimeSpan(0, 0, 0, 0, Convert.ToInt32(GameTimer.Interval.Milliseconds * 0.9));
+            if (HandleScore())
+                GameTimer.Interval = new TimeSpan(0, 0, 0, 0, Convert.ToInt32(GameTimer.Interval.Milliseconds * 0.9));
             NewTetromino();
         }
-        
+
         /// <summary>
-        /// Drops the tetromino every ... milliseconds
+        /// Drops the tetromino every <c>GameTimer.Interval</c> milliseconds
         /// Checks if the move is possible
         /// if that is not true the tetromino will be mounted in the representation
         /// </summary>
@@ -65,6 +66,7 @@ namespace TetrisClient
                 Tetromino.OffsetY++;
                 return true;
             }
+
             Representation.PutTetrominoInBoard(Tetromino);
             return false;
         }
@@ -83,6 +85,7 @@ namespace TetrisClient
                 GameTimer.IsEnabled = false;
                 GameOver = true;
             }
+
             NextTetromino = new Tetromino(4, 0);
         }
 
@@ -103,7 +106,7 @@ namespace TetrisClient
 
             return ghostTetromino;
         }
-        
+
         //Moves the tetromino to the right if allowed
         public void MoveRight()
         {
@@ -129,9 +132,9 @@ namespace TetrisClient
         /// <param name="type"> UP(clockwise) or DOWN(CounterClockWise)</param>
         public void HandleRotation(string type)
         {
-            if (type != "UP" && type != "DOWN") return;
-            
-            var offsetsToTest = new[] {0,1,-1,2,-2};
+            if (type is not "UP" and not "DOWN" ) return;
+
+            var offsetsToTest = new[] {0, 1, -1, 2, -2};
             foreach (var offset in offsetsToTest)
             {
                 if (Representation.CheckTurnCollision(Tetromino, type, offset)) continue;
@@ -147,14 +150,7 @@ namespace TetrisClient
         }
 
         //Drops the current tetromino to as low as possible
-        public void HardDrop()
-        {
-            var movePossible = true;
-            while (movePossible)
-            {
-                movePossible = SoftDrop();
-            }
-        }
+        public void HardDrop() { while (SoftDrop()) { } }
 
         //Drops the current tetromino by one
         public bool SoftDrop()
@@ -179,16 +175,11 @@ namespace TetrisClient
             return Representation.IsInRangeOfBoard(Tetromino, offsetInBoardX, offsetInBoardY)
                    && !Representation.CheckCollision(Tetromino, offsetCollisionX, offsetCollisionY);
         }
-
+        
         /// <summary>
-        /// Drops the tetromino every ... milliseconds
-        /// Checks if the tetromino can drop without colliding with other tetrominos or the board bounds
-        /// if it will collide with bounds or other tetromino's the tetromino will be put in the representation board
-        /// and the representation checks if there are any full rows, if so they will be deleted
-        /// if there are deleted rows score and level will be calculated again
-        /// if the level is updated so will the game speed (the interval is reduced by 10% per level)
-        /// lastly a new tetromino will be added and the board will be rendered again 
-        /// </summary> TODO FIX DOCUMENTATION
+        /// Checks if there are any deleted rows, if so the score level will be recalculated.
+        /// </summary>
+        /// <returns>True if the level has changed</returns>
         private bool HandleScore()
         {
             var deletedRows = Representation.HandleRowDeletion();
@@ -209,10 +200,9 @@ namespace TetrisClient
             NewTetromino();
         }
 
-        //toggle the timer pause
-        public void TogglePause()
-        {
-            GameTimer.IsEnabled = !GameTimer.IsEnabled;
-        }
+        /// <summary>
+        /// toggle the timer pause
+        /// </summary>
+        public void TogglePause() => GameTimer.IsEnabled = !GameTimer.IsEnabled;
     }
 }

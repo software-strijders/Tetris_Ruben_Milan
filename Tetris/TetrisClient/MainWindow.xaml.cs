@@ -15,17 +15,17 @@ namespace TetrisClient
     {
         private readonly TetrisEngine _engine = new();
         private DispatcherTimer _renderTimer;
-        
+
         public MainWindow()
-        { 
+        {
             InitializeComponent();
             _engine.StartGame();
             Timer();
         }
-        
+
         /// <summary>
         /// Start a DispatcherTimer because those don't interupt the program
-        /// This timer is used for determining the drop speed of tetrominoes.
+        /// This timer is only used for rendering, it matches the speed of the engine timer
         /// </summary>
         private void Timer()
         {
@@ -34,7 +34,7 @@ namespace TetrisClient
             _renderTimer.Interval = _engine.GameTimer.Interval;
             _renderTimer.Start();
         }
-        
+
         /// <summary>
         /// Starts a dispatcherTimer because those are non blocking.
         /// This timer is used to determine the speed at which tetromino's
@@ -46,20 +46,20 @@ namespace TetrisClient
         {
             UpdateGame();
         }
-        
-        
+
+
         /// <summary>
         /// Renders all landed tetrominos, the falling tetromino and the next tetromino
         /// </summary>
         private void RenderGrid()
         {
             TetrisGrid.Children.Clear();
-            
+
             RenderLandedTetrominos();
-            
+
             RenderTetromino(_engine.Tetromino, TetrisGrid);
             RenderTetromino(_engine.CreateGhostTetromino(), TetrisGrid, 0.30);
-            
+
             NextGrid.Children.Clear();
             RenderTetromino(_engine.NextTetromino, NextGrid);
         }
@@ -91,7 +91,7 @@ namespace TetrisClient
         private void RenderLandedTetrominos()
         {
             var board = _engine.Representation.Board;
-            
+
             for (var y = 0; y < board.GetLength(0); y++)
             for (var x = 0; x < board.GetLength(1); x++)
             {
@@ -124,14 +124,14 @@ namespace TetrisClient
             }
 
             _renderTimer.Interval = _engine.GameTimer.Interval;
-            
+
             LevelTextBlock.Text = _engine.Score.Level.ToString();
             ScoreTextBlock.Text = _engine.Score.Points.ToString();
             LinesTextBlock.Text = _engine.Score.Rows.ToString();
-            
+
             RenderGrid();
         }
-        
+
         /// <summary>
         /// C# function that triggers when a key is pressed.
         /// This is how the user controls the game
@@ -179,6 +179,7 @@ namespace TetrisClient
                 default:
                     return;
             }
+
             UpdateGame();
         }
 
@@ -209,14 +210,14 @@ namespace TetrisClient
             _renderTimer.IsEnabled = !_renderTimer.IsEnabled;
             _engine.TogglePause();
         }
-        
+
         /// <summary>
         /// Quits the game
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="routedEventArgs"></param>
         private void Quit(object sender, RoutedEventArgs routedEventArgs) => Application.Current.Shutdown();
-        
+
         /// <summary>
         /// Creates a rectangle and gives it the given <paramref name="color"/>
         /// </summary>
@@ -232,7 +233,7 @@ namespace TetrisClient
             Fill = color, // Background color
             Opacity = opacity // Opacity
         };
-        
+
         /// <summary>
         /// Based on the <paramref name="num"/> given, determines what color should be returned.
         /// </summary>
