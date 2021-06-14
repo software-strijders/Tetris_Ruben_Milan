@@ -46,7 +46,7 @@
             Background="#FF03DAC6"
             BorderBrush="{x:Null}"
             Click="HandleButtonClick"
-            Content="Multiplayer player"
+            Content="Multiplayer"
             Grid.Column="1"
             Height="64"
             HorizontalAlignment="Center"
@@ -56,7 +56,6 @@
         <Button
             Background="#FF03DAC6"
             BorderBrush="{x:Null}"
-            Click="HandleButtonClick"
             Content="Coming soon"
             Grid.Column="1"
             Height="64"

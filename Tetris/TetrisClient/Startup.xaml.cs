@@ -24,9 +24,6 @@ namespace TetrisClient
                 case "Multiplayer":
                     window = new MultiplayerWindow();
                     break;
-                case "Coming Soon":
-                    MessageBox.Show("Comming Soon");
-                    break;
             }
 
             Hide();
