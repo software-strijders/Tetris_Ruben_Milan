@@ -35,8 +35,8 @@ namespace TetrisClient
         /// are being chosen.
         /// </summary>
         public Tetromino() => new Tetromino(0, 0);
-        
-        
+
+
         /// <summary>
         /// Constructor with the option of setting the offsets.
         /// </summary>
@@ -50,7 +50,7 @@ namespace TetrisClient
             OffsetX = offsetX;
             OffsetY = offsetY;
         }
-        
+
         /// <summary>
         /// This constructor is only used to clone tetromino's
         /// </summary>
@@ -91,7 +91,7 @@ namespace TetrisClient
         private static TetrominoShape GenerateShape()
         {
             var values = Enum.GetValues(typeof(TetrominoShape));
-            return (TetrominoShape) values.GetValue(0);
+            return (TetrominoShape) values.GetValue(new Random().Next(values.Length));
         }
 
         /// <summary>
