@@ -10,20 +10,20 @@ namespace TetrisClient
         private HubConnection _connection;
         private Random P1Random;
         private Random P2Random;
-        
+
         public MultiplayerWindow()
         {
             InitializeComponent();
 
             // De url waar de meegeleverde TetrisHub op draait:
-            string url = "http://127.0.0.1:5000/TetrisHub"; 
-            
+            string url = "http://127.0.0.1:5000/TetrisHub";
+
             // De Builder waarmee de connectie aangemaakt wordt:
             _connection = new HubConnectionBuilder()
                 .WithUrl(url)
                 .WithAutomaticReconnect()
                 .Build();
-            
+
             // De eerste paramater moet gelijk zijn met de methodenaam in TetrisHub.cs
             // Wat er tussen de <..> staat bepaald wat de type van de paramater `seed` is.
             // Op deze manier loopt het onderstaande gelijk met de methode in TetrisHub.cs.
@@ -33,7 +33,7 @@ namespace TetrisClient
                 P2Random = new Random(seed);
                 MessageBox.Show(seed.ToString());
             });
-            
+
             // Let op: het starten van de connectie moet *nadat* alle event listeners zijn gezet!
             // Als de methode waarin dit voorkomt al `async` (asynchroon) is, dan kan `Task.Run` weggehaald worden.
             // In het startersproject staat dit in de constructor, daarom is dit echter wel nodig:
@@ -48,9 +48,9 @@ namespace TetrisClient
             {
                 return;
             }
-            
+
             int seed = Guid.NewGuid().GetHashCode();
-            
+
             P1Random = new Random(seed);
 
             // Het aanroepen van de TetrisHub.cs methode `ReadyUp`.
