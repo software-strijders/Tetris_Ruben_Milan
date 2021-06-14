@@ -100,19 +100,19 @@ namespace TetrisClient
         /// and checks if that action results in a collision.
         /// </summary>
         /// <param name="tetromino">Tetromino object</param>
-        /// <param name="key">Key pressed</param>
+        /// <param name="type">Key pressed</param>
         /// <param name="givenXOffset">Given offset</param>
         /// <returns>true if a collision has occured with the recreated Tetromino</returns>
-        public bool CheckTurnCollision(Tetromino tetromino, Key key, int givenXOffset = 0)
+        public bool CheckTurnCollision(Tetromino tetromino, string type, int givenXOffset = 0)
         {
-            if (key != Key.Up && key != Key.Down) return false;
+            if (type != "UP" && type != "DOWN") return false; 
             
             var testTetromino = new Tetromino(tetromino.OffsetX, tetromino.OffsetY,tetromino.Matrix,tetromino.Shape);
             testTetromino.OffsetX += givenXOffset;
-            testTetromino.Matrix = key switch
+            testTetromino.Matrix = type switch
             {
-                Key.Up => testTetromino.Matrix.Rotate90(),
-                Key.Down => testTetromino.Matrix.Rotate90CounterClockwise(),
+                "UP" => testTetromino.Matrix.Rotate90(),
+                "DOWN" => testTetromino.Matrix.Rotate90CounterClockwise(),
             };
 
             return !IsInRangeOfBoard(testTetromino) || CheckCollision(testTetromino);
