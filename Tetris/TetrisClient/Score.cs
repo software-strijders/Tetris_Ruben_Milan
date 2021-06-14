@@ -3,14 +3,23 @@
     public class Score
     {
         public int Level;
+
         public int Points;
+
+        //number of deleted rows
         public int Rows;
+
+        /// <summary>
+        /// used for level calculation
+        /// if it reaches 10 or higher the level is upped
+        /// </summary>
+        private int _rowsForLeveling;
 
         public Score()
         {
-            this.Level = 0;
-            this.Points = 0;
-            this.Rows = 0;
+            Level = 0;
+            Points = 0;
+            Rows = 0;
         }
 
         /// <summary>
@@ -29,8 +38,9 @@
                 _ => 1200
             };
 
-            this.Points += this.Level * multiplier + multiplier;
-            this.Rows += rows;
+            Points += Level * multiplier + multiplier;
+            Rows += rows;
+            _rowsForLeveling += rows;
         }
 
         /// <summary>
@@ -39,11 +49,10 @@
         /// <returns>true if the level is upped else false</returns>
         public bool HandleLevel()
         {
-            if (this.Rows == 0) return false;
-            if (this.Rows % 10 != 0) return false;
-            this.Level++;
+            if (_rowsForLeveling < 10) return false;
+            _rowsForLeveling -= 10;
+            Level++;
             return true;
-
         }
     }
 }
