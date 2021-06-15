@@ -120,9 +120,9 @@ namespace TetrisClient
 
             _renderTimer.Interval = _engine.GameTimer.Interval;
 
-            LevelTextBlock.Text = _engine.Score.Level.ToString();
-            ScoreTextBlock.Text = _engine.Score.Points.ToString();
-            LinesTextBlock.Text = _engine.Score.Rows.ToString();
+            LevelTextBlock.Text = $"{_engine.Score.Level}";
+            ScoreTextBlock.Text = $"{_engine.Score.Points}";
+            LinesTextBlock.Text = $"{_engine.Score.Rows}";
 
             RenderGrid();
         }
