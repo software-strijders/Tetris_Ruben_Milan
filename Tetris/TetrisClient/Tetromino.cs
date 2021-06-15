@@ -24,7 +24,7 @@ namespace TetrisClient
     /// </summary>
     public class Tetromino
     {
-        public TetrominoShape Shape { get; }
+        public TetrominoShape Shape { get; set; }
         public Matrix Matrix { get; set; }
         public int OffsetX;
         public int OffsetY;
