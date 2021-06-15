@@ -16,8 +16,6 @@ namespace TetrisClient
         private HubConnection _connection;
         private TetrisEngine _engine = new();
         private DispatcherTimer _renderTimer;
-        private Random P1Random;
-        private Random P2Random;
 
         private int[,] _enemyBoard;
         private Tetromino _enemyTetromino;
@@ -37,36 +35,7 @@ namespace TetrisClient
                 .WithAutomaticReconnect()
                 .Build();
 
-            // The first parameter has to be the same as the one in TetrisHub.cs
-            // The type specified between <..> determines what the type of the parameter `seed` is.
-            // This way the code below corresponds with the method in TetrisHub.cs
-            _connection.On<int>("ReadyUp", seed =>
-            {
-                P2Random = new Random(seed);
-                Task.Run(async () => await _connection.InvokeAsync("StartGame", seed));
-            });
-
-            _connection.On<int>("StartGame", seed => Dispatcher.BeginInvoke(new Action(() => StartGame(seed))));
-
-            _connection.On<string>("SendBoard", board => Dispatcher.BeginInvoke(new Action(() =>
-            {
-                _enemyBoard = JsonConvert.DeserializeObject<int[,]>(board);
-            })));
-            
-            _connection.On<string>("SendTetromino", tetromino => Dispatcher.BeginInvoke(new Action(() =>
-            {
-                _enemyTetromino = JsonConvert.DeserializeObject<Tetromino>(tetromino);
-            })));
-            
-            _connection.On<string>("SendNextTetromino", tetromino => Dispatcher.BeginInvoke(new Action(() =>
-            {
-                _enemyNextTetromino = JsonConvert.DeserializeObject<Tetromino>(tetromino);
-            })));
-            
-            _connection.On<string>("SendScore", score => Dispatcher.BeginInvoke(new Action(() =>
-            {
-                _enemyScore = JsonConvert.DeserializeObject<Score>(score);
-            })));
+            CreateSubscriptions();
 
             // It is mandatory that the connection is started *after* all event listeners are set.
             // If the method this occurs in happens to be `async`, Task.Run can be removed.
@@ -75,7 +44,7 @@ namespace TetrisClient
         }
 
         /// <summary>
-        /// Generates a seed and gives it to P1Random, then fires the ReadyUp event.
+        /// Generates a seed and fires the ReadyUp event.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -84,16 +53,38 @@ namespace TetrisClient
             // If the connection isn't initialized, nothing can be sent to it.
             if (_connection.State != HubConnectionState.Connected) return;
             var seed = Guid.NewGuid().GetHashCode();
-            P1Random = new Random(seed);
 
             // Calls `ReadyUp` from the TetrisHub.cs and gives the int it expects
             await _connection.InvokeAsync("ReadyUp", seed);
         }
 
+
+        /// <summary>
+        /// Sets all the needed substriptions
+        /// </summary>
+        private void CreateSubscriptions()
+        {
+            // The first parameter has to be the same as the one in TetrisHub.cs
+            // The type specified between <..> determines what the type of the parameter `seed` is.
+            // This way the code below corresponds with the method in TetrisHub.cs
+            _connection.On<int>("ReadyUp", seed =>
+                Task.Run(async () => await _connection.InvokeAsync("StartGame", seed)));
+            _connection.On<int>("StartGame", seed => Dispatcher.BeginInvoke(new Action(() =>
+                StartGame(seed))));
+            _connection.On<string>("SendBoard", board => Dispatcher.BeginInvoke(new Action(() =>
+                _enemyBoard = JsonConvert.DeserializeObject<int[,]>(board))));
+            _connection.On<string>("SendTetromino", tetromino => Dispatcher.BeginInvoke(new Action(() =>
+                _enemyTetromino = JsonConvert.DeserializeObject<Tetromino>(tetromino))));
+            _connection.On<string>("SendNextTetromino", tetromino => Dispatcher.BeginInvoke(new Action(() =>
+                _enemyNextTetromino = JsonConvert.DeserializeObject<Tetromino>(tetromino))));
+            _connection.On<string>("SendScore", score => Dispatcher.BeginInvoke(new Action(() =>
+                _enemyScore = JsonConvert.DeserializeObject<Score>(score))));
+        }
+
         private void StartGame(int seed)
         {
             Dispatcher.Invoke(() => { ReadyButton.Visibility = Visibility.Hidden; });
-            _engine.StartGame();
+            _engine.StartGame(seed);
             Timer();
         }
 
@@ -105,7 +96,7 @@ namespace TetrisClient
         {
             _renderTimer = new DispatcherTimer();
             _renderTimer.Tick += dispatcherTimer_Tick;
-            _renderTimer.Interval = new TimeSpan(0,0,0,0, 10);
+            _renderTimer.Interval = new TimeSpan(0, 0, 0, 0, 10);
             _renderTimer.Start();
         }
 
@@ -127,11 +118,15 @@ namespace TetrisClient
         /// </summary>
         private void UpdateGame()
         {
-            Task.Run(async () => await _connection.InvokeAsync("SendBoard", JsonConvert.SerializeObject(_engine.Representation.Board)));
-            Task.Run(async () => await _connection.InvokeAsync("SendTetromino", JsonConvert.SerializeObject(_engine.Tetromino)));
-            Task.Run(async () => await _connection.InvokeAsync("SendNextTetromino", JsonConvert.SerializeObject(_engine.NextTetromino)));
-            Task.Run(async () => await _connection.InvokeAsync("SendScore", JsonConvert.SerializeObject(_engine.Score)));
-            
+            Task.Run(async () =>
+                await _connection.InvokeAsync("SendBoard", JsonConvert.SerializeObject(_engine.Representation.Board)));
+            Task.Run(async () =>
+                await _connection.InvokeAsync("SendTetromino", JsonConvert.SerializeObject(_engine.Tetromino)));
+            Task.Run(async () =>
+                await _connection.InvokeAsync("SendNextTetromino", JsonConvert.SerializeObject(_engine.NextTetromino)));
+            Task.Run(async () =>
+                await _connection.InvokeAsync("SendScore", JsonConvert.SerializeObject(_engine.Score)));
+
             // GameOverText.Visibility = Visibility.Visible; //TODO: Fix met P2 ook, dus aanmaken voor p2
 
             LevelTextBlockP1.Text = $"{_engine.Score.Level}";
@@ -207,7 +202,7 @@ namespace TetrisClient
         private void RenderLandedTetrominos(Panel grid, int[,] board = null)
         {
             board ??= _engine.Representation.Board;
-            
+
             for (var y = 0; y < board.GetLength(0); y++)
             for (var x = 0; x < board.GetLength(1); x++)
             {
@@ -217,8 +212,8 @@ namespace TetrisClient
                 var rectangle = CreateRectangle(ConvertNumberToBrush(board[y, x]));
                 grid.Children.Add(rectangle);
 
-                Grid.SetRow(rectangle, y);      // Ligt het niet hier aan?
-                Grid.SetColumn(rectangle, x);   // Ligt het niet hier aan?
+                Grid.SetRow(rectangle, y); // Ligt het niet hier aan?
+                Grid.SetColumn(rectangle, x); // Ligt het niet hier aan?
             }
         }
 

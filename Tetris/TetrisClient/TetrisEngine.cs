@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace TetrisClient
@@ -11,19 +12,31 @@ namespace TetrisClient
         public Score Score;
         public DispatcherTimer GameTimer;
         public bool GameOver;
+        private Random _random;
 
         /// <summary>
         /// Starts the game, creates all items
         /// Starts the timer
         /// </summary>
-        public void StartGame()
+        public void StartGame(int? seed = null)
         {
+            if (seed != null) _random = new Random((int) seed);
             GameOver = false;
             Representation = new Representation();
             Score = new Score();
-            NextTetromino = new Tetromino(4, 0);
+            NextTetromino = new Tetromino(4, 0, GenerateShape());
             Timer();
             NewTetromino();
+        }
+
+        /// <summary>
+        /// Picks a random Tetromino Shape.
+        /// </summary>
+        /// <returns>TetrominoShape enum</returns>
+        private TetrominoShape GenerateShape()
+        {
+            var values = Enum.GetValues(typeof(TetrominoShape));
+            return (TetrominoShape) values.GetValue(_random.Next(values.Length));
         }
 
         /// <summary>
@@ -85,7 +98,7 @@ namespace TetrisClient
                 GameOver = true;
             }
 
-            NextTetromino = new Tetromino(4, 0);
+            NextTetromino = new Tetromino(4, 0, GenerateShape());
         }
 
         /// <summary>

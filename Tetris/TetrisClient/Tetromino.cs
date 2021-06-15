@@ -53,6 +53,21 @@ namespace TetrisClient
         }
 
         /// <summary>
+        /// Constructor used for playing multiplayer with the same seed.
+        /// Random will come from the engine so that the .Next() can be controlled properly.
+        /// </summary>
+        /// <param name="offsetX"></param>
+        /// <param name="offsetY"></param>
+        /// <param name="shape"></param>
+        public Tetromino(int offsetX, int offsetY, TetrominoShape shape)
+        {
+            Shape = shape;
+            Matrix = CreateShape(shape);
+            OffsetX = offsetX;
+            OffsetY = offsetY;
+        }
+
+        /// <summary>
         /// This constructor is only used to clone tetromino's
         /// </summary>
         /// <param name="offsetX">from the left side of the grid</param>
