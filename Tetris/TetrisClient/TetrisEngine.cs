@@ -28,6 +28,22 @@ namespace TetrisClient
         }
 
         /// <summary>
+        /// Starts the game, creates all items
+        /// Starts the timer
+        /// Creates a new Tetromino with the given <paramref name="seed"/>
+        /// <param name="seed">seed for random</param>
+        /// </summary>
+        public void StartGame(int? seed = null)
+        {
+            GameOver = false;
+            Representation = new Representation();
+            Score = new Score();
+            NextTetromino = new Tetromino(4, 0, seed);
+            Timer();
+            NewTetromino(seed);
+        }
+
+        /// <summary>
         /// Start a DispatcherTimer because those don't interrupt the program
         /// This timer is used for determining the drop speed of tetrominos.
         /// </summary>
@@ -77,7 +93,7 @@ namespace TetrisClient
         /// Also sets the start position of the current tetromino. 
         /// </summary>
         /// <returns>True if the game is lost(new tetromino cant be put in an empty spot at the top, else false</returns>
-        private void NewTetromino()
+        private void NewTetromino(int? seed = null)
         {
             Tetromino = NextTetromino;
             if (Representation.CheckCollision(Tetromino))
@@ -86,7 +102,7 @@ namespace TetrisClient
                 GameOver = true;
             }
 
-            NextTetromino = new Tetromino(4, 0);
+            NextTetromino = seed == null ? new Tetromino(4, 0) : new Tetromino(4, 0, seed);
         }
 
         /// <summary>
@@ -111,18 +127,14 @@ namespace TetrisClient
         public void MoveRight()
         {
             if (MovePossible(offsetInBoardX: 1, offsetCollisionX: 1))
-            {
                 Tetromino.OffsetX++;
-            }
         }
 
         //Moves the tetromino to the left if allowed
         public void MoveLeft()
         {
             if (MovePossible(offsetInBoardX: -1, offsetCollisionX: -1))
-            {
                 Tetromino.OffsetX--;
-            }
         }
 
         /// <summary>
@@ -132,7 +144,7 @@ namespace TetrisClient
         /// <param name="type"> UP(clockwise) or DOWN(CounterClockWise)</param>
         public void HandleRotation(string type)
         {
-            if (type is not "UP" and not "DOWN" ) return;
+            if (type is not "UP" and not "DOWN") return;
 
             var offsetsToTest = new[] {0, 1, -1, 2, -2};
             foreach (var offset in offsetsToTest)
@@ -150,7 +162,12 @@ namespace TetrisClient
         }
 
         //Drops the current tetromino to as low as possible
-        public void HardDrop() { while (SoftDrop()) { } }
+        public void HardDrop()
+        {
+            while (SoftDrop())
+            {
+            }
+        }
 
         //Drops the current tetromino by one
         public bool SoftDrop()
@@ -175,7 +192,7 @@ namespace TetrisClient
             return Representation.IsInRangeOfBoard(Tetromino, offsetInBoardX, offsetInBoardY)
                    && !Representation.CheckCollision(Tetromino, offsetCollisionX, offsetCollisionY);
         }
-        
+
         /// <summary>
         /// Checks if there are any deleted rows, if so the score level will be recalculated.
         /// </summary>

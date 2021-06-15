@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 using Microsoft.AspNetCore.SignalR.Client;
 
 namespace TetrisClient
@@ -8,6 +9,8 @@ namespace TetrisClient
     public partial class MultiplayerWindow
     {
         private HubConnection _connection;
+        private TetrisEngine _engine = new();
+        private DispatcherTimer _renderTimer;
         private Random P1Random;
         private Random P2Random;
 
@@ -32,9 +35,15 @@ namespace TetrisClient
                 // Seed van de andere client:
                 P2Random = new Random(seed);
                 MessageBox.Show(seed.ToString());
+                _connection.InvokeAsync("StartGame", seed);
             });
 
-     
+            _connection.On<int>("StartGame", seed =>
+            {
+                StartGame(seed);
+            });
+
+
             // It is mandatory that the connection is started *after* all event listeners are set.
             // If the method this occurs in happens to be `async`, Task.Run can be removed.
             // It is necessary because of the constructor.
@@ -50,12 +59,17 @@ namespace TetrisClient
         {
             // If the connection isn't initialized, nothing can be sent to it.
             if (_connection.State != HubConnectionState.Connected) return;
-           
             var seed = Guid.NewGuid().GetHashCode();
             P1Random = new Random(seed);
 
             // Calls `ReadyUp` from the TetrisHub.cs and gives the int it expects
             await _connection.InvokeAsync("ReadyUp", seed);
+        }
+
+        private void StartGame(int seed)
+        {
+            Dispatcher.Invoke(() => { ReadyButton.Visibility = Visibility.Hidden; });
+            _engine.StartGame(seed);
         }
     }
 }

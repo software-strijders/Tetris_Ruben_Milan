@@ -43,7 +43,7 @@ namespace TetrisClient
         /// <param name="sender"></param> 
         /// <param name="e"></param>
         private void dispatcherTimer_Tick(object sender, EventArgs e) => UpdateGame();
-        
+
         /// <summary>
         /// Renders all landed tetrominos, the falling tetromino and the next tetromino
         /// </summary>
@@ -94,8 +94,7 @@ namespace TetrisClient
                 var block = board[y, x];
                 if (block == 0) continue; //block does not need to be rendered when it is 0 because its empty
 
-                var rectangle = CreateRectangle(
-                    ConvertNumberToBrush(board[y, x]));
+                var rectangle = CreateRectangle(ConvertNumberToBrush(board[y, x]));
                 TetrisGrid.Children.Add(rectangle);
 
                 Grid.SetRow(rectangle, y);
