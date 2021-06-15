@@ -11,25 +11,36 @@ namespace TetrisClient
         public Score Score;
         public DispatcherTimer GameTimer;
         public bool GameOver;
+        private Random _random;
 
         /// <summary>
         /// Starts the game, creates all items
         /// Starts the timer
-        /// Creates a new Tetromino
         /// </summary>
-        public void StartGame()
+        public void StartGame(int? seed = null)
         {
+            if (seed != null) _random = new Random((int) seed);
             GameOver = false;
             Representation = new Representation();
             Score = new Score();
-            NextTetromino = new Tetromino(4, 0);
+            NextTetromino = _random == null ? new Tetromino(4, 0) : new Tetromino(4, 0, GenerateShape());
             Timer();
             NewTetromino();
         }
 
         /// <summary>
-        /// Start a DispatcherTimer because those don't interupt the program
-        /// This timer is used for determining the drop speed of tetrominoes.
+        /// Picks a random Tetromino Shape.
+        /// </summary>
+        /// <returns>TetrominoShape enum</returns>
+        private TetrominoShape GenerateShape()
+        {
+            var values = Enum.GetValues(typeof(TetrominoShape));
+            return (TetrominoShape) values.GetValue(_random.Next(values.Length));
+        }
+
+        /// <summary>
+        /// Start a DispatcherTimer because those don't interrupt the program
+        /// This timer is used for determining the drop speed of tetrominos.
         /// </summary>
         private void Timer()
         {
@@ -86,7 +97,7 @@ namespace TetrisClient
                 GameOver = true;
             }
 
-            NextTetromino = new Tetromino(4, 0);
+            NextTetromino = _random == null ? new Tetromino(4, 0) : new Tetromino(4, 0, GenerateShape());
         }
 
         /// <summary>
@@ -111,18 +122,14 @@ namespace TetrisClient
         public void MoveRight()
         {
             if (MovePossible(offsetInBoardX: 1, offsetCollisionX: 1))
-            {
                 Tetromino.OffsetX++;
-            }
         }
 
         //Moves the tetromino to the left if allowed
         public void MoveLeft()
         {
             if (MovePossible(offsetInBoardX: -1, offsetCollisionX: -1))
-            {
                 Tetromino.OffsetX--;
-            }
         }
 
         /// <summary>
@@ -132,7 +139,7 @@ namespace TetrisClient
         /// <param name="type"> UP(clockwise) or DOWN(CounterClockWise)</param>
         public void HandleRotation(string type)
         {
-            if (type is not "UP" and not "DOWN" ) return;
+            if (type is not "UP" and not "DOWN") return;
 
             var offsetsToTest = new[] {0, 1, -1, 2, -2};
             foreach (var offset in offsetsToTest)
@@ -150,7 +157,12 @@ namespace TetrisClient
         }
 
         //Drops the current tetromino to as low as possible
-        public void HardDrop() { while (SoftDrop()) { } }
+        public void HardDrop()
+        {
+            while (SoftDrop())
+            {
+            }
+        }
 
         //Drops the current tetromino by one
         public bool SoftDrop()
@@ -175,7 +187,7 @@ namespace TetrisClient
             return Representation.IsInRangeOfBoard(Tetromino, offsetInBoardX, offsetInBoardY)
                    && !Representation.CheckCollision(Tetromino, offsetCollisionX, offsetCollisionY);
         }
-        
+
         /// <summary>
         /// Checks if there are any deleted rows, if so the score level will be recalculated.
         /// </summary>

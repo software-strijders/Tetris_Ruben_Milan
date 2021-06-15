@@ -24,7 +24,7 @@ namespace TetrisClient
         }
 
         /// <summary>
-        /// Start a DispatcherTimer because those don't interupt the program
+        /// Start a DispatcherTimer because those don't interrupt the program
         /// This timer is only used for rendering, it matches the speed of the engine timer
         /// </summary>
         private void Timer()
@@ -42,11 +42,7 @@ namespace TetrisClient
         /// </summary>
         /// <param name="sender"></param> 
         /// <param name="e"></param>
-        private void dispatcherTimer_Tick(object sender, EventArgs e)
-        {
-            UpdateGame();
-        }
-
+        private void dispatcherTimer_Tick(object sender, EventArgs e) => UpdateGame();
 
         /// <summary>
         /// Renders all landed tetrominos, the falling tetromino and the next tetromino
@@ -98,8 +94,7 @@ namespace TetrisClient
                 var block = board[y, x];
                 if (block == 0) continue; //block does not need to be rendered when it is 0 because its empty
 
-                var rectangle = CreateRectangle(
-                    ConvertNumberToBrush(board[y, x]));
+                var rectangle = CreateRectangle(ConvertNumberToBrush(board[y, x]));
                 TetrisGrid.Children.Add(rectangle);
 
                 Grid.SetRow(rectangle, y);
@@ -125,9 +120,9 @@ namespace TetrisClient
 
             _renderTimer.Interval = _engine.GameTimer.Interval;
 
-            LevelTextBlock.Text = _engine.Score.Level.ToString();
-            ScoreTextBlock.Text = _engine.Score.Points.ToString();
-            LinesTextBlock.Text = _engine.Score.Rows.ToString();
+            LevelTextBlock.Text = $"{_engine.Score.Level}";
+            ScoreTextBlock.Text = $"{_engine.Score.Points}";
+            LinesTextBlock.Text = $"{_engine.Score.Rows}";
 
             RenderGrid();
         }
@@ -186,7 +181,7 @@ namespace TetrisClient
         /// <summary>
         /// Stops the timer
         /// Restarts the game engine
-        /// Hides the gameover text
+        /// Hides the game over text
         /// Starts the timer again
         /// Updates all game info
         /// </summary>

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Input;
 using static System.Linq.Enumerable;
 
 namespace TetrisClient
@@ -96,7 +95,7 @@ namespace TetrisClient
         }
 
         /// <summary>
-        /// Recreates the current Tetromino and executes the action based on the given <paramref name="key"/>
+        /// Recreates the current Tetromino and executes the action based on the given <paramref name="type"/>
         /// and checks if that action results in a collision.
         /// </summary>
         /// <param name="tetromino">Tetromino object</param>
@@ -113,6 +112,7 @@ namespace TetrisClient
             {
                 "UP" => testTetromino.Matrix.Rotate90(),
                 "DOWN" => testTetromino.Matrix.Rotate90CounterClockwise(),
+                _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
             };
 
             return !IsInRangeOfBoard(testTetromino) || CheckCollision(testTetromino);

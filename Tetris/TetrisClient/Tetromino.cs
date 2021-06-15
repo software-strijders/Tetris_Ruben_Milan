@@ -24,7 +24,7 @@ namespace TetrisClient
     /// </summary>
     public class Tetromino
     {
-        public TetrominoShape Shape { get; private set; }
+        public TetrominoShape Shape { get; }
         public Matrix Matrix { get; set; }
         public int OffsetX;
         public int OffsetY;
@@ -42,11 +42,27 @@ namespace TetrisClient
         /// </summary>
         /// <param name="offsetX">from the left side of the grid</param>
         /// <param name="offsetY">from the bottom of the grid</param>
+        /// <param name="seed">random seed</param>
         public Tetromino(int offsetX, int offsetY)
         {
             var generatedShape = GenerateShape();
             Shape = generatedShape;
             Matrix = CreateShape(generatedShape);
+            OffsetX = offsetX;
+            OffsetY = offsetY;
+        }
+
+        /// <summary>
+        /// Constructor used for playing multiplayer with the same seed.
+        /// Random will come from the engine so that the .Next() can be controlled properly.
+        /// </summary>
+        /// <param name="offsetX"></param>
+        /// <param name="offsetY"></param>
+        /// <param name="shape"></param>
+        public Tetromino(int offsetX, int offsetY, TetrominoShape shape)
+        {
+            Shape = shape;
+            Matrix = CreateShape(shape);
             OffsetX = offsetX;
             OffsetY = offsetY;
         }
@@ -58,12 +74,13 @@ namespace TetrisClient
         /// <param name="offsetY">from the bottom of the grid</param>
         /// <param name="matrix">matrix of a tetromino</param>
         /// <param name="shape">shape of a tetromino</param>
+        /// <param name="seed">random seed</param>
         public Tetromino(int offsetX, int offsetY, Matrix matrix, TetrominoShape shape)
         {
             Shape = shape;
             Matrix = matrix;
-            this.OffsetX = offsetX;
-            this.OffsetY = offsetY;
+            OffsetX = offsetX;
+            OffsetY = offsetY;
         }
 
         /// <summary>
