@@ -32,10 +32,10 @@
 
             var multiplier = rows switch
             {
-                1 => 40,
                 2 => 100,
                 3 => 300,
-                _ => 1200
+                4 => 1200,
+                _ => 40,
             };
 
             Points += Level * multiplier + multiplier;

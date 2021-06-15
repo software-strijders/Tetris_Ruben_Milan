@@ -7,6 +7,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using Microsoft.AspNetCore.SignalR.Client;
+using Newtonsoft.Json;
 
 namespace TetrisClient
 {
@@ -17,6 +18,11 @@ namespace TetrisClient
         private DispatcherTimer _renderTimer;
         private Random P1Random;
         private Random P2Random;
+
+        private int[,] _enemyBoard;
+        private Tetromino _enemyTetromino;
+        private Tetromino _enemyNextTetromino;
+        private Score _enemyScore;
 
         public MultiplayerWindow()
         {
@@ -36,13 +42,31 @@ namespace TetrisClient
             // This way the code below corresponds with the method in TetrisHub.cs
             _connection.On<int>("ReadyUp", seed =>
             {
-                // Seed van de andere client:
                 P2Random = new Random(seed);
-                MessageBox.Show(seed.ToString());
-                _connection.InvokeAsync("StartGame", seed);
+                Task.Run(async () => await _connection.InvokeAsync("StartGame", seed));
             });
 
             _connection.On<int>("StartGame", seed => Dispatcher.BeginInvoke(new Action(() => StartGame(seed))));
+
+            _connection.On<string>("SendBoard", board => Dispatcher.BeginInvoke(new Action(() =>
+            {
+                _enemyBoard = JsonConvert.DeserializeObject<int[,]>(board);
+            })));
+            
+            _connection.On<string>("SendTetromino", tetromino => Dispatcher.BeginInvoke(new Action(() =>
+            {
+                _enemyTetromino = JsonConvert.DeserializeObject<Tetromino>(tetromino);
+            })));
+            
+            _connection.On<string>("SendNextTetromino", tetromino => Dispatcher.BeginInvoke(new Action(() =>
+            {
+                _enemyNextTetromino = JsonConvert.DeserializeObject<Tetromino>(tetromino);
+            })));
+            
+            _connection.On<string>("SendScore", score => Dispatcher.BeginInvoke(new Action(() =>
+            {
+                _enemyScore = JsonConvert.DeserializeObject<Score>(score);
+            })));
 
             // It is mandatory that the connection is started *after* all event listeners are set.
             // If the method this occurs in happens to be `async`, Task.Run can be removed.
@@ -69,7 +93,7 @@ namespace TetrisClient
         private void StartGame(int seed)
         {
             Dispatcher.Invoke(() => { ReadyButton.Visibility = Visibility.Hidden; });
-            _engine.StartGame(seed);
+            _engine.StartGame();
             Timer();
         }
 
@@ -81,7 +105,7 @@ namespace TetrisClient
         {
             _renderTimer = new DispatcherTimer();
             _renderTimer.Tick += dispatcherTimer_Tick;
-            _renderTimer.Interval = _engine.GameTimer.Interval;
+            _renderTimer.Interval = new TimeSpan(0,0,0,0, 10);
             _renderTimer.Start();
         }
 
@@ -103,22 +127,23 @@ namespace TetrisClient
         /// </summary>
         private void UpdateGame()
         {
-            if (_engine.GameOver)
-            {
-                _renderTimer.IsEnabled = false;
-                // GameOverText.Visibility = Visibility.Visible; //TODO: Fix met P2 ook, dus aanmaken voor p2
-                return;
-            }
-
-            _renderTimer.Interval = _engine.GameTimer.Interval;
+            Task.Run(async () => await _connection.InvokeAsync("SendBoard", JsonConvert.SerializeObject(_engine.Representation.Board)));
+            Task.Run(async () => await _connection.InvokeAsync("SendTetromino", JsonConvert.SerializeObject(_engine.Tetromino)));
+            Task.Run(async () => await _connection.InvokeAsync("SendNextTetromino", JsonConvert.SerializeObject(_engine.NextTetromino)));
+            Task.Run(async () => await _connection.InvokeAsync("SendScore", JsonConvert.SerializeObject(_engine.Score)));
+            
+            // GameOverText.Visibility = Visibility.Visible; //TODO: Fix met P2 ook, dus aanmaken voor p2
 
             LevelTextBlockP1.Text = $"{_engine.Score.Level}";
             ScoreTextBlockP1.Text = $"{_engine.Score.Points}";
             LinesTextBlockP1.Text = $"{_engine.Score.Rows}";
-            
-            LevelTextBlockP2.Text = $"{_engine.Score.Level}";
-            ScoreTextBlockP2.Text = $"{_engine.Score.Points}";
-            LinesTextBlockP2.Text = $"{_engine.Score.Rows}";
+
+            if (_enemyScore != null)
+            {
+                LevelTextBlockP2.Text = $"{_enemyScore.Level}";
+                ScoreTextBlockP2.Text = $"{_enemyScore.Points}";
+                LinesTextBlockP2.Text = $"{_enemyScore.Rows}";
+            }
 
             RenderGrid();
         }
@@ -129,19 +154,30 @@ namespace TetrisClient
         private void RenderGrid()
         {
             TetrisGridP1.Children.Clear();
-            TetrisGridP2.Children.Clear();
-
             RenderLandedTetrominos(TetrisGridP1);
-            RenderLandedTetrominos(TetrisGridP2);
-            
+
+            if (_enemyBoard != null)
+            {
+                TetrisGridP2.Children.Clear();
+                RenderLandedTetrominos(TetrisGridP2, _enemyBoard);
+            }
+
             RenderTetromino(_engine.Tetromino, TetrisGridP1);
-            RenderTetromino(_engine.Tetromino, TetrisGridP2);
             RenderTetromino(_engine.CreateGhostTetromino(), TetrisGridP1, 0.30);
 
+            if (_enemyTetromino != null)
+            {
+                RenderTetromino(_enemyTetromino, TetrisGridP2);
+            }
+
             NextGridP1.Children.Clear();
-            NextGridP2.Children.Clear();
             RenderTetromino(_engine.NextTetromino, NextGridP1);
-            RenderTetromino(_engine.NextTetromino, NextGridP2);
+
+            if (_enemyNextTetromino != null)
+            {
+                NextGridP2.Children.Clear();
+                RenderTetromino(_enemyNextTetromino, NextGridP2);
+            }
         }
 
         /// <summary>
@@ -161,17 +197,17 @@ namespace TetrisClient
                 grid?.Children.Add(rectangle);
 
                 Grid.SetRow(rectangle, y); // TODO: Alleen op P1 grid renderen
-                Grid.SetColumn(rectangle, grid == TetrisGridP1 ? x : x - 4);
+                Grid.SetColumn(rectangle, grid != NextGridP1 && grid != NextGridP2 ? x : x - 4);
             });
         }
 
         /// <summary>
         /// Renders all tetrominos that are in the representation
         /// </summary>
-        private void RenderLandedTetrominos(Panel grid)
+        private void RenderLandedTetrominos(Panel grid, int[,] board = null)
         {
-            var board = _engine.Representation.Board;
-
+            board ??= _engine.Representation.Board;
+            
             for (var y = 0; y < board.GetLength(0); y++)
             for (var x = 0; x < board.GetLength(1); x++)
             {
@@ -179,10 +215,10 @@ namespace TetrisClient
                 if (block == 0) continue; //block does not need to be rendered when it is 0 because its empty
 
                 var rectangle = CreateRectangle(ConvertNumberToBrush(board[y, x]));
-                grid.Children.Add(rectangle); // TODO: FOR P1 and P2
+                grid.Children.Add(rectangle);
 
-                Grid.SetRow(rectangle, y);
-                Grid.SetColumn(rectangle, x);
+                Grid.SetRow(rectangle, y);      // Ligt het niet hier aan?
+                Grid.SetColumn(rectangle, x);   // Ligt het niet hier aan?
             }
         }
 
@@ -237,19 +273,15 @@ namespace TetrisClient
             {
                 case Key.Right:
                     _engine.MoveRight();
-                    // _connection.SendAsync("MoveShape", "RIGHT");
                     break;
                 case Key.Left:
                     _engine.MoveLeft();
-                    // _connection.SendAsync("MoveShape", "LEFT");
                     break;
                 case Key.Up:
                     _engine.HandleRotation("UP");
-                    // _connection.SendAsync("RotateShape", "UP");
                     break;
                 case Key.Down:
                     _engine.HandleRotation("DOWN");
-                    // _connection.SendAsync("RotateShape", "Down");
                     break;
                 case Key.Space:
                     _engine.HardDrop();

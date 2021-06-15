@@ -24,11 +24,10 @@ namespace TetrisClient
     /// </summary>
     public class Tetromino
     {
-        public TetrominoShape Shape { get; private set; }
+        public TetrominoShape Shape { get; }
         public Matrix Matrix { get; set; }
         public int OffsetX;
         public int OffsetY;
-        private static Random _random;
 
         /// <summary>
         /// Default start position is at the left top (0,0).
@@ -44,9 +43,8 @@ namespace TetrisClient
         /// <param name="offsetX">from the left side of the grid</param>
         /// <param name="offsetY">from the bottom of the grid</param>
         /// <param name="seed">random seed</param>
-        public Tetromino(int offsetX, int offsetY, int? seed = null)
+        public Tetromino(int offsetX, int offsetY)
         {
-            _random = seed == null ? new Random() : new Random((int) seed);
             var generatedShape = GenerateShape();
             Shape = generatedShape;
             Matrix = CreateShape(generatedShape);
@@ -62,13 +60,12 @@ namespace TetrisClient
         /// <param name="matrix">matrix of a tetromino</param>
         /// <param name="shape">shape of a tetromino</param>
         /// <param name="seed">random seed</param>
-        public Tetromino(int offsetX, int offsetY, Matrix matrix, TetrominoShape shape,  int? seed = null)
+        public Tetromino(int offsetX, int offsetY, Matrix matrix, TetrominoShape shape)
         {
             Shape = shape;
             Matrix = matrix;
             OffsetX = offsetX;
             OffsetY = offsetY;
-            _random = seed == null ? new Random() : new Random((int) seed);
         }
 
         /// <summary>
@@ -96,7 +93,7 @@ namespace TetrisClient
         private static TetrominoShape GenerateShape()
         {
             var values = Enum.GetValues(typeof(TetrominoShape));
-            return (TetrominoShape) values.GetValue(_random.Next(values.Length));
+            return (TetrominoShape) values.GetValue(new Random().Next(values.Length));
         }
 
         /// <summary>

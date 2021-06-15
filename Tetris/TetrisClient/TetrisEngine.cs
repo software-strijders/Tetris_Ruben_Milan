@@ -15,7 +15,6 @@ namespace TetrisClient
         /// <summary>
         /// Starts the game, creates all items
         /// Starts the timer
-        /// Creates a new Tetromino
         /// </summary>
         public void StartGame()
         {
@@ -25,22 +24,6 @@ namespace TetrisClient
             NextTetromino = new Tetromino(4, 0);
             Timer();
             NewTetromino();
-        }
-
-        /// <summary>
-        /// Starts the game, creates all items
-        /// Starts the timer
-        /// Creates a new Tetromino with the given <paramref name="seed"/>
-        /// <param name="seed">seed for random</param>
-        /// </summary>
-        public void StartGame(int? seed = null)
-        {
-            GameOver = false;
-            Representation = new Representation();
-            Score = new Score();
-            NextTetromino = new Tetromino(4, 0, seed);
-            Timer();
-            NewTetromino(seed);
         }
 
         /// <summary>
@@ -93,7 +76,7 @@ namespace TetrisClient
         /// Also sets the start position of the current tetromino. 
         /// </summary>
         /// <returns>True if the game is lost(new tetromino cant be put in an empty spot at the top, else false</returns>
-        private void NewTetromino(int? seed = null)
+        private void NewTetromino()
         {
             Tetromino = NextTetromino;
             if (Representation.CheckCollision(Tetromino))
@@ -102,7 +85,7 @@ namespace TetrisClient
                 GameOver = true;
             }
 
-            NextTetromino = seed == null ? new Tetromino(4, 0) : new Tetromino(4, 0, seed);
+            NextTetromino = new Tetromino(4, 0);
         }
 
         /// <summary>
