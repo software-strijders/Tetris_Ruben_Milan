@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Media;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -15,6 +16,9 @@ namespace TetrisClient
     {
         private readonly TetrisEngine _engine = new();
         private DispatcherTimer _renderTimer;
+        private readonly SoundPlayer _gameOverTune = new("GameOver.wav");
+        private readonly SoundPlayer _sound1 = new("Sound1.wav");
+        private readonly SoundPlayer _sound2 = new("Sound2.wav");
 
         public MainWindow()
         {
@@ -115,6 +119,7 @@ namespace TetrisClient
             {
                 _renderTimer.IsEnabled = false;
                 GameOverText.Visibility = Visibility.Visible;
+                _gameOverTune.Play();
                 return;
             }
 
@@ -155,26 +160,31 @@ namespace TetrisClient
             {
                 case Key.Right:
                     _engine.MoveRight();
+                    _sound2.Play();
                     break;
                 case Key.Left:
                     _engine.MoveLeft();
+                    _sound2.Play();
                     break;
                 case Key.Up:
                     _engine.HandleRotation("UP");
+                    _sound2.Play();
                     break;
                 case Key.Down:
                     _engine.HandleRotation("DOWN");
+                    _sound2.Play();
                     break;
                 case Key.Space:
                     _engine.HardDrop();
+                    _sound1.Play();
                     break;
                 case Key.LeftShift:
                     _engine.SoftDrop();
+                    _sound2.Play();
                     break;
                 default:
                     return;
             }
-
             UpdateGame();
         }
 

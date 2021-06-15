@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Media;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,6 +17,9 @@ namespace TetrisClient
         private HubConnection _connection;
         private TetrisEngine _engine = new();
         private DispatcherTimer _renderTimer;
+        
+        private readonly SoundPlayer _sound1 = new("Sound1.wav");
+        private readonly SoundPlayer _sound2 = new("Sound2.wav");
 
         private int[,] _enemyBoard;
         private Tetromino _enemyTetromino;
@@ -151,7 +155,10 @@ namespace TetrisClient
         private void CheckGameOver()
         {
             if (_engine.GameOver)
+            {
                 Dispatcher.Invoke(() => { GameOverTextP1.Visibility = Visibility.Visible; });
+            }
+
             if (_enemyGameOver)
                 Dispatcher.Invoke(() => { GameOverTextP2.Visibility = Visibility.Visible; });
         }
@@ -289,27 +296,32 @@ namespace TetrisClient
             switch (e.Key)
             {
                 case Key.Right:
+                    _sound2.Play();
                     _engine.MoveRight();
                     break;
                 case Key.Left:
+                    _sound2.Play();
                     _engine.MoveLeft();
                     break;
                 case Key.Up:
+                    _sound2.Play();
                     _engine.HandleRotation("UP");
                     break;
                 case Key.Down:
+                    _sound2.Play();
                     _engine.HandleRotation("DOWN");
                     break;
                 case Key.Space:
+                    _sound1.Play();
                     _engine.HardDrop();
                     break;
                 case Key.LeftShift:
+                    _sound2.Play();
                     _engine.SoftDrop();
                     break;
                 default:
                     return;
             }
-
             UpdateGame();
         }
     }
