@@ -417,20 +417,21 @@
             Width="298"
             x:Name="GameOverTextP1"><Run Text="GAME OVER" /></TextBlock>
         <Button
-                Background="#FF03DAC6"
-                BorderBrush="Black"
-                Click="StartGame_OnClick"
-                Content=" Start&#xD;&#xA;Game"
-                FontSize="40"
-                Grid.Column="2"
-                Height="121"
-                HorizontalAlignment="Left"
-                Margin="0,397,0,0"
-                VerticalAlignment="Top"
-                Width="142"
-                x:Name="ReadyButton" Foreground="Black" >
+            Background="#FF03DAC6"
+            BorderBrush="Black"
+            Click="StartGame_OnClick"
+            Content=" Start&#xD;&#xA;Game"
+            FontSize="40"
+            Foreground="Black"
+            Grid.Column="2"
+            Height="121"
+            HorizontalAlignment="Left"
+            Margin="0,397,0,0"
+            VerticalAlignment="Top"
+            Width="142"
+            x:Name="ReadyButton">
             <Button.Effect>
-                <DropShadowEffect/>
+                <DropShadowEffect />
             </Button.Effect>
         </Button>
 
