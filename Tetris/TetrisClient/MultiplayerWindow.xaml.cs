@@ -139,7 +139,9 @@ namespace TetrisClient
             RenderTetromino(_engine.CreateGhostTetromino(), TetrisGridP1, 0.30);
 
             NextGridP1.Children.Clear();
+            NextGridP2.Children.Clear();
             RenderTetromino(_engine.NextTetromino, NextGridP1);
+            RenderTetromino(_engine.NextTetromino, NextGridP2);
         }
 
         /// <summary>

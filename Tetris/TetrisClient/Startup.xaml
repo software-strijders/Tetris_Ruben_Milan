@@ -1,15 +1,16 @@
 ﻿<Window
+    ResizeMode="NoResize"
     Background="#FFE2E9FF"
-    Height="450"
+    Height="400"
     Title="Startup"
-    Width="800"
+    Width="480"
     mc:Ignorable="d"
     x:Class="TetrisClient.Startup"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Grid>
+    <Grid Margin="0,0,0,-6">
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                 <GradientStop Color="#FF000605" Offset="0" />
@@ -17,18 +18,18 @@
             </LinearGradientBrush>
         </Grid.Background>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="9*" />
-            <ColumnDefinition Width="191*" />
+            <ColumnDefinition Width="0*" />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <TextBlock
-            FontSize="72"
+        <TextBlock x:Name="TetrisText"
+            FontSize="148"
             Grid.Column="1"
-            Height="97"
+            Height="195"
             HorizontalAlignment="Center"
-            Margin="0,139,0,0"
+            Margin="0,-37,0,0"
             TextWrapping="Wrap"
             VerticalAlignment="Top"
-            Width="179">
+            Width="388" FontWeight="Bold" Foreground="#FF00FFE7">
             <Run Language="nl-nl" Text="Tetris" />
         </TextBlock>
         <Button
@@ -39,7 +40,7 @@
             Grid.Column="1"
             Height="64"
             HorizontalAlignment="Left"
-            Margin="163,264,0,0"
+            Margin="70,259,0,0"
             VerticalAlignment="Top"
             Width="113" />
         <Button
@@ -49,19 +50,17 @@
             Content="Multiplayer"
             Grid.Column="1"
             Height="64"
-            HorizontalAlignment="Center"
-            Margin="0,264,0,0"
-            VerticalAlignment="Top"
-            Width="113" />
-        <Button
-            Background="#FF03DAC6"
-            BorderBrush="{x:Null}"
-            Content="Coming soon"
-            Grid.Column="1"
-            Height="64"
             HorizontalAlignment="Left"
-            Margin="479,264,0,0"
+            Margin="288,259,0,0"
             VerticalAlignment="Top"
             Width="113" />
+        <TextBlock
+            FontSize="20"
+            Grid.Column="1"
+            Height="38"
+            HorizontalAlignment="Center"
+            TextWrapping="Wrap"
+            VerticalAlignment="Top"
+            Width="194" FontWeight="Bold" Foreground="#FF00FFE7" Margin="0,160,0,0"><Run Language="en-gb" Text="By Ruben &amp; Milan"/></TextBlock>
     </Grid>
 </Window>

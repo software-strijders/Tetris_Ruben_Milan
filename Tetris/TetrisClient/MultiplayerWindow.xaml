@@ -1,9 +1,10 @@
 ﻿<Window
-    Height="550"
+    ResizeMode="NoResize"
+    Height="584"
     MinHeight="550"
     MinWidth="950"
     Title="MultiplayerWindow"
-    Width="950"
+    Width="1032"
     mc:Ignorable="d"
     x:Class="TetrisClient.MultiplayerWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -11,10 +12,10 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Grid>
+    <Grid Margin="0,0,0,-6">
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                <GradientStop Color="#FF000605" Offset="0" />
+                <GradientStop Color="#FF00110E" Offset="0" />
                 <GradientStop Color="#FF004039" Offset="1" />
             </LinearGradientBrush>
         </Grid.Background>
@@ -30,8 +31,8 @@
             Grid.ColumnSpan="2"
             Height="480"
             HorizontalAlignment="Left"
-            Margin="12,0,0,0"
-            VerticalAlignment="Center"
+            Margin="23,38,0,0"
+            VerticalAlignment="Top"
             Width="300"
             x:Name="TetrisGridP2">
             <Grid.RowDefinitions>
@@ -71,10 +72,10 @@
             Grid.Column="2"
             Height="480"
             HorizontalAlignment="Left"
-            Margin="12,0,0,0"
-            VerticalAlignment="Center"
+            Margin="172,38,0,0"
+            VerticalAlignment="Top"
             Width="300"
-            x:Name="TetrisGridP1">
+            x:Name="TetrisGridP1" Grid.ColumnSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="30" />
                 <RowDefinition Height="30" />
@@ -129,7 +130,7 @@
             Grid.Column="3"
             Height="101"
             HorizontalAlignment="Left"
-            Margin="98,53,0,0"
+            Margin="146,38,0,0"
             VerticalAlignment="Top"
             Width="101"
             x:Name="NextGridP1">
@@ -146,206 +147,226 @@
                 <ColumnDefinition Width="30" />
             </Grid.ColumnDefinitions>
         </Grid>
-        <Grid
-            Height="424"
-            HorizontalAlignment="Center"
-            Margin="0,10,0,0"
-            VerticalAlignment="Top"
-            Width="224"
-            x:Name="TetrisGridMisc">
-
-            <Grid.Column>
-                <system:Int32>3</system:Int32>
-            </Grid.Column>
-            <TextBlock
+        <TextBlock
                 FontSize="72"
                 FontWeight="Bold"
                 Foreground="#FF00FFE7"
                 Height="84"
                 HorizontalAlignment="Left"
-                Margin="19,305,0,0"
+                Margin="141,429,0,0"
                 TextWrapping="Wrap"
                 VerticalAlignment="Top"
                 Width="193"
-                x:Name="TetrisText">
-                <TextBlock.Effect>
-                    <DropShadowEffect />
-                </TextBlock.Effect>
-                <Run Language="en-gb" Text="Tetris" />
-            </TextBlock>
-            <TextBlock
+                x:Name="TetrisText" Grid.Column="3">
+            <TextBlock.Effect>
+                <DropShadowEffect />
+            </TextBlock.Effect><Run Language="en-gb" Text="Tetris" /></TextBlock>
+        <TextBlock
                 FontSize="24"
                 Foreground="#FF00FFE7"
                 HorizontalAlignment="Left"
-                Margin="27,272,0,0"
+                Margin="148,348,0,0"
                 TextWrapping="Wrap"
                 VerticalAlignment="Top"
-                x:Name="Score">
-                <TextBlock.Effect>
-                    <DropShadowEffect />
-                </TextBlock.Effect>
-                <Run Language="en-gb" Text="Score" />
-            </TextBlock>
-            <TextBlock
+                x:Name="Score" Grid.Column="3">
+            <TextBlock.Effect>
+                <DropShadowEffect />
+            </TextBlock.Effect><Run Language="en-gb" Text="Score" /></TextBlock>
+        <TextBlock
+                FontSize="24"
+                Foreground="#FF00FFE7"
+                Height="35"
+                HorizontalAlignment="Center"
+                Margin="0,297,0,0"
+                TextWrapping="Wrap"
+                VerticalAlignment="Top"
+                x:Name="Lines" Grid.Column="3">
+            <TextBlock.Effect>
+                <DropShadowEffect />
+            </TextBlock.Effect><Run Text="L" /><Run Text="ines" /><LineBreak /><Run /></TextBlock>
+        <TextBlock
+                FontSize="24"
+                Foreground="#FF00FFE7"
+                Height="35"
+                HorizontalAlignment="Center"
+                Margin="0,244,0,0"
+                TextWrapping="Wrap"
+                VerticalAlignment="Top"
+                x:Name="Level" Grid.Column="3">
+            <TextBlock.Effect>
+                <DropShadowEffect />
+            </TextBlock.Effect><Run Language="en-gb" Text="L" /><Run Text="evel" /><LineBreak /><Run /></TextBlock>
+        <TextBlock
                 FontSize="24"
                 Foreground="#FF00FFE7"
                 Height="35"
                 HorizontalAlignment="Left"
-                Margin="27,221,0,0"
+                Margin="253,241,0,0"
                 TextWrapping="Wrap"
                 VerticalAlignment="Top"
-                x:Name="Lines">
-                <TextBlock.Effect>
-                    <DropShadowEffect />
-                </TextBlock.Effect>
-                <Run Text="L" /><Run Text="ines" /><LineBreak /><Run />
-            </TextBlock>
-            <TextBlock
+                x:Name="LevelTextBlockP1" Grid.Column="3">
+            <TextBlock.Effect>
+                <DropShadowEffect />
+            </TextBlock.Effect><Run Language="en-gb" Text="0" /></TextBlock>
+        <TextBlock
                 FontSize="24"
                 Foreground="#FF00FFE7"
                 Height="35"
                 HorizontalAlignment="Left"
-                Margin="27,168,0,0"
+                Margin="253,294,0,0"
                 TextWrapping="Wrap"
                 VerticalAlignment="Top"
-                x:Name="Level">
-                <TextBlock.Effect>
-                    <DropShadowEffect />
-                </TextBlock.Effect>
-                <Run Language="en-gb" Text="L" /><Run Text="evel" /><LineBreak /><Run />
-            </TextBlock>
-            <TextBlock
+                x:Name="LinesTextBlockP1" Grid.Column="3">
+            <TextBlock.Effect>
+                <DropShadowEffect />
+            </TextBlock.Effect><Run Language="en-gb" Text="0" /></TextBlock>
+        <TextBlock
                 FontSize="24"
                 Foreground="#FF00FFE7"
                 Height="35"
                 HorizontalAlignment="Left"
-                Margin="177,165,0,0"
+                Margin="253,345,0,0"
                 TextWrapping="Wrap"
                 VerticalAlignment="Top"
-                x:Name="LevelTextBlockP2">
-                <TextBlock.Effect>
-                    <DropShadowEffect />
-                </TextBlock.Effect>
-                <Run Language="en-gb" Text="0" />
-            </TextBlock>
-            <TextBlock
-                FontSize="24"
-                Foreground="#FF00FFE7"
-                Height="35"
-                HorizontalAlignment="Left"
-                Margin="177,218,0,0"
-                TextWrapping="Wrap"
-                VerticalAlignment="Top"
-                x:Name="LinesTextBlockP2">
-                <TextBlock.Effect>
-                    <DropShadowEffect />
-                </TextBlock.Effect>
-                <Run Language="en-gb" Text="0" />
-            </TextBlock>
-            <TextBlock
-                FontSize="24"
-                Foreground="#FF00FFE7"
-                Height="35"
-                HorizontalAlignment="Left"
-                Margin="177,269,0,0"
-                TextWrapping="Wrap"
-                VerticalAlignment="Top"
-                x:Name="ScoreTextBlockP2">
-                <TextBlock.Effect>
-                    <DropShadowEffect />
-                </TextBlock.Effect>
-                <Run Language="en-gb" Text="0" />
-            </TextBlock>
-            <TextBlock
-                FontSize="24"
-                Foreground="#FF00FFE7"
-                Height="35"
-                HorizontalAlignment="Left"
-                Margin="132,165,0,0"
-                TextWrapping="Wrap"
-                VerticalAlignment="Top"
-                x:Name="LevelTextBlockP1">
-                <TextBlock.Effect>
-                    <DropShadowEffect />
-                </TextBlock.Effect>
-                <Run Language="en-gb" Text="0" />
-            </TextBlock>
-            <TextBlock
-                FontSize="24"
-                Foreground="#FF00FFE7"
-                Height="35"
-                HorizontalAlignment="Left"
-                Margin="132,218,0,0"
-                TextWrapping="Wrap"
-                VerticalAlignment="Top"
-                x:Name="LinesTextBlockP1">
-                <TextBlock.Effect>
-                    <DropShadowEffect />
-                </TextBlock.Effect>
-                <Run Language="en-gb" Text="0" />
-            </TextBlock>
-            <TextBlock
-                FontSize="24"
-                Foreground="#FF00FFE7"
-                Height="35"
-                HorizontalAlignment="Left"
-                Margin="132,269,0,0"
-                TextWrapping="Wrap"
-                VerticalAlignment="Top"
-                x:Name="ScoreTextBlockP1">
-                <TextBlock.Effect>
-                    <DropShadowEffect />
-                </TextBlock.Effect>
-                <Run Language="en-gb" Text="0" />
-            </TextBlock>
-
-
+                x:Name="ScoreTextBlockP1" Grid.Column="3">
+            <TextBlock.Effect>
+                <DropShadowEffect />
+            </TextBlock.Effect><Run Language="en-gb" Text="0" /></TextBlock>
+        <Grid
+            Background="Black"
+            Grid.Column="1"
+            Height="101"
+            HorizontalAlignment="Left"
+            Margin="272,38,0,0"
+            VerticalAlignment="Top"
+            Width="101"
+            x:Name="NextGridP2" Grid.ColumnSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="30" />
+                <ColumnDefinition Width="30" />
+                <ColumnDefinition Width="30" />
+                <ColumnDefinition Width="30" />
+            </Grid.ColumnDefinitions>
         </Grid>
         <TextBlock
             FontSize="24"
             Foreground="#FF00FFE7"
-            Grid.Column="3"
-            Height="35"
             HorizontalAlignment="Left"
-            Margin="204,173,0,0"
+            Margin="274,348,0,0"
             TextWrapping="Wrap"
             VerticalAlignment="Top"
-            x:Name="LevelDivider">
+            x:Name="Score_Copy" Grid.Column="1" Grid.ColumnSpan="2">
             <TextBlock.Effect>
                 <DropShadowEffect />
-            </TextBlock.Effect>
-            <Run Language="nl-nl" Text="-" />
-        </TextBlock>
+            </TextBlock.Effect><Run Language="en-gb" Text="Score" /></TextBlock>
         <TextBlock
             FontSize="24"
             Foreground="#FF00FFE7"
-            Grid.Column="3"
             Height="35"
             HorizontalAlignment="Left"
-            Margin="204,226,0,0"
-            Text="-"
+            Margin="274,297,0,0"
             TextWrapping="Wrap"
             VerticalAlignment="Top"
-            x:Name="LinesDivider">
+            x:Name="Lines_Copy" Grid.Column="1" Grid.ColumnSpan="2">
             <TextBlock.Effect>
                 <DropShadowEffect />
-            </TextBlock.Effect>
-        </TextBlock>
+            </TextBlock.Effect><Run Text="L" /><Run Text="ines" /><LineBreak /><Run /></TextBlock>
         <TextBlock
             FontSize="24"
             Foreground="#FF00FFE7"
-            Grid.Column="3"
             Height="35"
             HorizontalAlignment="Left"
-            Margin="204,277,0,0"
+            Margin="274,244,0,0"
             TextWrapping="Wrap"
             VerticalAlignment="Top"
-            x:Name="ScoreDivider">
+            x:Name="Level_Copy" Grid.Column="1" Grid.ColumnSpan="2">
             <TextBlock.Effect>
                 <DropShadowEffect />
-            </TextBlock.Effect>
-            <Run Language="nl-nl" Text="-" />
-        </TextBlock>
+            </TextBlock.Effect><Run Language="en-gb" Text="L" /><Run Text="evel" /><LineBreak /><Run /></TextBlock>
+        <TextBlock
+            FontSize="24"
+            Foreground="#FF00FFE7"
+            Height="35"
+            HorizontalAlignment="Left"
+            Margin="102,241,0,0"
+            TextWrapping="Wrap"
+            VerticalAlignment="Top"
+            x:Name="LevelTextBlockP2" Grid.Column="2">
+            <TextBlock.Effect>
+                <DropShadowEffect />
+            </TextBlock.Effect><Run Language="en-gb" Text="0" /></TextBlock>
+        <TextBlock
+            FontSize="24"
+            Foreground="#FF00FFE7"
+            Height="35"
+            HorizontalAlignment="Left"
+            Margin="102,294,0,0"
+            TextWrapping="Wrap"
+            VerticalAlignment="Top"
+            x:Name="LinesTextBlockP2" Grid.Column="2">
+            <TextBlock.Effect>
+                <DropShadowEffect />
+            </TextBlock.Effect><Run Language="en-gb" Text="0" /></TextBlock>
+        <TextBlock
+            FontSize="24"
+            Foreground="#FF00FFE7"
+            Height="35"
+            HorizontalAlignment="Left"
+            Margin="102,345,0,0"
+            TextWrapping="Wrap"
+            VerticalAlignment="Top"
+            x:Name="ScoreTextBlockP2" Grid.Column="2">
+            <TextBlock.Effect>
+                <DropShadowEffect />
+            </TextBlock.Effect><Run Language="en-gb" Text="0" /></TextBlock>
+        <TextBlock
+            FontSize="72"
+            FontWeight="Bold"
+            Foreground="#FF00FFE7"
+            Height="84"
+            HorizontalAlignment="Left"
+            Margin="27,429,0,0"
+            TextWrapping="Wrap"
+            VerticalAlignment="Top"
+            Width="96"
+            x:Name="TetrisText_Copy" Grid.Column="2">
+            <TextBlock.Effect>
+                <DropShadowEffect />
+            </TextBlock.Effect><Run Language="en-gb" Text="VS"/></TextBlock>
+        <TextBlock
+            FontSize="20"
+            FontWeight="Bold"
+            Foreground="White"
+            Height="24"
+            HorizontalAlignment="Left"
+            Margin="172,38,0,0"
+            TextWrapping="Wrap"
+            VerticalAlignment="Top"
+            Width="24"
+            x:Name="P1Text" Grid.Column="2">
+            <TextBlock.Effect>
+                <DropShadowEffect />
+            </TextBlock.Effect><Run Language="en-gb" Text="P1"/></TextBlock>
+        <TextBlock
+            FontSize="20"
+            FontWeight="Bold"
+            Foreground="White"
+            Height="24"
+            HorizontalAlignment="Center"
+            Margin="0,38,0,0"
+            TextWrapping="Wrap"
+            VerticalAlignment="Top"
+            Width="24"
+            x:Name="P2Text">
+            <TextBlock.Effect>
+                <DropShadowEffect />
+            </TextBlock.Effect><Run Language="en-gb" Text="P2"/></TextBlock>
 
     </Grid>
 </Window>

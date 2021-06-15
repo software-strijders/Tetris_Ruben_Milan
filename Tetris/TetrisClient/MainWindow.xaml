@@ -1,4 +1,5 @@
 ﻿<Window
+    ResizeMode="NoResize"
     Background="#FFE2E9FF"
     Height="559"
     Title="Tetris"
