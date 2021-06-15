@@ -16,9 +16,9 @@ namespace TetrisClient
     {
         private readonly TetrisEngine _engine = new();
         private DispatcherTimer _renderTimer;
-        private readonly SoundPlayer _gameOverTune = new("GameOver.wav");
-        private readonly SoundPlayer _sound1 = new("Sound1.wav");
-        private readonly SoundPlayer _sound2 = new("Sound2.wav");
+        private readonly SoundPlayer _gameOverTune = new(Resource1.GameOver);
+        private readonly SoundPlayer _sound1 = new(Resource1.Sound1);
+        private readonly SoundPlayer _sound2 = new(Resource1.Sound2);
 
         public MainWindow()
         {

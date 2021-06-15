@@ -18,8 +18,8 @@ namespace TetrisClient
         private TetrisEngine _engine = new();
         private DispatcherTimer _renderTimer;
         
-        private readonly SoundPlayer _sound1 = new("Sound1.wav");
-        private readonly SoundPlayer _sound2 = new("Sound2.wav");
+        private readonly SoundPlayer _sound1 = new(Resource1.Sound1);
+        private readonly SoundPlayer _sound2 = new(Resource1.Sound2);
 
         private int[,] _enemyBoard;
         private Tetromino _enemyTetromino;
