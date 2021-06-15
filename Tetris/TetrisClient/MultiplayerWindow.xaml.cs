@@ -21,6 +21,7 @@ namespace TetrisClient
         private Tetromino _enemyTetromino;
         private Tetromino _enemyNextTetromino;
         private Score _enemyScore;
+        private bool _enemyGameOver;
 
         public MultiplayerWindow()
         {
@@ -79,6 +80,8 @@ namespace TetrisClient
                 _enemyNextTetromino = JsonConvert.DeserializeObject<Tetromino>(tetromino))));
             _connection.On<string>("SendScore", score => Dispatcher.BeginInvoke(new Action(() =>
                 _enemyScore = JsonConvert.DeserializeObject<Score>(score))));
+            _connection.On<bool>("SendGameStatus", status => Dispatcher.BeginInvoke(new Action(() =>
+                _enemyGameOver = status)));
         }
 
         private void StartGame(int seed)
@@ -118,29 +121,51 @@ namespace TetrisClient
         /// </summary>
         private void UpdateGame()
         {
+            SendData();
+            CheckGameOver();
+            SetTextBlocks();
+            RenderGrid();
+        }
+
+        /// <summary>
+        /// Sends all the required data to the server so it can dispatch it to the other client.
+        /// </summary>
+        private void SendData()
+        {
+            Task.Run(async () =>
+                await _connection.InvokeAsync("SendScore", JsonConvert.SerializeObject(_engine.Score)));
             Task.Run(async () =>
                 await _connection.InvokeAsync("SendBoard", JsonConvert.SerializeObject(_engine.Representation.Board)));
             Task.Run(async () =>
                 await _connection.InvokeAsync("SendTetromino", JsonConvert.SerializeObject(_engine.Tetromino)));
             Task.Run(async () =>
-                await _connection.InvokeAsync("SendNextTetromino", JsonConvert.SerializeObject(_engine.NextTetromino)));
+                await _connection.InvokeAsync("SendGameStatus", _engine.GameOver));
             Task.Run(async () =>
-                await _connection.InvokeAsync("SendScore", JsonConvert.SerializeObject(_engine.Score)));
+                await _connection.InvokeAsync("SendNextTetromino", JsonConvert.SerializeObject(_engine.NextTetromino)));
+        }
 
-            // GameOverText.Visibility = Visibility.Visible; //TODO: Fix met P2 ook, dus aanmaken voor p2
 
+        /// <summary>
+        /// Checks if either one of the players is game over and if so, displays the game over message.
+        /// </summary>
+        private void CheckGameOver()
+        {
+            if (_engine.GameOver)
+                Dispatcher.Invoke(() => { GameOverTextP1.Visibility = Visibility.Visible; });
+            if (_enemyGameOver)
+                Dispatcher.Invoke(() => { GameOverTextP2.Visibility = Visibility.Visible; });
+        }
+
+        private void SetTextBlocks()
+        {
             LevelTextBlockP1.Text = $"{_engine.Score.Level}";
             ScoreTextBlockP1.Text = $"{_engine.Score.Points}";
             LinesTextBlockP1.Text = $"{_engine.Score.Rows}";
 
-            if (_enemyScore != null)
-            {
-                LevelTextBlockP2.Text = $"{_enemyScore.Level}";
-                ScoreTextBlockP2.Text = $"{_enemyScore.Points}";
-                LinesTextBlockP2.Text = $"{_enemyScore.Rows}";
-            }
-
-            RenderGrid();
+            if (_enemyScore == null) return;
+            LevelTextBlockP2.Text = $"{_enemyScore.Level}";
+            ScoreTextBlockP2.Text = $"{_enemyScore.Points}";
+            LinesTextBlockP2.Text = $"{_enemyScore.Rows}";
         }
 
         /// <summary>
@@ -161,18 +186,15 @@ namespace TetrisClient
             RenderTetromino(_engine.CreateGhostTetromino(), TetrisGridP1, 0.30);
 
             if (_enemyTetromino != null)
-            {
                 RenderTetromino(_enemyTetromino, TetrisGridP2);
-            }
+
 
             NextGridP1.Children.Clear();
             RenderTetromino(_engine.NextTetromino, NextGridP1);
 
-            if (_enemyNextTetromino != null)
-            {
-                NextGridP2.Children.Clear();
-                RenderTetromino(_enemyNextTetromino, NextGridP2);
-            }
+            if (_enemyNextTetromino == null) return;
+            NextGridP2.Children.Clear();
+            RenderTetromino(_enemyNextTetromino, NextGridP2);
         }
 
         /// <summary>
@@ -191,7 +213,7 @@ namespace TetrisClient
                 var rectangle = CreateRectangle(Tetromino.DetermineColor(tetromino.Shape), opacity);
                 grid?.Children.Add(rectangle);
 
-                Grid.SetRow(rectangle, y); // TODO: Alleen op P1 grid renderen
+                Grid.SetRow(rectangle, y);
                 Grid.SetColumn(rectangle, grid != NextGridP1 && grid != NextGridP2 ? x : x - 4);
             });
         }

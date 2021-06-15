@@ -12,9 +12,11 @@ namespace TetrisServer.Hubs
         public async Task SendBoard(string board) => await Clients.Others.SendAsync("SendBoard", board);
 
         public async Task SendTetromino(string tetromino) => await Clients.Others.SendAsync("SendTetromino", tetromino);
-        
+
         public async Task SendNextTetromino(string tetromino) => await Clients.Others.SendAsync("SendNextTetromino", tetromino);
-        
+
         public async Task SendScore(string score) => await Clients.Others.SendAsync("SendScore", score);
+
+        public async Task SendGameStatus(bool status) => await Clients.Others.SendAsync("SendGameStatus", status);
     }
 }
