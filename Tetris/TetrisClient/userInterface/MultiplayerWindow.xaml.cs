@@ -291,6 +291,7 @@ namespace TetrisClient
         protected override void OnKeyDown(KeyEventArgs e)
         {
             if (!_renderTimer.IsEnabled) return;
+            if (_engine.GameOver) return;
 
             // In-game actions
             switch (e.Key)
