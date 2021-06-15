@@ -1,7 +1,7 @@
 ﻿<Window
-    ResizeMode="NoResize"
     Background="#FFE2E9FF"
     Height="559"
+    ResizeMode="NoResize"
     Title="Tetris"
     Width="614"
     mc:Ignorable="d"
