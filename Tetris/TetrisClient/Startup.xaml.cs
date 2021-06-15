@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Media;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -6,13 +7,17 @@ namespace TetrisClient
 {
     public partial class Startup
     {
+        private readonly SoundPlayer _themeSong = new ("TetrisTechno.wav");
+        
         public Startup()
         {
             InitializeComponent();
+            _themeSong.PlayLooping();
         }
 
         private void HandleButtonClick(object sender, RoutedEventArgs routedEventArgs)
         {
+            _themeSong.Stop();
             var button = (Button) sender;
             Window window = (string) button.Content switch
             {

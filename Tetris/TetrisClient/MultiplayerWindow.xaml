@@ -106,32 +106,16 @@
                 <ColumnDefinition Width="30" />
                 <ColumnDefinition Width="30" />
             </Grid.ColumnDefinitions>
-            <Button
-                Background="#FF03DAC6"
-                BorderBrush="{x:Null}"
-                Click="StartGame_OnClick"
-                Content="Click to let your&#xD;&#xA;oppenent know&#xD;&#xA;that you're&#xD;&#xA;ready!"
-                FontSize="20"
-                Grid.Column="1"
-                Grid.ColumnSpan="8"
-                Grid.Row="6"
-                Grid.RowSpan="4"
-                Height="117"
-                HorizontalAlignment="Left"
-                Margin="0,2,0,0"
-                VerticalAlignment="Top"
-                Width="240"
-                x:Name="ReadyButton" />
         </Grid>
 
         <Grid
             Background="Black"
             Grid.Column="3"
-            Height="101"
+            Height="120"
             HorizontalAlignment="Left"
             Margin="146,38,0,0"
             VerticalAlignment="Top"
-            Width="101"
+            Width="120"
             x:Name="NextGridP1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="30" />
@@ -249,11 +233,11 @@
             Background="Black"
             Grid.Column="1"
             Grid.ColumnSpan="2"
-            Height="101"
+            Height="120"
             HorizontalAlignment="Left"
             Margin="272,38,0,0"
             VerticalAlignment="Top"
-            Width="101"
+            Width="120"
             x:Name="NextGridP2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="30" />
@@ -432,6 +416,23 @@
             Visibility="Hidden"
             Width="298"
             x:Name="GameOverTextP1"><Run Text="GAME OVER" /></TextBlock>
+        <Button
+                Background="#FF03DAC6"
+                BorderBrush="Black"
+                Click="StartGame_OnClick"
+                Content=" Start&#xD;&#xA;Game"
+                FontSize="40"
+                Grid.Column="2"
+                Height="121"
+                HorizontalAlignment="Left"
+                Margin="0,397,0,0"
+                VerticalAlignment="Top"
+                Width="142"
+                x:Name="ReadyButton" Foreground="Black" >
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
 
     </Grid>
 </Window>

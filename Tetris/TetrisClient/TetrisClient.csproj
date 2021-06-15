@@ -10,5 +10,13 @@
       <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.0-preview.2.21154.6" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     </ItemGroup>
+    
+    <ItemGroup>
+      <None Include="bin\Debug\net5.0-windows\TetrisTechno.wav" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <Content Include="bin\Debug\net5.0-windows\Tetris Music - Menu.wav" />
+    </ItemGroup>
 
 </Project>
