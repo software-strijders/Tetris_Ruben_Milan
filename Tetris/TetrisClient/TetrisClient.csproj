@@ -18,5 +18,9 @@
     <ItemGroup>
       <Content Include="bin\Debug\net5.0-windows\Tetris Music - Menu.wav" />
     </ItemGroup>
+    
+    <ItemGroup>
+      <Folder Include="bin\Debug\net5.0-windows" />
+    </ItemGroup>
 
 </Project>

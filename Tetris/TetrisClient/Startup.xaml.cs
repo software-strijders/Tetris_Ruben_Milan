@@ -7,7 +7,7 @@ namespace TetrisClient
 {
     public partial class Startup
     {
-        private readonly SoundPlayer _themeSong = new ("TetrisTechno.wav");
+        private readonly SoundPlayer _themeSong = new (Resource1.TetrisTechno);
         
         public Startup()
         {
