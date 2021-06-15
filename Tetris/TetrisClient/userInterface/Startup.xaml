@@ -1,7 +1,7 @@
 ﻿<Window
-    ResizeMode="NoResize"
     Background="#FFE2E9FF"
-    Height="400"
+    Height="647"
+    ResizeMode="NoResize"
     Title="Startup"
     Width="480"
     mc:Ignorable="d"
@@ -21,15 +21,18 @@
             <ColumnDefinition Width="0*" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <TextBlock x:Name="TetrisText"
+        <TextBlock
             FontSize="148"
+            FontWeight="Bold"
+            Foreground="#FF00FFE7"
             Grid.Column="1"
             Height="195"
             HorizontalAlignment="Center"
             Margin="0,-37,0,0"
             TextWrapping="Wrap"
             VerticalAlignment="Top"
-            Width="388" FontWeight="Bold" Foreground="#FF00FFE7">
+            Width="388"
+            x:Name="TetrisText">
             <Run Language="nl-nl" Text="Tetris" />
         </TextBlock>
         <Button
@@ -56,11 +59,25 @@
             Width="113" />
         <TextBlock
             FontSize="20"
+            FontWeight="Bold"
+            Foreground="#FF00FFE7"
             Grid.Column="1"
             Height="38"
             HorizontalAlignment="Center"
+            Margin="0,160,0,0"
             TextWrapping="Wrap"
             VerticalAlignment="Top"
-            Width="194" FontWeight="Bold" Foreground="#FF00FFE7" Margin="0,160,0,0"><Run Language="en-gb" Text="By Ruben &amp; Milan"/></TextBlock>
+            Width="194"><Run Language="en-gb" Text="By Ruben &amp; Milan" /></TextBlock>
+        <Label
+            Content="Arrow up = Rotate 90 degrees clockwise&#xD;&#xA;Arrow Down = Rotate 90 degress counterclockwise&#xD;&#xA;Arrow Left = Move left&#xD;&#xA;Arrow Right = Move right&#xD;&#xA;Space = Hard drop&#xD;&#xA;Shift = Soft drop&#xD;&#xA;&#xD;&#xA;R = Restart&#xD;&#xA;Esc = Quit&#xD;&#xA;P = Pause"
+            Foreground="#FF00FFE7"
+            Grid.ColumnSpan="2"
+            HorizontalAlignment="Center"
+            HorizontalContentAlignment="Center"
+            Margin="0,362,0,99"
+            VerticalAlignment="Center"
+            VerticalContentAlignment="Center"
+            Width="287"
+            x:Name="GameManual" />
     </Grid>
 </Window>
