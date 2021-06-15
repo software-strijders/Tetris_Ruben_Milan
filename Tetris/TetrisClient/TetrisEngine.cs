@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace TetrisClient
@@ -24,7 +23,7 @@ namespace TetrisClient
             GameOver = false;
             Representation = new Representation();
             Score = new Score();
-            NextTetromino = new Tetromino(4, 0, GenerateShape());
+            NextTetromino = _random == null ? new Tetromino(4, 0) : new Tetromino(4, 0, GenerateShape());
             Timer();
             NewTetromino();
         }
@@ -98,7 +97,7 @@ namespace TetrisClient
                 GameOver = true;
             }
 
-            NextTetromino = new Tetromino(4, 0, GenerateShape());
+            NextTetromino = _random == null ? new Tetromino(4, 0) : new Tetromino(4, 0, GenerateShape());
         }
 
         /// <summary>
